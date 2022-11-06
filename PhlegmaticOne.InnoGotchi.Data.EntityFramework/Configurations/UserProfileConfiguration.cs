@@ -14,6 +14,7 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.Property(x => x.FirstName).IsRequired();
         builder.Property(x => x.SecondName).IsRequired();
         builder.Property(x => x.AvatarData);
+        builder.Property(x => x.JoinDate);
 
         builder.HasOne(x => x.User)
             .WithOne(x => x.Profile)

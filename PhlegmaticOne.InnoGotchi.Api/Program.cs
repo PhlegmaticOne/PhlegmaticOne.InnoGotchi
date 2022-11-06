@@ -1,17 +1,12 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PhlegmaticOne.InnoGotchi.Api.Helpers;
 using PhlegmaticOne.InnoGotchi.Data.Core.Services;
+using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Services;
 using PhlegmaticOne.PasswordHasher.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-builder.Services.AddPasswordHasher();
-
-builder.Services.AddSingleton<IUsersDataService, EfUsersDataService>();
 
 builder.Services.AddAuthentication("OAuth")
     .AddJwtBearer("OAuth", config =>
@@ -24,8 +19,22 @@ builder.Services.AddAuthentication("OAuth")
         };
     });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+builder.Services.AddPasswordHasher();
+
+builder.Services.AddDbContext<ApplicationDbContext>(x =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DbConnection");
+    x.UseSqlServer(connectionString);
+});
+builder.Services.AddScoped<IUsersDataService, EfUsersDataService>();
+
 
 var app = builder.Build();
+
+await DatabaseInitializer.SeedAsync(app.Services);
 
 if (app.Environment.IsDevelopment())
 {

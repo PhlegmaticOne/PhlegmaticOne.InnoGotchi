@@ -21,6 +21,10 @@ public class InnoGotchiConfiguration : IEntityTypeConfiguration<InnoGotchiModel>
             .HasDefaultValue(ThirstyLevel.Normal)
             .HasConversion<string>();
 
+        builder.Property(x => x.LastDrinkTime);
+
+        builder.Property(x => x.LastFeedTime);
+
         builder.Property(x => x.Name)
             .IsRequired()
             .HasMaxLength(ConfigurationConstants.NamePropertyMaxLength);
