@@ -1,15 +1,10 @@
 ﻿document.addEventListener("DOMContentLoaded", onLoaded);
+document.addEventListener('keydown', onKeyDown);
 
-document.addEventListener('keypress', onKeyPress);
 
-function onKeyPress(e) {
-    if (e.key === 'k') {
-        var svg = document.querySelector('.drop-area');
-        svg.style.transform = 'scale(0.5)';
-    }
-}
 
 let currentDraggingElement;
+let currentScalingElement;
 let canDragInConstructorArea;
 let constructorArea;
 
@@ -24,6 +19,7 @@ const dragEnterEventName = 'dragenter';
 const mouseDownEventName = 'mousedown';
 const mouseUpEventName   = 'mouseup';
 const mouseMoveEventName = 'mousemove';
+
 
 function onLoaded() {
     setup_dragging_elements();
@@ -51,7 +47,10 @@ function dragStart(e) {
     set_dragging_element(e);
 }
 
+
 function onDragEnter(e) {
+    if (currentDraggingElement === null) return;
+
     place_component_in_constructor();
 }
 
@@ -62,13 +61,10 @@ function onMouseDown(e) {
 
     currentDraggingElement = elementUnderMouse;
 
-    if (e.button !== 2) return;
-
-    var scale = get_element_scale(currentDraggingElement);
-    changeScale(currentDraggingElement, scale.scaleX + 0.8, scale.scaleY + 0.8);
+    currentScalingElement = elementUnderMouse;
 }
 
-function changeScale(element, newScaleX, newScaleY) {
+function set_element_scale(element, newScaleX, newScaleY) {
     const curTrans = element.style.transform;
     const newScaleString = `scale(${newScaleX}, ${newScaleY})`;
     const regex = /scale\([0-9|\.]*\, [0-9|\.]*\)/;
@@ -96,10 +92,6 @@ function onMouseMove(e) {
     set_element_translate(elementUnderMouse, newX, newY);
 }
 
-function get_element_under_mouse(e) {
-    return document.elementFromPoint(e.clientX, e.clientY);
-}
-
 function set_element_translate(element, translateX, translateY) {
     const curTrans = element.style.transform;
     const newTransformString = `translate(${translateX}px, ${translateY}px)`;
@@ -108,14 +100,30 @@ function set_element_translate(element, translateX, translateY) {
     element.style.transform = newTrans;
 }
 
-function get_element_translate(element) {
-    const style = window.getComputedStyle(element);
-    const matrix = new DOMMatrixReadOnly(style.transform);
-    return {
-        translateX: matrix.m41,
-        translateY: matrix.m42
-    }
+function set_can_drag_in_constructor_area(canDrag) {
+    canDragInConstructorArea = canDrag;
 }
+
+
+function place_component_in_constructor() {
+    const img = currentDraggingElement.querySelector('image');
+
+    const className = img.className.baseVal;
+
+    const existingChild = constructorArea.querySelector('.' + className);
+
+    if (existingChild !== null) {
+        constructorArea.removeChild(existingChild);
+    }
+
+    const copy = img.cloneNode(true);
+    constructorArea.appendChild(copy);
+
+    currentDraggingElement = null;
+}
+
+
+
 
 function get_element_scale(element) {
     const style = window.getComputedStyle(element);
@@ -126,16 +134,44 @@ function get_element_scale(element) {
     }
 }
 
+
+function get_element_translate(element) {
+    const style = window.getComputedStyle(element);
+    const matrix = new DOMMatrixReadOnly(style.transform);
+    return {
+        translateX: matrix.m41,
+        translateY: matrix.m42
+    }
+}
+
+
+function get_element_under_mouse(e) {
+    return document.elementFromPoint(e.clientX, e.clientY);
+}
+
+
 function set_dragging_element(e) {
     currentDraggingElement = e.target;
 }
 
-function set_can_drag_in_constructor_area(canDrag) {
-    canDragInConstructorArea = canDrag;
-}
 
-function place_component_in_constructor() {
-    const img = currentDraggingElement.querySelector('image');
-    const copy = img.cloneNode(true);
-    constructorArea.appendChild(copy);
+function onKeyDown(e) {
+    if (currentScalingElement === null || currentScalingElement === undefined) return;
+
+    const scale = get_element_scale(currentScalingElement);
+    const dScale = 0.1;
+
+    if (e.key === "w") {
+        console.log(scale);
+        set_element_scale(currentScalingElement, scale.scaleX, scale.scaleY + dScale);
+    }
+    if (e.key === "s") {
+        set_element_scale(currentScalingElement, scale.scaleX, scale.scaleY - dScale);
+    }
+    if (e.key === "a") {
+        set_element_scale(currentScalingElement, scale.scaleX - dScale, scale.scaleY);
+    }
+    if (e.key === "d") {
+        set_element_scale(currentScalingElement, scale.scaleX + dScale, scale.scaleY);
+    }
 }
