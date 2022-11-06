@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.InnoGotchi.Api", "PhlegmaticOne.InnoGotchi.Api\PhlegmaticOne.InnoGotchi.Api.csproj", "{E06EC9BC-055F-4840-9D93-547892928E4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Api", "PhlegmaticOne.InnoGotchi.Api\PhlegmaticOne.InnoGotchi.Api.csproj", "{E06EC9BC-055F-4840-9D93-547892928E4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.InnoGotchi.Web", "PhlegmaticOne.InnoGotchi.Web\PhlegmaticOne.InnoGotchi.Web.csproj", "{989A38CE-51DF-43FD-918D-FD577A25CEF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Web", "PhlegmaticOne.InnoGotchi.Web\PhlegmaticOne.InnoGotchi.Web.csproj", "{989A38CE-51DF-43FD-918D-FD577A25CEF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.InnoGotchi.Data.Models", "PhlegmaticOne.InnoGotchi.Data.Models\PhlegmaticOne.InnoGotchi.Data.Models.csproj", "{108706F6-F202-4412-A5C0-EE8881AAE398}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Data.Models", "PhlegmaticOne.InnoGotchi.Data.Models\PhlegmaticOne.InnoGotchi.Data.Models.csproj", "{108706F6-F202-4412-A5C0-EE8881AAE398}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.InnoGotchi.Data.EntityFramework", "PhlegmaticOne.InnoGotchi.Data.EntityFramework\PhlegmaticOne.InnoGotchi.Data.EntityFramework.csproj", "{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{108706F6-F202-4412-A5C0-EE8881AAE398}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{108706F6-F202-4412-A5C0-EE8881AAE398}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{108706F6-F202-4412-A5C0-EE8881AAE398}.Release|Any CPU.Build.0 = Release|Any CPU
+		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
