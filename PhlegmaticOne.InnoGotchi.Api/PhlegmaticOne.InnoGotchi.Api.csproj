@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
@@ -77,6 +78,13 @@
     <None Include="wwwroot\Resources\Noses\nose6.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.Core\PhlegmaticOne.InnoGotchi.Data.Core.csproj" />
+    <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.EntityFramework\PhlegmaticOne.InnoGotchi.Data.EntityFramework.csproj" />
+    <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
+    <ProjectReference Include="..\PhlegmaticOne.PasswordHasher\PhlegmaticOne.PasswordHasher.csproj" />
   </ItemGroup>
 
 </Project>
