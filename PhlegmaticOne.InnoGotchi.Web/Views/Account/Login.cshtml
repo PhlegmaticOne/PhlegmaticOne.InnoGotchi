@@ -1,15 +1,16 @@
-﻿@model PhlegmaticOne.InnoGotchi.Web.ViewModels.AuthenticationViewModel
-<h2>Регистрация</h2>
+﻿@model PhlegmaticOne.InnoGotchi.Web.ViewModels.LoginViewModel
 
-<form asp-action="Authenticate" asp-controller="Authentication" asp-anti-forgery="true">
+<h2>Login</h2>
+
+<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
     <div class="validation" asp-validation-summary="All"></div>
     <div>
         <div>
-            <label asp-for="Email">Введите Email</label><br />
+            <label asp-for="Email">Enter Email</label><br />
             <input type="text" asp-for="Email" />
         </div>
         <div>
-            <label asp-for="Password">Введите Password</label><br />
+            <label asp-for="Password">Enter Password</label><br />
             <input type="password" asp-for="Password" />
         </div>
         <div>

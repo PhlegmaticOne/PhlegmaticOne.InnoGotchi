@@ -1,6 +1,10 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Data.Core.Services;
+﻿using PhlegmaticOne.InnoGotchi.Data.Models;
+
+namespace PhlegmaticOne.InnoGotchi.Data.Core.Services;
 
 public interface IUsersDataService
 {
-    Task<bool> IsExistsAsync(string email, string passwordHash);
+    Task<bool> ExistsAsync(string email);
+    Task<User?> GetByEmailAsync(string email);
+    Task<User> CreateUserAsync(User user);
 }

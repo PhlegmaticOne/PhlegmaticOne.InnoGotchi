@@ -3,16 +3,9 @@
 public class JwtTokenDto
 {
     public string? Token { get; init; }
-    public bool IsAuthenticated { get; init; }
 
-    public static JwtTokenDto FromToken(string token) => new()
+    public JwtTokenDto(string token)
     {
-        Token = token,
-        IsAuthenticated = true
-    };
-
-    public static JwtTokenDto Failed => new()
-    {
-        IsAuthenticated = false
-    };
+        Token = token;
+    }
 }

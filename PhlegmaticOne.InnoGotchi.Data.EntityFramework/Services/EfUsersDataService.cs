@@ -13,11 +13,29 @@ public class EfUsersDataService : IUsersDataService
     {
         _applicationDbContext = applicationDbContext;
     }
-    public async Task<bool> IsExistsAsync(string email, string passwordHash)
+    public async Task<bool> ExistsAsync(string email)
+    {
+        var isExistsByEmail = IsExistsByEmail(email);
+        return await isExistsByEmail.FirstOrDefaultAsync() is not null;
+    }
+    
+    public async Task<User?> GetByEmailAsync(string email)
+    {
+        var isExistsByEmail = IsExistsByEmail(email);
+        return await isExistsByEmail.FirstOrDefaultAsync();
+    }
+
+    public async Task<User> CreateUserAsync(User user)
+    {
+        var users = _applicationDbContext.Set<User>();
+        var entity = await users.AddAsync(user);
+        await _applicationDbContext.SaveChangesAsync();
+        return entity.Entity;
+    }
+
+    private IQueryable<User> IsExistsByEmail(string email)
     {
         IQueryable<User> users = _applicationDbContext.Set<User>();
-        return await users
-            .AnyAsync(x => x.Password == passwordHash &&
-                           x.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
+        return users.Where(x => x.Email.ToLower() == email.ToLower());
     }
 }

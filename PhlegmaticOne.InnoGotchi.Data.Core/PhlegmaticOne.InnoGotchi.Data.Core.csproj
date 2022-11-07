@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.Models\PhlegmaticOne.InnoGotchi.Data.Models.csproj" />
+  </ItemGroup>
+
 </Project>

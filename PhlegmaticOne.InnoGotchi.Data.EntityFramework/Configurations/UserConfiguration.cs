@@ -15,5 +15,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Email).IsRequired();
 
         builder.Property(x => x.Password).IsRequired();
+
+        builder.HasOne(x => x.Profile)
+            .WithOne(x => x.User)
+            .HasForeignKey<UserProfile>(x => x.UserId);
     }
 }

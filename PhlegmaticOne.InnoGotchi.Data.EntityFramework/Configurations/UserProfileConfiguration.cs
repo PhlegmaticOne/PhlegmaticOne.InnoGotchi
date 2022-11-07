@@ -16,10 +16,6 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.Property(x => x.AvatarData);
         builder.Property(x => x.JoinDate);
 
-        builder.HasOne(x => x.User)
-            .WithOne(x => x.Profile)
-            .HasForeignKey<User>(x => x.ProfileId);
-
         builder.HasOne(x => x.Farm)
             .WithOne(x => x.Owner)
             .HasForeignKey<Farm>(x => x.OwnerId);

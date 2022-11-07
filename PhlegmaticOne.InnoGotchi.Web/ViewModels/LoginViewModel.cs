@@ -2,7 +2,7 @@
 
 namespace PhlegmaticOne.InnoGotchi.Web.ViewModels;
 
-public class AuthenticationViewModel
+public class LoginViewModel
 {
     [Required(ErrorMessage = "Specify the email")]
     public string Email { get; set; }

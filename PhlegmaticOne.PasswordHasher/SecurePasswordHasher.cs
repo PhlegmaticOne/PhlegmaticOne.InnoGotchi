@@ -1,52 +1,21 @@
 ﻿using PhlegmaticOne.PasswordHasher.Base;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace PhlegmaticOne.PasswordHasher;
 
 public class SecurePasswordHasher : IPasswordHasher
 {
-    private const int SaltSize = 16;
-    private const int HashSize = 20;
+    public string Hash(string password) => HashPrivate(password);
 
-    private readonly int _iterations;
+    public bool Verify(string password, string hashedPassword) => 
+        HashPrivate(password) == hashedPassword;
 
-    public SecurePasswordHasher(int hashIterations)
+    private static string HashPrivate(string password)
     {
-        _iterations = hashIterations;
-    }
-    public string Hash(string password)
-    {
-        var salt = new byte[SaltSize];
-        RandomNumberGenerator.Fill(salt);
-
-        var pbkdf2 = new Rfc2898DeriveBytes(password, salt, _iterations);
-        var hash = pbkdf2.GetBytes(HashSize);
-
-        var hashBytes = new byte[SaltSize + HashSize];
-        Array.Copy(salt, 0, hashBytes, 0, SaltSize);
-        Array.Copy(hash, 0, hashBytes, SaltSize, HashSize);
-
-        return Convert.ToBase64String(hashBytes);
-    }
-
-    public bool Verify(string password, string hashedPassword)
-    {
-        var hashBytes = Convert.FromBase64String(hashedPassword);
-
-        var salt = new byte[SaltSize];
-        Array.Copy(hashBytes, 0, salt, 0, SaltSize);
-
-        var pbkdf2 = new Rfc2898DeriveBytes(password, salt, _iterations);
-        var hash = pbkdf2.GetBytes(HashSize);
-
-        for (var i = 0; i < HashSize; i++)
-        {
-            if (hashBytes[i + SaltSize] != hash[i])
-            {
-                return false;
-            }
-        }
-
-        return true;
+        using var sha = SHA256.Create();
+        var bytes = Encoding.Default.GetBytes(password);
+        var hashed = sha.ComputeHash(bytes);
+        return Convert.ToBase64String(hashed);
     }
 }
