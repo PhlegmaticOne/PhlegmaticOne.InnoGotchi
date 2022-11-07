@@ -161,8 +161,9 @@ function onKeyDown(e) {
     const scale = get_element_scale(currentScalingElement);
     const dScale = 0.1;
 
+    console.log(e.key);
+
     if (e.key === "w") {
-        console.log(scale);
         set_element_scale(currentScalingElement, scale.scaleX, scale.scaleY + dScale);
     }
     if (e.key === "s") {

@@ -1,16 +1,23 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos;
+using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
+using PhlegmaticOne.InnoGotchi.Shared.OperationResults;
+using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
+using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IClientRequestsService _clientRequestsService;
+    private readonly IMapper _mapper;
 
-    public AccountController(IHttpClientFactory httpClientFactory) => 
-        _httpClientFactory = httpClientFactory;
+    public AccountController(IClientRequestsService clientRequestsService, IMapper mapper)
+    {
+        _clientRequestsService = clientRequestsService;
+        _mapper = mapper;
+    }
 
     [HttpGet]
     public IActionResult Login() => View();
@@ -22,55 +29,32 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
-        return View();
-    }
+        var registerDto = _mapper.Map<RegisterProfileDto>(registerViewModel);
 
-    public async Task<IActionResult> Login(LoginViewModel authenticationViewModel)
-    {
-        var userCredentials = new UserCredentials
-        {
-            Email = authenticationViewModel.Email,
-            Password = authenticationViewModel.Password
-        };
-
-        var client = _httpClientFactory.CreateClient();
-        client.BaseAddress = new Uri("https://localhost:7142/api/");
-
-        var httpResponseMessage = 
-            await client.PostAsJsonAsync("JwtAuthentication/Authenticate", userCredentials);
-
-
-        
-        if (!httpResponseMessage.IsSuccessStatusCode) return NotFound();
-
-        var result = await httpResponseMessage.Content.ReadFromJsonAsync<JwtTokenDto>();
-
+        var result =
+            await _clientRequestsService
+                .PostAsync<OperationResult<ProfileDto>>(new RegisterProfileRequest(registerDto));
 
         return Ok(result);
     }
 
-    private async Task<JwtTokenDto?> GetJwtToken(string email, string password)
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
-        var userCredentials = new UserCredentials
-        {
-            Email = email,
-            Password = password
-        };
+        var loginDto = _mapper.Map<LoginDto>(loginViewModel);
 
-        var client = _httpClientFactory.CreateClient();
-        client.BaseAddress = new Uri("https://localhost:7142/api/");
+        var result =
+            await _clientRequestsService
+                .PostAsync<OperationResult<ProfileDto>>(new LoginRequest(loginDto));
 
-        var httpResponseMessage =
-            await client.PostAsJsonAsync("JwtAuthentication/Authenticate", userCredentials);
-
-
-        return httpResponseMessage.IsSuccessStatusCode ? 
-            await httpResponseMessage.Content.ReadFromJsonAsync<JwtTokenDto>() :
-            null;
+        return Ok(result);
     }
 
-    private async Task AuthenticateByCookies()
+    [HttpGet]
+    public async Task<IActionResult> Test()
     {
-
+        var result = await _clientRequestsService
+            .GetAsync<OperationResult<string>>(new TestGetRequest(22));
+        return View(result.ResponseData.Message);
     }
 }

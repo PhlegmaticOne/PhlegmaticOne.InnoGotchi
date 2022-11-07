@@ -104,8 +104,8 @@ public class ProfilesController : Controller
         return new()
         {
             User = user,
-            FirstName = profileDto.UserFirstName,
-            SecondName = profileDto.UserLastName
+            FirstName = profileDto.FirstName,
+            SecondName = profileDto.SecondName
         };
     }
 }

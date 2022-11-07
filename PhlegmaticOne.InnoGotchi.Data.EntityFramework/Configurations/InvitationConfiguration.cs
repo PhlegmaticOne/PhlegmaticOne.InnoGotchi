@@ -8,7 +8,7 @@ public class InvitationConfiguration : IEntityTypeConfiguration<Invitation>
 {
     public void Configure(EntityTypeBuilder<Invitation> builder)
     {
-        builder.ToTable("Invitations");
+        builder.ToTable(ConfigurationConstants.InvitationsTableName);
 
         builder.HasKey(x => x.Id);
 

@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PhlegmaticOne.InnoGotchi.Api.Helpers;
 using PhlegmaticOne.InnoGotchi.Api.MapperConfigurations;
@@ -9,9 +11,13 @@ using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Services;
 using PhlegmaticOne.PasswordHasher.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddAuthentication("OAuth")
-    .AddJwtBearer("OAuth", config =>
+    builder.Services.AddAuthentication(x =>
+    {
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(config =>
     {
         config.TokenValidationParameters = new TokenValidationParameters
         {
