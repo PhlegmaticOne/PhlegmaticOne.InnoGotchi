@@ -2,5 +2,5 @@
 
 public class ConstructorViewModel
 {
-    public IDictionary<string, List<string>> ComponentPaths { get; init; }
+    public IEnumerable<IGrouping<string, string>> ComponentsByCategories { get; init; }
 }

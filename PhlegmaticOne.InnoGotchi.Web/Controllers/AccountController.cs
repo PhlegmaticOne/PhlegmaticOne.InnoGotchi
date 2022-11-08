@@ -63,23 +63,5 @@ public class AccountController : Controller
         return Ok(result);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Test()
-    {
-        var jwtToken = _localStorageService.GetJwtToken();
-
-        var result = await _clientRequestsService
-            .GetAsync<OperationResult<string>>(new TestGetRequest(22), jwtToken);
-
-        if (result.IsSuccess == false)
-        {
-            ViewBag.Result = result.ReasonPhrase;
-            return View();
-        }
-
-        ViewBag.Result = result.ResponseData.Result;
-        return View();
-    }
-
     private void SetJwtToken(ProfileDto profile) => _localStorageService.SetJwtToken(profile.JwtToken.Token!);
 }

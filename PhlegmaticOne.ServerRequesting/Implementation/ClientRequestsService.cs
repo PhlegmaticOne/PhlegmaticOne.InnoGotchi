@@ -58,7 +58,7 @@ public class ClientRequestsService : IClientRequestsService
 
     private static async Task<ServerResponse<TResponse>> GetServerResponse<TResponse>(HttpResponseMessage httpResponseMessage)
     {
-        var httpStatusCode = (int)httpResponseMessage.StatusCode;
+        var httpStatusCode = httpResponseMessage.StatusCode;
         var reasonPhrase = httpResponseMessage.ReasonPhrase;
 
         if (httpResponseMessage.IsSuccessStatusCode == false)

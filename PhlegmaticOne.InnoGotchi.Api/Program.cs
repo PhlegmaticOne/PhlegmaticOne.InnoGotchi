@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PhlegmaticOne.InnoGotchi.Api.Helpers;
 using PhlegmaticOne.InnoGotchi.Api.MapperConfigurations;
 using PhlegmaticOne.InnoGotchi.Api.Services;
 using PhlegmaticOne.InnoGotchi.Data.Core.Services;
@@ -36,6 +37,7 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddAutoMapper(x =>
 {
     x.AddProfile<ProfileMapperConfiguration>();
+    x.AddProfile<InnoGotchiComponentsMapperConfiguration>();
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
@@ -55,11 +57,12 @@ builder.Services.AddPasswordHasher();
 builder.Services.AddJwtTokenGeneration(jwtOptions);
 builder.Services.AddScoped<IUserProfilesDataService, EfProfilesDataService>();
 builder.Services.AddScoped<IUsersDataService, EfUsersDataService>();
+builder.Services.AddScoped<IInnoGotchiComponentsDataService, EfInnoGotchiComponentsDataService>();
 
 
 var app = builder.Build();
 
-//await DatabaseInitializer.SeedAsync(app.Services);
+await DatabaseInitializer.SeedAsync(app.Services);
 
 if (app.Environment.IsDevelopment())
 {

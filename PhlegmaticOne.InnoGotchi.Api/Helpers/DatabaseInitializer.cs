@@ -13,7 +13,14 @@ public static class DatabaseInitializer
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
 
-        await dbContext.Database.MigrateAsync();
+        if (dbContext.Database.IsRelational())
+        {
+            await dbContext.Database.MigrateAsync();
+        }
+        else
+        {
+            await dbContext.Database.EnsureCreatedAsync();
+        }
 
         var set = dbContext.Set<InnoGotchiComponent>();
 

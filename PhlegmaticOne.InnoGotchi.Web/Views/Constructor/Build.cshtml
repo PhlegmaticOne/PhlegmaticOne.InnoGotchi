@@ -5,11 +5,11 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            @foreach (var component in Model.ComponentPaths)
+            @foreach (var component in Model.ComponentsByCategories)
             {
                 <div class="row">
                     <p>@component.Key</p>
-                    @foreach (var componentImagePath in component.Value)
+                    @foreach (var componentImagePath in component)
                     {
                         <div class="col dragging" draggable="true">
                             <svg style="position: relative;"

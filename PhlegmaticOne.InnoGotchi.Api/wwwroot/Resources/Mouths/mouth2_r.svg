@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Creator: CorelDRAW 2021.5 (Evaluation Version) -->
+
+<svg
+   xml:space="preserve"
+   width="4820.0288"
+   height="1148.111"
+   version="1.1"
+   style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+   viewBox="0 0 4820.0288 1148.111"
+   id="svg14"
+   sodipodi:docname="mouth2.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+   id="namedview16"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   inkscape:zoom="0.094588235"
+   inkscape:cx="2590.1741"
+   inkscape:cy="777.05224"
+   inkscape:window-width="1920"
+   inkscape:window-height="991"
+   inkscape:window-x="-9"
+   inkscape:window-y="-9"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_x0020_1" />
+ <defs
+   id="defs4">
+  <style
+   type="text/css"
+   id="style2">
+   <![CDATA[
+    .str1 {stroke:black;stroke-width:41.67;stroke-miterlimit:2.61313}
+    .str0 {stroke:#E3E3E3;stroke-width:41.67;stroke-miterlimit:2.61313}
+    .fil1 {fill:none}
+    .fil0 {fill:white}
+   ]]>
+  </style>
+ </defs>
+ <g
+   id="Layer_x0020_1"
+   inkscape:label="Layer 1"
+   inkscape:groupmode="layer"
+   transform="translate(-2910.9322,-3481.064)">
+  <metadata
+   id="CorelCorpID_0Corel-Layer" />
+  <path
+   class="fil0 str0"
+   d="m 4443,3538.55 c 257.29,30.57 518.4,67.3 771.68,106.09 v 963.7 H 4443 Z"
+   id="path7" />
+  <path
+   class="fil1 str0"
+   d="m 5300.51,3658.08 c 220.8,32.24 435.04,66.22 662.39,96.72 v 765.51 h -662.39 z"
+   id="path9" />
+  <path
+   class="fil1 str1"
+   d="m 2915.93,3602.49 c 1638.75,-404.92 3371.35,581.11 4807.63,35.34"
+   id="path11" />
+ </g>
+</svg>
