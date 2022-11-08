@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.MappersConfigurations;
+using PhlegmaticOne.InnoGotchi.Web.Services.Storage;
 using PhlegmaticOne.ServerRequesting.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<LoginRequest>("Profiles/Login");
     a.ConfigureRequest<TestGetRequest>("InnoGotchi/Test");
 });
+builder.Services.AddLocalStorage();
 
 
 var app = builder.Build();

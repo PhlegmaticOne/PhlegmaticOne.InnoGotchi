@@ -1,5 +1,4 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using PhlegmaticOne.InnoGotchi.Api.Helpers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -7,10 +6,9 @@ namespace PhlegmaticOne.InnoGotchi.Api.Services;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
-    private readonly TimeSpan _expirationDuration;
+    private readonly IJwtOptions _jwtOptions;
 
-    public JwtTokenGenerator(TimeSpan expirationDuration) => 
-        _expirationDuration = expirationDuration;
+    public JwtTokenGenerator(IJwtOptions jwtOptions) => _jwtOptions = jwtOptions;
 
     public string GenerateToken(string userName)
     {
@@ -20,16 +18,15 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new(JwtRegisteredClaimNames.Email, userName)
         };
 
-        var keyBytes = JwtAuthenticationHelper.GetSecretBytes();
-        var securityKey = new SymmetricSecurityKey(keyBytes);
+        var securityKey = _jwtOptions.GetSecretKey();
         var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            JwtAuthenticationHelper.Issuer,
-            JwtAuthenticationHelper.Audience,
+            _jwtOptions.Issuer,
+            _jwtOptions.Audience,
             claims,
             notBefore: DateTime.Now,
-            expires: DateTime.Now.Add(_expirationDuration),
+            expires: DateTime.Now.AddMinutes(_jwtOptions.ExpirationDurationInMinutes),
             signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

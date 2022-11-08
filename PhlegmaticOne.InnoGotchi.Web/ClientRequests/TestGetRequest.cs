@@ -6,5 +6,6 @@ public class TestGetRequest : ClientGetRequest<int>
 {
     public TestGetRequest(int requestData) : base(requestData) { }
 
-    public override string BuildQueryString() => $"id={RequestData}";
+    public override string BuildQueryString() => 
+        WithOneQueryParameter(new("id", RequestData));
 }

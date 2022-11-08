@@ -9,7 +9,7 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 public class InnoGotchiController
 {
     [HttpGet]
-    [AllowAnonymous]
+    [Authorize]
     public OperationResult<string> Test(int id)
     {
         return OperationResult<string>.FromSuccess($"inno gotchi: {id}");
