@@ -11,10 +11,16 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.ToTable(ConfigurationConstants.UserProfilesTableName);
 
         builder.HasKey(x => x.Id);
+
         builder.Property(x => x.FirstName).IsRequired();
+
         builder.Property(x => x.SecondName).IsRequired();
-        builder.Property(x => x.AvatarData);
+
         builder.Property(x => x.JoinDate);
+
+        builder.HasOne(x => x.Avatar)
+            .WithOne(x => x.UserProfile)
+            .HasForeignKey<Avatar>(x => x.UserProfileId);
 
         builder.HasOne(x => x.Farm)
             .WithOne(x => x.Owner)

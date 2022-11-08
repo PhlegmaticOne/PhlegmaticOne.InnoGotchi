@@ -7,7 +7,7 @@ public class UserProfile : ModelBase
     public DateTime JoinDate { get; set; }
     public string FirstName { get; set; } = null!;
     public string SecondName { get; set; } = null!;
-    public byte[] AvatarData { get; set; } = Array.Empty<byte>();
+    public Avatar Avatar { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
     public Farm Farm { get; set; }

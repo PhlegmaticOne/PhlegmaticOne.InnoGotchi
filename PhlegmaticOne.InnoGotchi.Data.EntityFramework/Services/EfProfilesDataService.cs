@@ -8,41 +8,21 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Services;
 public class EfProfilesDataService : IUserProfilesDataService
 {
     private readonly ApplicationDbContext _applicationDbContext;
-    private readonly IUsersDataService _usersDataService;
 
-    public EfProfilesDataService(ApplicationDbContext applicationDbContext, IUsersDataService usersDataService)
-    {
+    public EfProfilesDataService(ApplicationDbContext applicationDbContext) => 
         _applicationDbContext = applicationDbContext;
-        _usersDataService = usersDataService;
-    }
 
     public async Task<UserProfile> CreateProfileAsync(UserProfile userProfile)
     {
-        var user = await CreateUserFromProfile(userProfile);
-        var createdUserProfile = await CreateProfile(userProfile);
-
-        createdUserProfile.User = user;
-        return createdUserProfile;
-    }
-
-    public async Task<UserProfile> GetProfileForUserAsync(User user)
-    {
-        var set = Set();
-        return await set
-            .Include(x => x.User)
-            .FirstAsync(x => x.User.Password == user.Password && x.User.Email == user.Email);
-    }
-
-    private async Task<UserProfile> CreateProfile(UserProfile userProfile)
-    {
-        var profilesSet = Set();
-        var entity = await profilesSet.AddAsync(userProfile);
+        var entity = await Set().AddAsync(userProfile);
         await _applicationDbContext.SaveChangesAsync();
         return entity.Entity;
     }
 
-    private async Task<User> CreateUserFromProfile(UserProfile userProfile) => 
-        await _usersDataService.CreateUserAsync(userProfile.User);
+    public async Task<UserProfile> GetProfileForUserAsync(User user) =>
+        await Set()
+            .Include(x => x.User)
+            .FirstAsync(x => x.User.Password == user.Password && x.User.Email == user.Email);
 
     private DbSet<UserProfile> Set() => _applicationDbContext.Set<UserProfile>();
 }

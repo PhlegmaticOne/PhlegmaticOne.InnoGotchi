@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Services;
 
@@ -17,7 +18,8 @@ public class ClientRequestsService : IClientRequestsService
         _httpClientName = httpClientName;
         _requestUrls = requestUrls;
     }
-    public async Task<ServerResponse<TResponse>> PostAsync<TResponse>(ClientPostRequest postRequest, string? jwtToken = null)
+
+    public async Task<ServerResponse<OperationResult<TResponse>>> PostAsync<TResponse>(ClientPostRequest postRequest, string? jwtToken = null)
     {
         var requestUrl = GetRequestUrl(postRequest);
         var requestData = postRequest.Data;
@@ -28,7 +30,7 @@ public class ClientRequestsService : IClientRequestsService
         return await GetServerResponse<TResponse>(httpResponseMessage);
     }
 
-    public async Task<ServerResponse<TResponse>> GetAsync<TResponse>(ClientGetRequest getRequest, string? jwtToken = null)
+    public async Task<ServerResponse<OperationResult<TResponse>>> GetAsync<TResponse>(ClientGetRequest getRequest, string? jwtToken = null)
     {
         var requestUrl = BuildGetQuery(getRequest);
         var httpClient = CreateHttpClientWithToken(jwtToken);
@@ -56,17 +58,17 @@ public class ClientRequestsService : IClientRequestsService
 
     private string GetRequestUrl(ClientRequest clientRequest) => _requestUrls[clientRequest.GetType()];
 
-    private static async Task<ServerResponse<TResponse>> GetServerResponse<TResponse>(HttpResponseMessage httpResponseMessage)
+    private static async Task<ServerResponse<OperationResult<TResponse>>> GetServerResponse<TResponse>(HttpResponseMessage httpResponseMessage)
     {
         var httpStatusCode = httpResponseMessage.StatusCode;
         var reasonPhrase = httpResponseMessage.ReasonPhrase;
 
         if (httpResponseMessage.IsSuccessStatusCode == false)
         {
-            return ServerResponse<TResponse>.FromError(httpStatusCode, reasonPhrase);
+            return ServerResponse.FromError<TResponse>(httpStatusCode, reasonPhrase);
         }
 
-        var result = await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
-        return ServerResponse<TResponse>.FromSuccess(result!, httpStatusCode, reasonPhrase);
+        var result = await httpResponseMessage.Content.ReadFromJsonAsync<OperationResult<TResponse>>();
+        return ServerResponse.FromSuccess(result!, httpStatusCode, reasonPhrase);
     }
 }

@@ -1,5 +1,7 @@
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using PhlegmaticOne.InnoGotchi.Api.Helpers;
 using PhlegmaticOne.InnoGotchi.Api.MapperConfigurations;
@@ -22,15 +24,20 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(config =>
+.AddJwtBearer(o =>
 {
-    config.TokenValidationParameters = new TokenValidationParameters
+    o.SaveToken = true;
+    o.TokenValidationParameters = new TokenValidationParameters
     {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
         ValidIssuer = jwtOptions.Issuer,
         ValidAudience = jwtOptions.Audience,
-        IssuerSigningKey = jwtOptions.GetSecretKey()
+        IssuerSigningKey = jwtOptions.GetSecretKey(),
+        ClockSkew = TimeSpan.Zero
     };
 });
 

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
-using PhlegmaticOne.InnoGotchi.Shared.OperationResults;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Services.Storage;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
@@ -36,19 +35,20 @@ public class AccountController : Controller
     {
         var registerDto = _mapper.Map<RegisterProfileDto>(registerViewModel);
 
-        var result =
-            await _clientRequestsService
-                .PostAsync<OperationResult<ProfileDto>>(new RegisterProfileRequest(registerDto));
+        var serverResponse = await _clientRequestsService
+            .PostAsync<ProfileDto>(new RegisterProfileRequest(registerDto));
 
-        if (result.IsSuccess == false)
+        if (serverResponse.IsSuccess == false)
         {
             return BadRequest();
         }
 
-        var responseResult = result.ResponseData!.Result;
-        SetJwtToken(responseResult!);
+        _localStorageService.SetIsAuthenticationRequired(false);
 
-        return LocalRedirect("~/Home/Index");
+        var data = serverResponse.GetData<ProfileDto>();
+        SetJwtToken(data);
+
+        return LocalRedirect("~/");
     }
 
     [HttpPost]
@@ -56,9 +56,10 @@ public class AccountController : Controller
     {
         var loginDto = _mapper.Map<LoginDto>(loginViewModel);
 
-        var result =
-            await _clientRequestsService
-                .PostAsync<OperationResult<ProfileDto>>(new LoginRequest(loginDto));
+        var result = await _clientRequestsService
+            .PostAsync<ProfileDto>(new LoginRequest(loginDto));
+
+        _localStorageService.SetIsAuthenticationRequired(false);
 
         return Ok(result);
     }

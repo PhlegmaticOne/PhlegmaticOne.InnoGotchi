@@ -13,6 +13,8 @@ public class RegisterViewModel
     [Required(ErrorMessage = "Specify your second name")]
     public string SecondName { get; set; }
 
+    public IFormFile Avatar { get; set; }
+
     [Required(ErrorMessage = "Specify your password")]
     [DataType(DataType.Password)]
     public string Password { get; set; }

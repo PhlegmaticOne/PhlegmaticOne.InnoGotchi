@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Data.Core.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
-using PhlegmaticOne.InnoGotchi.Shared.OperationResults;
+using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[Authorize]
 public class InnoGotchiComponentsController
 {
     private readonly IInnoGotchiComponentsDataService _innoGotchiComponentsDataService;
@@ -21,12 +22,11 @@ public class InnoGotchiComponentsController
     }
 
     [HttpGet]
-    //[Authorize]
     public async Task<OperationResult<InnoGotchiComponentCollectionDto>> GetAll()
     {
         var components = await _innoGotchiComponentsDataService.GetAllAsync();
         var result = _mapper.Map<InnoGotchiComponentCollectionDto>(components);
 
-        return OperationResult<InnoGotchiComponentCollectionDto>.FromSuccess(result);
+        return OperationResult.FromSuccess(result);
     }
 }

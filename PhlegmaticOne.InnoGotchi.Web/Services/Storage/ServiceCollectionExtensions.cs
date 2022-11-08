@@ -5,11 +5,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddLocalStorage(this IServiceCollection serviceCollection) =>
         serviceCollection.AddSingleton<ILocalStorageService, InMemoryLocalStorageService>();
 
-    public static IServiceCollection AddLocalStorage(this IServiceCollection serviceCollection, string serverAddress) =>
+    public static IServiceCollection AddLocalStorage(this IServiceCollection serviceCollection,
+        Action<ILocalStorageService> startConfigurationAction) =>
         serviceCollection.AddSingleton<ILocalStorageService>(x =>
         {
             var storage = new InMemoryLocalStorageService();
-            storage.SetServerAddress(serverAddress);
+            startConfigurationAction(storage);
             return storage;
         });
 }

@@ -5,9 +5,9 @@ using PhlegmaticOne.InnoGotchi.Data.Core.Services;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
-using PhlegmaticOne.InnoGotchi.Shared.OperationResults;
 using PhlegmaticOne.PasswordHasher.Base;
 using PhlegmaticOne.InnoGotchi.Api.Services;
+using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 
@@ -40,8 +40,8 @@ public class ProfilesController : Controller
     {
         if (await _usersDataService.ExistsAsync(createUserDto.Email))
         {
-            return OperationResult<ProfileDto>
-                .FromFail($"Unable to create user profile. User with email exists: {createUserDto.Email}");
+            var customErrorMessage = $"Unable to create user profile. User with email exists: {createUserDto.Email}";
+            return OperationResult.FromFail<ProfileDto>(customMessage: customErrorMessage);
         }
 
         var newUserProfile = CreateUserProfile(createUserDto);
@@ -59,12 +59,14 @@ public class ProfilesController : Controller
 
         if (user is null)
         {
-            return OperationResult<ProfileDto>.FromFail($"There is no user with email: {loginDto.Email}");
+            var notExistingUserErrorMessage = $"There is no user with email: {loginDto.Email}";
+            return OperationResult.FromFail<ProfileDto>(customMessage:notExistingUserErrorMessage);
         }
 
         if (PasswordsEqual(loginDto.Password, user.Password) == false)
         {
-            return OperationResult<ProfileDto>.FromFail("Incorrect password");
+            const string incorrectPasswordMessage = "You've entered incorrect password";
+            return OperationResult.FromFail<ProfileDto>(incorrectPasswordMessage);
         }
 
         var profile = await _profilesDataService.GetProfileForUserAsync(user);
@@ -79,7 +81,7 @@ public class ProfilesController : Controller
             o.AfterMap((_, dest) => dest.JwtToken = CreateJwtToken(userProfile.User.Email));
         });
 
-        return OperationResult<ProfileDto>.FromSuccess(mapped);
+        return OperationResult.FromSuccess(mapped);
     }
 
     private JwtTokenDto CreateJwtToken(string email)
@@ -101,11 +103,17 @@ public class ProfilesController : Controller
             Password = password
         };
 
+        var avatar = new Avatar
+        {
+            AvatarData = profileDto.AvatarData
+        };
+
         return new()
         {
             User = user,
             FirstName = profileDto.FirstName,
-            SecondName = profileDto.SecondName
+            SecondName = profileDto.SecondName,
+            Avatar = avatar
         };
     }
 }
