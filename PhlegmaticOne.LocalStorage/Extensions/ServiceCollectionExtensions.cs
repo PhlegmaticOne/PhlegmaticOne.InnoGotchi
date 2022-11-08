@@ -1,4 +1,7 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Web.Services.Storage;
+﻿using Microsoft.Extensions.DependencyInjection;
+using PhlegmaticOne.LocalStorage.Base;
+
+namespace PhlegmaticOne.LocalStorage.Extensions;
 
 public static class ServiceCollectionExtensions
 {

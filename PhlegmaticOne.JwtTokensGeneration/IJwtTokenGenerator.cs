@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Api.Services;
+﻿namespace PhlegmaticOne.JwtTokensGeneration;
 
 public interface IJwtTokenGenerator
 {

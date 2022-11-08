@@ -1,7 +1,7 @@
-using PhlegmaticOne.InnoGotchi.Web;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.MappersConfigurations;
-using PhlegmaticOne.InnoGotchi.Web.Services.Storage;
+using PhlegmaticOne.InnoGotchi.Web.Middlewares;
+using PhlegmaticOne.LocalStorage.Extensions;
 using PhlegmaticOne.ServerRequesting.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,12 +20,13 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 });
 
+
 builder.Services.AddLocalStorage(startConf =>
 {
     startConf.SetServerAddress("https://localhost:7142");
     startConf.SetAnonymousEndpoints("/Account/Login", "/Account/Register", "/");
     startConf.SetLoginUrl("/Account/Login");
-    startConf.SetIsAuthenticationRequired(false);
+    startConf.SetIsAuthenticationRequired(true);
 });
 
 
@@ -40,7 +41,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<CustomAuthenticationMiddleware>();
+app.UseCustomAuthentication();
 
 app.UseStaticFiles();
 

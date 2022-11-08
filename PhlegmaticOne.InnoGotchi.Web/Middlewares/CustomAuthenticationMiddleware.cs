@@ -1,6 +1,7 @@
-﻿using PhlegmaticOne.InnoGotchi.Web.Services.Storage;
+﻿using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage.Extensions;
 
-namespace PhlegmaticOne.InnoGotchi.Web;
+namespace PhlegmaticOne.InnoGotchi.Web.Middlewares;
 
 public class CustomAuthenticationMiddleware
 {
@@ -29,6 +30,6 @@ public class CustomAuthenticationMiddleware
         await _next(httpContext);
     }
 
-    private static bool PathIsAnonymous(PathString path, string[]? anonymousEndpoints) => 
+    private static bool PathIsAnonymous(PathString path, string[]? anonymousEndpoints) =>
         anonymousEndpoints is not null && anonymousEndpoints.Contains(path.Value);
 }

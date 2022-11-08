@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
-using PhlegmaticOne.InnoGotchi.Web.Services.Storage;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
+using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage.Extensions;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;

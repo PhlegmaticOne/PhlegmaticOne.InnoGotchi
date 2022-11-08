@@ -18,6 +18,7 @@
     <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.Core\PhlegmaticOne.InnoGotchi.Data.Core.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.EntityFramework\PhlegmaticOne.InnoGotchi.Data.EntityFramework.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
+    <ProjectReference Include="..\PhlegmaticOne.JwtTokensGeneration\PhlegmaticOne.JwtTokensGeneration.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.OperationResults\PhlegmaticOne.OperationResults.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.PasswordHasher\PhlegmaticOne.PasswordHasher.csproj" />
   </ItemGroup>

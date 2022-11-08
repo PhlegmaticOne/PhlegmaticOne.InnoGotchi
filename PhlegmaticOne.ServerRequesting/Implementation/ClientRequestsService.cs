@@ -12,7 +12,9 @@ public class ClientRequestsService : IClientRequestsService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _httpClientName;
     private readonly Dictionary<Type, string> _requestUrls;
-    public ClientRequestsService(IHttpClientFactory httpClientFactory, Dictionary<Type, string> requestUrls, string httpClientName)
+    public ClientRequestsService(IHttpClientFactory httpClientFactory, 
+        Dictionary<Type, string> requestUrls,
+        string httpClientName)
     {
         _httpClientFactory = httpClientFactory;
         _httpClientName = httpClientName;
@@ -22,10 +24,9 @@ public class ClientRequestsService : IClientRequestsService
     public async Task<ServerResponse<OperationResult<TResponse>>> PostAsync<TResponse>(ClientPostRequest postRequest, string? jwtToken = null)
     {
         var requestUrl = GetRequestUrl(postRequest);
-        var requestData = postRequest.Data;
         var httpClient = CreateHttpClientWithToken(jwtToken);
         
-        var httpResponseMessage = await httpClient.PostAsJsonAsync(requestUrl, requestData);
+        var httpResponseMessage = await httpClient.PostAsJsonAsync(requestUrl, postRequest.Data);
 
         return await GetServerResponse<TResponse>(httpResponseMessage);
     }

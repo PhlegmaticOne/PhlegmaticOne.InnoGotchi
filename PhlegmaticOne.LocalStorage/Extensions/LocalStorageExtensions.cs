@@ -1,4 +1,6 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Web.Services.Storage;
+﻿using PhlegmaticOne.LocalStorage.Base;
+
+namespace PhlegmaticOne.LocalStorage.Extensions;
 
 public static class LocalStorageExtensions
 {

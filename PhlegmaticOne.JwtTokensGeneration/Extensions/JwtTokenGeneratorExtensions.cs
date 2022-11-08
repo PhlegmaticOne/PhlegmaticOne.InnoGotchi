@@ -1,4 +1,7 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Api.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using PhlegmaticOne.JwtTokensGeneration.Options;
+
+namespace PhlegmaticOne.JwtTokensGeneration.Extensions;
 
 public static class JwtTokenGeneratorExtensions
 {

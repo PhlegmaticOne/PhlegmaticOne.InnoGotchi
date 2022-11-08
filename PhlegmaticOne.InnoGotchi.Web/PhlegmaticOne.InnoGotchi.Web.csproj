@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
+    <ProjectReference Include="..\PhlegmaticOne.LocalStorage\PhlegmaticOne.LocalStorage.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.ServerRequesting\PhlegmaticOne.ServerRequesting.csproj" />
   </ItemGroup>
 

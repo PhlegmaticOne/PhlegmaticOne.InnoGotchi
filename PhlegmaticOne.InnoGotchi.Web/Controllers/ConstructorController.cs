@@ -3,44 +3,41 @@ using PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Extentions;
-using PhlegmaticOne.InnoGotchi.Web.Services.Storage;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
+using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage.Extensions;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
-public class ConstructorController : AuthenticationControllerBase
+public class ConstructorController : ClientRequestsControllerBase
 {
-    private readonly IClientRequestsService _clientRequestsService;
-
-    public ConstructorController(IClientRequestsService clientRequestsService, 
-        ILocalStorageService localStorageService) : base(localStorageService) =>
-        _clientRequestsService = clientRequestsService;
-
+    public ConstructorController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService) : 
+        base(clientRequestsService, localStorageService) { }
 
     [HttpGet]
     public async Task<IActionResult> Build()
     {
-        var jwtToken = GetJwtToken();
-        var serverAddress = LocalStorageService.GetServerAddress();
+        var serverResponse =
+            await SendAuthorizedGetRequestAsync<InnoGotchiComponentCollectionDto>(new GetAllInnoGotchiComponentsRequest());
 
-        var serverResult = await _clientRequestsService
-            .GetAsync<InnoGotchiComponentCollectionDto>(new GetAllInnoGotchiComponentsRequest(), jwtToken);
-
-        if (serverResult.IsUnauthorized)
+        if (serverResponse.IsUnauthorized)
         {
             return HandleUnauthorizedResponse();
         }
 
-        var response = serverResult.GetData<InnoGotchiComponentCollectionDto>();
-
-        var result = response.Components
-            .GroupBy(x => x.Name,
-                s => serverAddress.Combine(s.ImageUrl).ToString());
+        var data = serverResponse.GetData<InnoGotchiComponentCollectionDto>();
 
         return View(new ConstructorViewModel
         {
-            ComponentsByCategories = result
+            ComponentsByCategories = GetComponentsByCategories(data)
         });
+    }
+
+    private IEnumerable<IGrouping<string, string>> GetComponentsByCategories(InnoGotchiComponentCollectionDto data)
+    {
+        var serverAddress = LocalStorageService.GetServerAddress();
+        return data.Components.GroupBy(x => x.Name,
+                s => serverAddress.Combine(s.ImageUrl).ToString());
     }
 }

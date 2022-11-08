@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Web.Services.Storage;
+﻿namespace PhlegmaticOne.LocalStorage.Base;
 
 public interface ILocalStorageService
 {

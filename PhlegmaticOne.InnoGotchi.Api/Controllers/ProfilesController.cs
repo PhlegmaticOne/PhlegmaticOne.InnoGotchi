@@ -6,7 +6,7 @@ using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
 using PhlegmaticOne.PasswordHasher.Base;
-using PhlegmaticOne.InnoGotchi.Api.Services;
+using PhlegmaticOne.JwtTokensGeneration;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;

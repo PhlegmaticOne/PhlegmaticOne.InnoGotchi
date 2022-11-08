@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Services;
+namespace PhlegmaticOne.JwtTokensGeneration.Options;
 
 public interface IJwtOptions
 {
