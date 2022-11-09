@@ -1,31 +1,30 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
+using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Web.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
 using PhlegmaticOne.LocalStorage.Base;
-using PhlegmaticOne.LocalStorage.Extensions;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
-public class AccountController : Controller
+[AllowAnonymous]
+public class AccountController : ClientRequestsControllerBase
 {
-    private readonly IClientRequestsService _clientRequestsService;
-    private readonly ILocalStorageService _localStorageService;
     private readonly IMapper _mapper;
 
     public AccountController(IClientRequestsService clientRequestsService, 
         ILocalStorageService localStorageService,
-        IMapper mapper)
-    {
-        _clientRequestsService = clientRequestsService;
-        _localStorageService = localStorageService;
+        IMapper mapper) : base(clientRequestsService, localStorageService) =>
         _mapper = mapper;
-    }
+
 
     [HttpGet]
-    public IActionResult Login() => View();
+    public IActionResult Login(string returnUrl) => View();
 
     [HttpGet]
     public IActionResult Register() => View();
@@ -36,20 +35,19 @@ public class AccountController : Controller
     {
         var registerDto = _mapper.Map<RegisterProfileDto>(registerViewModel);
 
-        var serverResponse = await _clientRequestsService
-            .PostAsync<ProfileDto>(new RegisterProfileRequest(registerDto));
+        var serverResponse =
+            await SendAuthorizedPostRequestAsync<ProfileDto>(new RegisterProfileRequest(registerDto));
 
         if (serverResponse.IsSuccess == false)
         {
             return BadRequest();
         }
 
-        _localStorageService.SetIsAuthenticationRequired(false);
+        var registeredProfile = serverResponse.GetData<ProfileDto>();
 
-        var data = serverResponse.GetData<ProfileDto>();
-        SetJwtToken(data);
+        await AuthenticateAsync(registeredProfile);
 
-        return LocalRedirect("~/");
+        return LocalRedirect(Constants.HomeUrl);
     }
 
     [HttpPost]
@@ -57,13 +55,46 @@ public class AccountController : Controller
     {
         var loginDto = _mapper.Map<LoginDto>(loginViewModel);
 
-        var result = await _clientRequestsService
-            .PostAsync<ProfileDto>(new LoginRequest(loginDto));
+        var serverResponse =
+            await SendAuthorizedPostRequestAsync<ProfileDto>(new LoginRequest(loginDto));
 
-        _localStorageService.SetIsAuthenticationRequired(false);
+        if (serverResponse.IsSuccess == false)
+        {
+            return BadRequest();
+        }
 
-        return Ok(result);
+        var operationResult = serverResponse.ResponseData!;
+
+        if (operationResult.IsSuccess == false)
+        {
+            return BadRequest();
+        }
+
+        await AuthenticateAsync(serverResponse.GetData<ProfileDto>());
+
+        return LocalRedirect(loginViewModel.ReturnUrl ?? Constants.HomeUrl);
     }
 
-    private void SetJwtToken(ProfileDto profile) => _localStorageService.SetJwtToken(profile.JwtToken.Token!);
+    private async Task AuthenticateAsync(ProfileDto profileDto)
+    {
+        var claimsPrincipal = CreatePrincipalFromProfile(profileDto);
+        await SignInAsync(claimsPrincipal, profileDto.JwtToken.Token!);
+    }
+
+    private ClaimsPrincipal CreatePrincipalFromProfile(ProfileDto profileDto)
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimsIdentity.DefaultNameClaimType, profileDto.Email),
+            new(ProfileClaimsConstants.FirstNameClaimName, profileDto.FirstName),
+            new(ProfileClaimsConstants.SecondNameClaimName, profileDto.SecondName)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims,
+            Constants.CookieAuthenticationType,
+            ClaimsIdentity.DefaultNameClaimType,
+            ClaimsIdentity.DefaultRoleClaimType);
+
+        return new(claimsIdentity);
+    }
 }

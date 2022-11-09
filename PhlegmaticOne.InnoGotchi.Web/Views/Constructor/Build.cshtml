@@ -5,6 +5,9 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
+            @{
+                var i = 0;
+            }
             @foreach (var component in Model.ComponentsByCategories)
             {
                 <div class="row">
@@ -14,17 +17,24 @@
                         <div class="col dragging" draggable="true">
                             <svg style="position: relative;"
                                  width="100px" height="100px">
-                                <image class="@component.Key" style="position: absolute; transform: translate(0px, 0px) scale(1, 1)" width="100px" height="100px" href="@componentImagePath" />
+                                <image class="@component.Key"
+                                       style="position: absolute; transform: translate(0px, 0px) scale(1, 1)"
+                                       width="100px" height="100px"
+                                       href="@componentImagePath"
+                                       orderInLayer="@i"/>
                             </svg>
                         </div>
                     }
                 </div>
+                i++;
             }
         </div>
         <div class="col-4">
             <div style="background: aqua; height: 500px">
                 <svg class="drop-area" style="position: relative" width="100%" height="100%"></svg>
             </div>
+            <textarea id="test-text"></textarea>
+            <input type="submit" id="createNew" value="Create new" />
         </div>
     </div>
 </div>

@@ -2,19 +2,21 @@
 
 <h2>Login</h2>
 
-<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
-    <div class="validation" asp-validation-summary="All"></div>
+<form asp-action="Login" asp-controller="Account" method="post">
     <div>
-        <div>
-            <label asp-for="Email">Enter Email</label><br />
-            <input type="text" asp-for="Email" />
-        </div>
-        <div>
-            <label asp-for="Password">Enter Password</label><br />
-            <input type="password" asp-for="Password" />
-        </div>
-        <div>
-            <input type="submit" value="Регистрация" />
-        </div>
+        <input hidden asp-for="ReturnUrl"/>
+    </div>
+    <div>
+        <label asp-for="Email">Enter Email</label><br/>
+        <input type="text" asp-for="Email"/>
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password">Enter Password</label><br/>
+        <input type="password" asp-for="Password"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <input type="submit" value="Регистрация"/>
     </div>
 </form>

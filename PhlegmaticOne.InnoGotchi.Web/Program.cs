@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
+using PhlegmaticOne.InnoGotchi.Web.Extentions;
 using PhlegmaticOne.InnoGotchi.Web.MappersConfigurations;
-using PhlegmaticOne.InnoGotchi.Web.Middlewares;
 using PhlegmaticOne.LocalStorage.Extensions;
 using PhlegmaticOne.ServerRequesting.Extensions;
 
@@ -12,6 +13,11 @@ builder.Services.AddAutoMapper(x =>
     x.AddProfile<AccountMapperConfiguration>();
 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(x =>
+    {
+        x.LoginPath = new PathString("/Account/Login");
+    });
 
 builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 {
@@ -24,9 +30,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 builder.Services.AddLocalStorage(startConf =>
 {
     startConf.SetServerAddress("https://localhost:7142");
-    startConf.SetAnonymousEndpoints("/Account/Login", "/Account/Register", "/");
-    startConf.SetLoginUrl("/Account/Login");
-    startConf.SetIsAuthenticationRequired(true);
+    startConf.SetLoginPath("/Account/Login");
 });
 
 
@@ -41,11 +45,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCustomAuthentication();
 
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -24,6 +24,44 @@ const mouseMoveEventName = 'mousemove';
 function onLoaded() {
     setup_dragging_elements();
     setup_constructor_area();
+
+    document.getElementById('createNew').addEventListener('click', createNew);
+}
+
+async function createNew() {
+
+    const components = document.querySelectorAll('.in-constructor');
+
+    const result = [];
+
+    components.forEach(c => {
+        const translate = get_element_translate(c);
+        const scale = get_element_scale(c);
+        const imageUrl = c.getAttribute('href');
+        result.push({
+            translateX: translate.translateX,
+            translateY: translate.translateY,
+            scaleX: scale.scaleX,
+            scaleY: scale.scaleY,
+            imageUrl: imageUrl
+        });
+    });
+
+    const viewModel = {
+        components : result
+    }
+
+    const response = await window.fetch("/Constructor/CreateNew", {
+        method: "POST",
+        headers: {
+            'Content-type': "application/json"
+        },
+        body: JSON.stringify(viewModel)
+    });
+
+    console.log(response);
+    const data = await response.json();
+    console.log(data);
 }
 
 function setup_dragging_elements() {
@@ -112,14 +150,53 @@ function place_component_in_constructor() {
 
     const existingChild = constructorArea.querySelector('.' + className);
 
+    const copy = img.cloneNode(true);
+    copy.classList.add("in-constructor");
+
     if (existingChild !== null) {
+        constructorArea.insertBefore(copy, existingChild);
         constructorArea.removeChild(existingChild);
+    } else {
+
+        if (constructorArea.hasChildNodes() === false) {
+            constructorArea.appendChild(copy);
+            return;
+        }
+
+        const lastChild = constructorArea.lastChild;
+        const previousChild = constructorArea.lastChild.previousSibling;
+        const lastOrderInLayer = get_order_in_layer(lastChild);
+        const insertingOrderInLayer = get_order_in_layer(copy);
+
+        if (previousChild === null) {
+            if (insertingOrderInLayer > lastOrderInLayer) {
+                constructorArea.appendChild(copy);
+                return;
+            } else {
+                constructorArea.insertBefore(copy, lastChild);
+            }
+        }
+
+        const previousOrderInLayer = get_order_in_layer(previousChild);
+
+        if (insertingOrderInLayer > lastOrderInLayer) {
+            constructorArea.appendChild(copy);
+            return;
+        }
+
+        if (insertingOrderInLayer < lastOrderInLayer && insertingOrderInLayer > previousOrderInLayer) {
+            constructorArea.insertBefore(copy, lastChild);
+            return;
+        }
+
+        constructorArea.insertBefore(copy, previousChild);
     }
 
-    const copy = img.cloneNode(true);
-    constructorArea.appendChild(copy);
-
     currentDraggingElement = null;
+}
+
+function get_order_in_layer(element) {
+    return +element.getAttribute('orderinlayer');
 }
 
 
