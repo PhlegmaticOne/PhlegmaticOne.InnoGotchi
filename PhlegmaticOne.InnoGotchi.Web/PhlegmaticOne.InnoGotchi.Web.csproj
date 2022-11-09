@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Farm\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Views\Constructor\Build.cshtml" />
+    <None Include="Views\Farm\Create.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

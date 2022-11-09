@@ -7,12 +7,14 @@ using PhlegmaticOne.InnoGotchi.Shared.Dtos;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
 using PhlegmaticOne.PasswordHasher.Base;
 using PhlegmaticOne.JwtTokensGeneration;
+using PhlegmaticOne.JwtTokensGeneration.Models;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[AllowAnonymous]
 public class ProfilesController : Controller
 {
     private readonly IUserProfilesDataService _profilesDataService;
@@ -35,16 +37,15 @@ public class ProfilesController : Controller
     }
 
     [HttpPost]
-    [AllowAnonymous]
-    public async Task<OperationResult<ProfileDto>> Register([FromBody] RegisterProfileDto createUserDto)
+    public async Task<OperationResult<ProfileDto>> Register([FromBody] RegisterProfileDto registerProfileDto)
     {
-        if (await _usersDataService.ExistsAsync(createUserDto.Email))
+        if (await _usersDataService.ExistsAsync(registerProfileDto.Email))
         {
-            var customErrorMessage = $"Unable to create user profile. User with email exists: {createUserDto.Email}";
+            var customErrorMessage = $"Unable to create user profile. User with email exists: {registerProfileDto.Email}";
             return OperationResult.FromFail<ProfileDto>(customMessage: customErrorMessage);
         }
 
-        var newUserProfile = CreateUserProfile(createUserDto);
+        var newUserProfile = CreateUserProfile(registerProfileDto);
 
         var createdProfile = await _profilesDataService.CreateProfileAsync(newUserProfile);
 
@@ -52,7 +53,6 @@ public class ProfilesController : Controller
     }
 
     [HttpPost]
-    [AllowAnonymous]
     public async Task<OperationResult<ProfileDto>> Login([FromBody] LoginDto loginDto)
     {
         var user = await _usersDataService.GetByEmailAsync(loginDto.Email);
@@ -71,22 +71,24 @@ public class ProfilesController : Controller
 
         var profile = await _profilesDataService.GetProfileForUserAsync(user);
 
-        return ResultFromMap(profile);
+        return ResultFromMap(profile!);
     }
 
     private OperationResult<ProfileDto> ResultFromMap(UserProfile userProfile)
     {
         var mapped = _mapper.Map<ProfileDto>(userProfile, o =>
         {
-            o.AfterMap((_, dest) => dest.JwtToken = CreateJwtToken(userProfile.User.Email));
+            o.AfterMap((_, dest) => dest.JwtToken = CreateJwtToken(userProfile));
         });
 
         return OperationResult.FromSuccess(mapped);
     }
 
-    private JwtTokenDto CreateJwtToken(string email)
+    private JwtTokenDto CreateJwtToken(UserProfile userProfile)
     {
-        var tokenValue = _jwtTokenGenerator.GenerateToken(email);
+        var userInfo = new UserRegisteringModel(userProfile.Id, userProfile.FirstName, userProfile.SecondName,
+            userProfile.User.Email);
+        var tokenValue = _jwtTokenGenerator.GenerateToken(userInfo);
         return new JwtTokenDto(tokenValue);
     }
 

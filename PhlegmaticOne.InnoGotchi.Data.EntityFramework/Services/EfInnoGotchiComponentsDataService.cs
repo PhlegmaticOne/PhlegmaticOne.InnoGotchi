@@ -9,10 +9,9 @@ public class EfInnoGotchiComponentsDataService : IInnoGotchiComponentsDataServic
 {
     private readonly ApplicationDbContext _applicationDbContext;
 
-    public EfInnoGotchiComponentsDataService(ApplicationDbContext applicationDbContext)
-    {
+    public EfInnoGotchiComponentsDataService(ApplicationDbContext applicationDbContext) => 
         _applicationDbContext = applicationDbContext;
-    }
+
     public async Task<IEnumerable<InnoGotchiComponent>> GetAllAsync()
     {
         var components = await _applicationDbContext.Set<InnoGotchiComponent>().ToListAsync();

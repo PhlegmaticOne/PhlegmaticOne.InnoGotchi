@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Web.Models;
 using System.Diagnostics;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
 public class HomeController : Controller
 {
     public IActionResult Index() => View();
-    public IActionResult Test() => Content(User.Identity?.Name!);
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error() => 

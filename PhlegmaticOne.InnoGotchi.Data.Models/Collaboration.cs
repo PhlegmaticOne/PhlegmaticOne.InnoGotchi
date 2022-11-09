@@ -1,6 +1,4 @@
-﻿using PhlegmaticOne.InnoGotchi.Data.Models.Base;
-
-namespace PhlegmaticOne.InnoGotchi.Data.Models;
+﻿namespace PhlegmaticOne.InnoGotchi.Data.Models;
 
 public class Collaboration
 {

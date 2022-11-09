@@ -11,7 +11,7 @@ using PhlegmaticOne.ServerRequesting.Services;
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
 [Authorize]
-public class ConstructorController : ClientRequestsControllerBase
+public class ConstructorController : ClientRequestsController
 {
     public ConstructorController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService) : 
         base(clientRequestsService, localStorageService) { }

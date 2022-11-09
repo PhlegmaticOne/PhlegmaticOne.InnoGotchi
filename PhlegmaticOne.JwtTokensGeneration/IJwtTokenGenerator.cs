@@ -1,6 +1,8 @@
-﻿namespace PhlegmaticOne.JwtTokensGeneration;
+﻿using PhlegmaticOne.JwtTokensGeneration.Models;
+
+namespace PhlegmaticOne.JwtTokensGeneration;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(string userName);
+    string GenerateToken(UserRegisteringModel userRegisteringModel);
 }

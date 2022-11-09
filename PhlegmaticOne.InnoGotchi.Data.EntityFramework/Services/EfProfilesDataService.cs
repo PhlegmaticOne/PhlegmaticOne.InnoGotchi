@@ -19,10 +19,13 @@ public class EfProfilesDataService : IUserProfilesDataService
         return entity.Entity;
     }
 
-    public async Task<UserProfile> GetProfileForUserAsync(User user) =>
+    public async Task<UserProfile?> GetProfileForUserAsync(User user) =>
         await Set()
             .Include(x => x.User)
-            .FirstAsync(x => x.User.Password == user.Password && x.User.Email == user.Email);
+            .FirstOrDefaultAsync(x => x.User.Password == user.Password && x.User.Email == user.Email);
+
+    public async Task<UserProfile?> GetProfileByEmailAsync(string email) =>
+        await Set().FirstOrDefaultAsync(x => x.User.Email == email);
 
     private DbSet<UserProfile> Set() => _applicationDbContext.Set<UserProfile>();
 }

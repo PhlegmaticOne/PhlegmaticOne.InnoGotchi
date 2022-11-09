@@ -23,8 +23,7 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(o =>
+}).AddJwtBearer(o =>
 {
     o.SaveToken = true;
     o.TokenValidationParameters = new TokenValidationParameters
@@ -44,6 +43,7 @@ builder.Services.AddAutoMapper(x =>
 {
     x.AddProfile<ProfileMapperConfiguration>();
     x.AddProfile<InnoGotchiComponentsMapperConfiguration>();
+    x.AddProfile<FarmMapperConfiguration>();
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
@@ -61,9 +61,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddPasswordHasher();
 builder.Services.AddJwtTokenGeneration(jwtOptions);
+
 builder.Services.AddScoped<IUserProfilesDataService, EfProfilesDataService>();
 builder.Services.AddScoped<IUsersDataService, EfUsersDataService>();
 builder.Services.AddScoped<IInnoGotchiComponentsDataService, EfInnoGotchiComponentsDataService>();
+builder.Services.AddScoped<IFarmsDataService, EfFarmsDataService>();
 
 
 var app = builder.Build();

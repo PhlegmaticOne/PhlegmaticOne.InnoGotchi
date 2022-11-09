@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using PhlegmaticOne.JwtTokensGeneration.Helpers;
+using PhlegmaticOne.JwtTokensGeneration.Models;
 using PhlegmaticOne.JwtTokensGeneration.Options;
 
 namespace PhlegmaticOne.JwtTokensGeneration;
@@ -10,13 +12,15 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     private readonly IJwtOptions _jwtOptions;
 
     public JwtTokenGenerator(IJwtOptions jwtOptions) => _jwtOptions = jwtOptions;
-
-    public string GenerateToken(string userName)
+    public string GenerateToken(UserRegisteringModel userRegisteringModel)
     {
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, userName),
-            new(JwtRegisteredClaimNames.Email, userName)
+            new(JwtRegisteredClaimNames.Sub, userRegisteringModel.Email),
+            new(JwtRegisteredClaimNames.Email, userRegisteringModel.Email),
+            new(JwtRegisteredClaimNames.GivenName, userRegisteringModel.FirstName),
+            new(JwtRegisteredClaimNames.FamilyName, userRegisteringModel.LastName),
+            new(CustomJwtClaimNames.UserId, userRegisteringModel.Id.ToString())
         };
 
         var securityKey = _jwtOptions.GetSecretKey();

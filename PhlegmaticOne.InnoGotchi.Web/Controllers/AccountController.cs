@@ -13,7 +13,7 @@ using PhlegmaticOne.ServerRequesting.Services;
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
 [AllowAnonymous]
-public class AccountController : ClientRequestsControllerBase
+public class AccountController : ClientRequestsController
 {
     private readonly IMapper _mapper;
 

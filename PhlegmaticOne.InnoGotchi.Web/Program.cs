@@ -8,22 +8,28 @@ using PhlegmaticOne.ServerRequesting.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+.AddCookie(x =>
+{
+    x.LoginPath = new PathString("/Account/Login");
+});
+
+
 builder.Services.AddAutoMapper(x =>
 {
     x.AddProfile<AccountMapperConfiguration>();
+    x.AddProfile<FarmMapperConfiguration>();
 });
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x =>
-    {
-        x.LoginPath = new PathString("/Account/Login");
-    });
 
 builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 {
     a.ConfigureRequest<RegisterProfileRequest>("Profiles/Register");
     a.ConfigureRequest<LoginRequest>("Profiles/Login");
     a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
+    a.ConfigureRequest<GetFarmRequest>("Farm/Get");
+    a.ConfigureRequest<CreateFarmRequest>("Farm/Create");
 });
 
 

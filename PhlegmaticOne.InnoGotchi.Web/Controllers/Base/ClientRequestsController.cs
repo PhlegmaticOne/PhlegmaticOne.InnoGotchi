@@ -11,12 +11,12 @@ using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 
-public class ClientRequestsControllerBase : Controller
+public class ClientRequestsController : Controller
 {
     protected readonly ILocalStorageService LocalStorageService;
     protected readonly IClientRequestsService ClientRequestsService;
 
-    public ClientRequestsControllerBase(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService)
+    public ClientRequestsController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService)
     {
         LocalStorageService = localStorageService;
         ClientRequestsService = clientRequestsService;

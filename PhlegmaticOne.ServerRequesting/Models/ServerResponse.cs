@@ -42,11 +42,11 @@ public class ServerResponse<T> : ServerResponse
         return true;
     }
 
-    public TData GetData<TData>()
+    public TData? GetData<TData>()
     {
         if (ResponseData is OperationResult<TData> operationResult)
         {
-            return operationResult.Result!;
+            return operationResult.Result;
         }
 
         throw new ArgumentException($"Response data is not of type OperationResult<{typeof(TData).Name}>");
