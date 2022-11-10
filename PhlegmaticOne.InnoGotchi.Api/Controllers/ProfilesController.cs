@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Data.Core.Services;
+using Microsoft.EntityFrameworkCore;
+using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
-using PhlegmaticOne.PasswordHasher.Base;
 using PhlegmaticOne.JwtTokensGeneration;
 using PhlegmaticOne.JwtTokensGeneration.Models;
 using PhlegmaticOne.OperationResults;
+using PhlegmaticOne.PasswordHasher.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 
@@ -17,20 +18,17 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [AllowAnonymous]
 public class ProfilesController : Controller
 {
-    private readonly IUserProfilesDataService _profilesDataService;
-    private readonly IUsersDataService _usersDataService;
+    private readonly IDataRepository<UserProfile> _profilesDataService;
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-    public ProfilesController(IUserProfilesDataService profilesDataService, 
-        IUsersDataService usersDataService,
+    public ProfilesController(IDataService dataService,
         IMapper mapper,
         IPasswordHasher passwordHasher,
         IJwtTokenGenerator jwtTokenGenerator)
     {
-        _profilesDataService = profilesDataService;
-        _usersDataService = usersDataService;
+        _profilesDataService = dataService.GetDataRepository<UserProfile>();
         _mapper = mapper;
         _passwordHasher = passwordHasher;
         _jwtTokenGenerator = jwtTokenGenerator;
@@ -39,7 +37,10 @@ public class ProfilesController : Controller
     [HttpPost]
     public async Task<OperationResult<ProfileDto>> Register([FromBody] RegisterProfileDto registerProfileDto)
     {
-        if (await _usersDataService.ExistsAsync(registerProfileDto.Email))
+        var isUserExists = await _profilesDataService
+            .ExistsAsync(x => x.User.Email == registerProfileDto.Email);
+
+        if (isUserExists)
         {
             var customErrorMessage = $"Unable to create user profile. User with email exists: {registerProfileDto.Email}";
             return OperationResult.FromFail<ProfileDto>(customMessage: customErrorMessage);
@@ -47,7 +48,7 @@ public class ProfilesController : Controller
 
         var newUserProfile = CreateUserProfile(registerProfileDto);
 
-        var createdProfile = await _profilesDataService.CreateProfileAsync(newUserProfile);
+        var createdProfile = await _profilesDataService.CreateAsync(newUserProfile);
 
         return ResultFromMap(createdProfile);
     }
@@ -55,21 +56,21 @@ public class ProfilesController : Controller
     [HttpPost]
     public async Task<OperationResult<ProfileDto>> Login([FromBody] LoginDto loginDto)
     {
-        var user = await _usersDataService.GetByEmailAsync(loginDto.Email);
+        var profile = await _profilesDataService
+            .GetFirstOrDefaultAsync(x => x.User.Email == loginDto.Email,
+                i => i.Include(x => x.User));
 
-        if (user is null)
+        if (profile is null)
         {
             var notExistingUserErrorMessage = $"There is no user with email: {loginDto.Email}";
-            return OperationResult.FromFail<ProfileDto>(customMessage:notExistingUserErrorMessage);
+            return OperationResult.FromFail<ProfileDto>(customMessage: notExistingUserErrorMessage);
         }
 
-        if (PasswordsEqual(loginDto.Password, user.Password) == false)
+        if (PasswordsEqual(loginDto.Password, profile.User.Password) == false)
         {
             const string incorrectPasswordMessage = "You've entered incorrect password";
             return OperationResult.FromFail<ProfileDto>(incorrectPasswordMessage);
         }
-
-        var profile = await _profilesDataService.GetProfileForUserAsync(user);
 
         return ResultFromMap(profile!);
     }
@@ -92,7 +93,7 @@ public class ProfilesController : Controller
         return new JwtTokenDto(tokenValue);
     }
 
-    private bool PasswordsEqual(string firstPassword, string secondPassword) => 
+    private bool PasswordsEqual(string firstPassword, string secondPassword) =>
         _passwordHasher.Verify(firstPassword, secondPassword);
 
     private UserProfile CreateUserProfile(RegisterProfileDto profileDto)

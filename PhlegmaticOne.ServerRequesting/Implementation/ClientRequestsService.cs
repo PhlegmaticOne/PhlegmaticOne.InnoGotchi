@@ -1,8 +1,8 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using PhlegmaticOne.OperationResults;
+﻿using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Services;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace PhlegmaticOne.ServerRequesting.Implementation;
 
@@ -12,7 +12,7 @@ public class ClientRequestsService : IClientRequestsService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _httpClientName;
     private readonly Dictionary<Type, string> _requestUrls;
-    public ClientRequestsService(IHttpClientFactory httpClientFactory, 
+    public ClientRequestsService(IHttpClientFactory httpClientFactory,
         Dictionary<Type, string> requestUrls,
         string httpClientName)
     {
@@ -21,17 +21,19 @@ public class ClientRequestsService : IClientRequestsService
         _requestUrls = requestUrls;
     }
 
-    public async Task<ServerResponse<OperationResult<TResponse>>> PostAsync<TResponse>(ClientPostRequest postRequest, string? jwtToken = null)
+    public async Task<ServerResponse<TResponse>> PostAsync<TRequest, TResponse>(
+        ClientPostRequest<TRequest, TResponse> postRequest, string? jwtToken = null)
     {
         var requestUrl = GetRequestUrl(postRequest);
         var httpClient = CreateHttpClientWithToken(jwtToken);
-        
-        var httpResponseMessage = await httpClient.PostAsJsonAsync(requestUrl, postRequest.Data);
+
+        var httpResponseMessage = await httpClient.PostAsJsonAsync(requestUrl, postRequest.RequestData);
 
         return await GetServerResponse<TResponse>(httpResponseMessage);
     }
 
-    public async Task<ServerResponse<OperationResult<TResponse>>> GetAsync<TResponse>(ClientGetRequest getRequest, string? jwtToken = null)
+    public async Task<ServerResponse<TResponse>> GetAsync<TRequest, TResponse>(
+        ClientGetRequest<TRequest, TResponse> getRequest, string? jwtToken = null)
     {
         var requestUrl = BuildGetQuery(getRequest);
         var httpClient = CreateHttpClientWithToken(jwtToken);
@@ -49,7 +51,7 @@ public class ClientRequestsService : IClientRequestsService
         return httpClient;
     }
 
-    private string BuildGetQuery(ClientGetRequest clientGetRequest)
+    private string BuildGetQuery<TRequest, TResponse>(ClientGetRequest<TRequest, TResponse> clientGetRequest)
     {
         var requestUrl = GetRequestUrl(clientGetRequest);
         return clientGetRequest.IsEmpty == false ?
@@ -59,7 +61,7 @@ public class ClientRequestsService : IClientRequestsService
 
     private string GetRequestUrl(ClientRequest clientRequest) => _requestUrls[clientRequest.GetType()];
 
-    private static async Task<ServerResponse<OperationResult<TResponse>>> GetServerResponse<TResponse>(HttpResponseMessage httpResponseMessage)
+    private static async Task<ServerResponse<TResponse>> GetServerResponse<TResponse>(HttpResponseMessage httpResponseMessage)
     {
         var httpStatusCode = httpResponseMessage.StatusCode;
         var reasonPhrase = httpResponseMessage.ReasonPhrase;

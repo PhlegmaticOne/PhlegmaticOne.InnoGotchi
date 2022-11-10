@@ -8,7 +8,7 @@ public class SecurePasswordHasher : IPasswordHasher
 {
     public string Hash(string password) => HashPrivate(password);
 
-    public bool Verify(string password, string hashedPassword) => 
+    public bool Verify(string password, string hashedPassword) =>
         HashPrivate(password) == hashedPassword;
 
     private static string HashPrivate(string password)

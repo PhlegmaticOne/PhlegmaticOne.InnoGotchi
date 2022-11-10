@@ -1,11 +1,8 @@
-﻿using PhlegmaticOne.ServerRequesting.Models;
+﻿using PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
+using PhlegmaticOne.ServerRequesting.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 
-public class GetFarmRequest : ClientGetRequest<string>
+public class GetFarmRequest : EmptyClientGetRequest<FarmDto>
 {
-    public GetFarmRequest(string requestData) : base(requestData) { }
-
-    public override string BuildQueryString() => 
-        WithOneQueryParameter(new("email", RequestData));
 }

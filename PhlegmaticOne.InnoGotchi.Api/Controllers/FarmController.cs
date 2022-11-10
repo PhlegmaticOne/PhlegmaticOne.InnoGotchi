@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Data.Core.Services;
+using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
 using PhlegmaticOne.JwtTokensGeneration.Extensions;
@@ -14,31 +14,30 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [Authorize]
 public class FarmController : ControllerBase
 {
-    private readonly IUserProfilesDataService _userProfilesDataService;
-    private readonly IFarmsDataService _farmDataService;
+    private readonly IDataRepository<UserProfile> _userProfilesDataService;
+    private readonly IDataRepository<Farm> _farmDataService;
     private readonly IMapper _mapper;
 
-    public FarmController(IUserProfilesDataService userProfilesDataService, 
-        IFarmsDataService farmDataService,
+    public FarmController(IDataService dataService,
         IMapper mapper)
     {
-        _userProfilesDataService = userProfilesDataService;
-        _farmDataService = farmDataService;
+        _userProfilesDataService = dataService.GetDataRepository<UserProfile>();
+        _farmDataService = dataService.GetDataRepository<Farm>();
         _mapper = mapper;
     }
 
     [HttpPost]
     public async Task<OperationResult<FarmDto>> Create([FromBody] CreateFarmDto createFarmDto)
     {
-        var userEmail = User.GetUserEmail();
+        var userId = User.GetUserId();
 
-        if (await _farmDataService.ExistsForUserAsync(userEmail))
+        if (await _farmDataService.ExistsAsync(x => x.Owner.Id == userId))
         {
-            var alreadyExistsMessage = $"User {userEmail} already has a farm";
+            var alreadyExistsMessage = $"User {userId} already has a farm";
             return OperationResult.FromFail<FarmDto>(customMessage: alreadyExistsMessage);
         }
 
-        var userProfile = await _userProfilesDataService.GetProfileByEmailAsync(userEmail);
+        var userProfile = await _userProfilesDataService.GetByIdOrDefaultAsync(userId);
 
         var farm = CreateFarmForProfile(userProfile!, createFarmDto.Name);
 
@@ -52,8 +51,8 @@ public class FarmController : ControllerBase
     [HttpGet]
     public async Task<OperationResult<FarmDto>> Get()
     {
-        var user = User.GetUserEmail();
-        var farm = await _farmDataService.GetByEmailAsync(user);
+        var userId = User.GetUserId();
+        var farm = await _farmDataService.GetFirstOrDefaultAsync(x => x.Owner.Id == userId);
 
         if (farm is null)
         {

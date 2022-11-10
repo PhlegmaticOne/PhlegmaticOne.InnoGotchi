@@ -1,9 +1,9 @@
-﻿using PhlegmaticOne.InnoGotchi.Data.Models.Base;
+﻿using PhlegmaticOne.DataService.Models;
 using PhlegmaticOne.InnoGotchi.Data.Models.Enums;
 
 namespace PhlegmaticOne.InnoGotchi.Data.Models;
 
-public class InnoGotchiModel : ModelBase
+public class InnoGotchiModel : EntityBase
 {
     public HungerLevel HungerLevel { get; set; }
     public ThirstyLevel ThirstyLevel { get; set; }

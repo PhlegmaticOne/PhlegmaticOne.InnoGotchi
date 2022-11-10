@@ -1,48 +1,35 @@
 ﻿namespace PhlegmaticOne.ServerRequesting.Models;
 
-public interface IHaveRequestData<out T>
+
+public abstract class ClientRequest { }
+
+public abstract class ClientRequest<TRequest, TResponse> : ClientRequest
 {
-    T RequestData { get; }
+    protected ClientRequest(TRequest requestData) => RequestData = requestData;
+
+    public TRequest RequestData { get; set; }
 }
 
-public abstract class ClientRequest
+public abstract class ClientPostRequest<TRequest, TResponse> : ClientRequest<TRequest, TResponse>
 {
-    public object Data { get; set; }
-    protected ClientRequest(object data) => Data = data;
-}
-
-public abstract class ClientPostRequest : ClientRequest
-{
-    protected ClientPostRequest(object data) : base(data) { }
+    protected ClientPostRequest(TRequest requestData) : base(requestData) { }
 }
 
 
-public abstract class ClientPostRequest<T> : ClientPostRequest, IHaveRequestData<T>
+public abstract class ClientGetRequest<TRequest, TResponse> : ClientRequest<TRequest, TResponse>
 {
-    protected ClientPostRequest(T requestData) : base(requestData) => RequestData = requestData;
-    public T RequestData { get; }
-}
-
-public abstract class ClientGetRequest : ClientRequest
-{
+    protected ClientGetRequest(TRequest requestData) : base(requestData) => RequestData = requestData;
     public bool IsEmpty { get; protected set; }
-    protected ClientGetRequest(object data) : base(data) { }
     public abstract string BuildQueryString();
 
-    protected string WithOneQueryParameter(GetRequestQueryParameter getRequestQueryParameter) => 
+    protected string WithOneQueryParameter(GetRequestQueryParameter getRequestQueryParameter) =>
         getRequestQueryParameter.BuildQueryPart();
-
-    protected string WithManyQueryParameters(params GetRequestQueryParameter[] queryParameters) => 
+    protected string WithManyQueryParameters(params GetRequestQueryParameter[] queryParameters) =>
         string.Join('&', queryParameters.Select(x => x.BuildQueryPart()));
 }
-public abstract class ClientGetRequest<T> : ClientGetRequest, IHaveRequestData<T>
-{
-    protected ClientGetRequest(T requestData) : base(requestData) => RequestData = requestData;
-    public T RequestData { get; }
-}
 
-public abstract class EmptyClientGetRequest : ClientGetRequest<object>
+public abstract class EmptyClientGetRequest<TResponse> : ClientGetRequest<object, TResponse>
 {
-    protected EmptyClientGetRequest() : base(null) => IsEmpty = true;
+    protected EmptyClientGetRequest() : base(default) => IsEmpty = true;
     public sealed override string BuildQueryString() => string.Empty;
 }

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
@@ -9,6 +8,7 @@ using PhlegmaticOne.InnoGotchi.Web.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
+using System.Security.Claims;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
@@ -17,7 +17,7 @@ public class AccountController : ClientRequestsController
 {
     private readonly IMapper _mapper;
 
-    public AccountController(IClientRequestsService clientRequestsService, 
+    public AccountController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService,
         IMapper mapper) : base(clientRequestsService, localStorageService) =>
         _mapper = mapper;
@@ -31,23 +31,15 @@ public class AccountController : ClientRequestsController
 
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+    public Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
         var registerDto = _mapper.Map<RegisterProfileDto>(registerViewModel);
 
-        var serverResponse =
-            await SendAuthorizedPostRequestAsync<ProfileDto>(new RegisterProfileRequest(registerDto));
-
-        if (serverResponse.IsSuccess == false)
+        return FromAuthorizedPost(new RegisterProfileRequest(registerDto), async profile =>
         {
-            return BadRequest();
-        }
-
-        var registeredProfile = serverResponse.GetData<ProfileDto>();
-
-        await AuthenticateAsync(registeredProfile);
-
-        return LocalRedirect(Constants.HomeUrl);
+            await AuthenticateAsync(profile);
+            return LocalRedirect(Constants.HomeUrl);
+        });
     }
 
     [HttpPost]
@@ -55,24 +47,11 @@ public class AccountController : ClientRequestsController
     {
         var loginDto = _mapper.Map<LoginDto>(loginViewModel);
 
-        var serverResponse =
-            await SendAuthorizedPostRequestAsync<ProfileDto>(new LoginRequest(loginDto));
-
-        if (serverResponse.IsSuccess == false)
+        return await FromAuthorizedPost(new LoginRequest(loginDto), async profile =>
         {
-            return BadRequest();
-        }
-
-        var operationResult = serverResponse.ResponseData!;
-
-        if (operationResult.IsSuccess == false)
-        {
-            return BadRequest();
-        }
-
-        await AuthenticateAsync(serverResponse.GetData<ProfileDto>());
-
-        return LocalRedirect(loginViewModel.ReturnUrl ?? Constants.HomeUrl);
+            await AuthenticateAsync(profile);
+            return LocalRedirect(loginViewModel.ReturnUrl ?? Constants.HomeUrl);
+        });
     }
 
     private async Task AuthenticateAsync(ProfileDto profileDto)
@@ -81,7 +60,7 @@ public class AccountController : ClientRequestsController
         await SignInAsync(claimsPrincipal, profileDto.JwtToken.Token!);
     }
 
-    private ClaimsPrincipal CreatePrincipalFromProfile(ProfileDto profileDto)
+    private static ClaimsPrincipal CreatePrincipalFromProfile(ProfileDto profileDto)
     {
         var claims = new List<Claim>
         {

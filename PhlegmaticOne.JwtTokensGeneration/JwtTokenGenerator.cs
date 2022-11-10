@@ -1,9 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using PhlegmaticOne.JwtTokensGeneration.Helpers;
 using PhlegmaticOne.JwtTokensGeneration.Models;
 using PhlegmaticOne.JwtTokensGeneration.Options;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace PhlegmaticOne.JwtTokensGeneration;
 

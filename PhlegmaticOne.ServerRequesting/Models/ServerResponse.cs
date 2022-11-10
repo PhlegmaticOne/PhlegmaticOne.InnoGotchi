@@ -1,5 +1,5 @@
-﻿using System.Net;
-using PhlegmaticOne.OperationResults;
+﻿using PhlegmaticOne.OperationResults;
+using System.Net;
 
 namespace PhlegmaticOne.ServerRequesting.Models;
 
@@ -11,44 +11,26 @@ public class ServerResponse
     public bool IsSuccess { get; init; }
     public bool IsUnauthorized => StatusCode == HttpStatusCode.Unauthorized;
 
-    public static ServerResponse<OperationResult<T>> FromError<T>(HttpStatusCode statusCode, string? reasonPhrase) => new()
+    public static ServerResponse<T> FromError<T>(HttpStatusCode statusCode, string? reasonPhrase) => new()
     {
         ReasonPhrase = reasonPhrase ?? string.Empty,
         StatusCode = statusCode,
         IsSuccess = false,
-        ResponseData = default
+        OperationResult = default,
     };
 
-    public static ServerResponse<OperationResult<T>> FromSuccess<T>(OperationResult<T> result, HttpStatusCode statusCode, string? reasonPhrase) => new()
+    public static ServerResponse<T> FromSuccess<T>(OperationResult<T> result, HttpStatusCode statusCode, string? reasonPhrase) => new()
     {
         ReasonPhrase = reasonPhrase ?? string.Empty,
         StatusCode = statusCode,
         IsSuccess = true,
-        ResponseData = result
+        OperationResult = result
     };
 }
 
 [Serializable]
-public class ServerResponse<T> : ServerResponse
+public class ServerResponse<TResponse> : ServerResponse
 {
-    public T? ResponseData { get; internal set; }
-
-    public bool TryGetData<TData>(out TData? data)
-    {
-        data = default;
-        if (ResponseData is not OperationResult<TData> operationResult) return false;
-
-        data = operationResult.Result;
-        return true;
-    }
-
-    public TData? GetData<TData>()
-    {
-        if (ResponseData is OperationResult<TData> operationResult)
-        {
-            return operationResult.Result;
-        }
-
-        throw new ArgumentException($"Response data is not of type OperationResult<{typeof(TData).Name}>");
-    }
+    public OperationResult<TResponse>? OperationResult { get; internal set; }
+    public TResponse? GetData() => OperationResult is null ? default : OperationResult.Result;
 }

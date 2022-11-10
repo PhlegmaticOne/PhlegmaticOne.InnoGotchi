@@ -13,25 +13,20 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [Authorize]
 public class ConstructorController : ClientRequestsController
 {
-    public ConstructorController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService) : 
-        base(clientRequestsService, localStorageService) { }
+    public ConstructorController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService) :
+        base(clientRequestsService, localStorageService)
+    { }
 
     [HttpGet]
-    public async Task<IActionResult> Build()
+    public Task<IActionResult> Build()
     {
-        var serverResponse =
-            await SendAuthorizedGetRequestAsync<InnoGotchiComponentCollectionDto>(new GetAllInnoGotchiComponentsRequest());
-
-        if (serverResponse.IsUnauthorized)
+        return FromAuthorizedGet(new GetAllInnoGotchiComponentsRequest(), components =>
         {
-            return LoginRedirect();
-        }
-
-        var data = serverResponse.GetData<InnoGotchiComponentCollectionDto>();
-
-        return View(new ConstructorViewModel
-        {
-            ComponentsByCategories = GetComponentsByCategories(data)
+            IActionResult view = View(new ConstructorViewModel
+            {
+                ComponentsByCategories = GetComponentsByCategories(components)
+            });
+            return Task.FromResult(view);
         });
     }
 

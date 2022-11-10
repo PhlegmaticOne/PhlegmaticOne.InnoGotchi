@@ -1,8 +1,8 @@
-﻿using PhlegmaticOne.InnoGotchi.Data.Models.Base;
+﻿using PhlegmaticOne.DataService.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Data.Models;
 
-public class Avatar : ModelBase
+public class Avatar : EntityBase
 {
     public byte[] AvatarData { get; set; } = Array.Empty<byte>();
     public Guid UserProfileId { get; set; }

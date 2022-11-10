@@ -37,6 +37,7 @@ builder.Services.AddLocalStorage(startConf =>
 {
     startConf.SetServerAddress("https://localhost:7142");
     startConf.SetLoginPath("/Account/Login");
+    startConf.SetErrorPath("/Home/Error");
 });
 
 

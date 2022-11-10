@@ -1,8 +1,8 @@
-﻿using PhlegmaticOne.InnoGotchi.Data.Models.Base;
+﻿using PhlegmaticOne.DataService.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Data.Models;
 
-public class User : ModelBase
+public class User : EntityBase
 {
     public string Email { get; set; }
     public string Password { get; set; }

@@ -11,23 +11,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Data.EntityFramework", "PhlegmaticOne.InnoGotchi.Data.EntityFramework\PhlegmaticOne.InnoGotchi.Data.EntityFramework.csproj", "{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Data.Core", "PhlegmaticOne.InnoGotchi.Data.Core\PhlegmaticOne.InnoGotchi.Data.Core.csproj", "{6A4ECAEF-06D4-4EE8-836E-361935F442BB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Shared", "PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj", "{CDA9B5DB-8F9B-45E3-81D3-44E69C1C200C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.PasswordHasher", "PhlegmaticOne.PasswordHasher\PhlegmaticOne.PasswordHasher.csproj", "{BF78CCD5-B532-4D33-8315-22E09FD3456A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.ServerRequesting", "PhlegmaticOne.ServerRequesting\PhlegmaticOne.ServerRequesting.csproj", "{EDECEE0E-B243-47B1-A9D3-EB6AF2E45DBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.OperationResults", "PhlegmaticOne.OperationResults\PhlegmaticOne.OperationResults.csproj", "{F94DCE6C-4F95-402E-BDC8-65116DDEB406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.OperationResults", "PhlegmaticOne.OperationResults\PhlegmaticOne.OperationResults.csproj", "{F94DCE6C-4F95-402E-BDC8-65116DDEB406}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{0CA3B202-3873-4B74-927A-8BF149ECF8C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.JwtTokensGeneration", "PhlegmaticOne.JwtTokensGeneration\PhlegmaticOne.JwtTokensGeneration.csproj", "{BC6FC810-A31C-4B24-B31F-139662E4D01E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.JwtTokensGeneration", "PhlegmaticOne.JwtTokensGeneration\PhlegmaticOne.JwtTokensGeneration.csproj", "{BC6FC810-A31C-4B24-B31F-139662E4D01E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.LocalStorage", "PhlegmaticOne.LocalStorage\PhlegmaticOne.LocalStorage.csproj", "{700E0400-96D9-4CC4-BD9C-775307A3B8BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.LocalStorage", "PhlegmaticOne.LocalStorage\PhlegmaticOne.LocalStorage.csproj", "{700E0400-96D9-4CC4-BD9C-775307A3B8BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.DataService", "PhlegmaticOne.DataService\PhlegmaticOne.DataService.csproj", "{7A3D0149-19BB-4F46-917C-CB66857B788C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +51,6 @@ Global
 		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A4ECAEF-06D4-4EE8-836E-361935F442BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A4ECAEF-06D4-4EE8-836E-361935F442BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A4ECAEF-06D4-4EE8-836E-361935F442BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A4ECAEF-06D4-4EE8-836E-361935F442BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDA9B5DB-8F9B-45E3-81D3-44E69C1C200C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDA9B5DB-8F9B-45E3-81D3-44E69C1C200C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDA9B5DB-8F9B-45E3-81D3-44E69C1C200C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,6 +75,10 @@ Global
 		{700E0400-96D9-4CC4-BD9C-775307A3B8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{700E0400-96D9-4CC4-BD9C-775307A3B8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{700E0400-96D9-4CC4-BD9C-775307A3B8BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A3D0149-19BB-4F46-917C-CB66857B788C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A3D0149-19BB-4F46-917C-CB66857B788C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A3D0149-19BB-4F46-917C-CB66857B788C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A3D0149-19BB-4F46-917C-CB66857B788C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,12 +86,12 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{108706F6-F202-4412-A5C0-EE8881AAE398} = {0CA3B202-3873-4B74-927A-8BF149ECF8C2}
 		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A} = {0CA3B202-3873-4B74-927A-8BF149ECF8C2}
-		{6A4ECAEF-06D4-4EE8-836E-361935F442BB} = {0CA3B202-3873-4B74-927A-8BF149ECF8C2}
 		{BF78CCD5-B532-4D33-8315-22E09FD3456A} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 		{EDECEE0E-B243-47B1-A9D3-EB6AF2E45DBE} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 		{F94DCE6C-4F95-402E-BDC8-65116DDEB406} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 		{BC6FC810-A31C-4B24-B31F-139662E4D01E} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 		{700E0400-96D9-4CC4-BD9C-775307A3B8BB} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
+		{7A3D0149-19BB-4F46-917C-CB66857B788C} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F503F9F6-0369-431A-BF1E-79BBAD139A76}

@@ -1,9 +1,9 @@
-﻿using PhlegmaticOne.InnoGotchi.Data.Models.Base;
+﻿using PhlegmaticOne.DataService.Models;
 using PhlegmaticOne.InnoGotchi.Data.Models.Enums;
 
 namespace PhlegmaticOne.InnoGotchi.Data.Models;
 
-public class Invitation : ModelBase
+public class Invitation : EntityBase
 {
     public Guid FromProfileId { get; set; }
     public UserProfile From { get; set; }

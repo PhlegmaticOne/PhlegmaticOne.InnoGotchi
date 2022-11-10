@@ -25,45 +25,26 @@ public class FarmController : ClientRequestsController
     public IActionResult Create() => View();
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public Task<IActionResult> Index()
     {
-        var email = User.Identity!.Name!;
-        var serverResponse =
-            await SendAuthorizedGetRequestAsync<FarmDto>(new GetFarmRequest(email));
-
-        if (serverResponse.IsSuccess == false)
+        return FromAuthorizedGet(new GetFarmRequest(), farm =>
         {
-            return BadRequest();
-        }
-
-        var operationResult = serverResponse.ResponseData!;
-
-        if (operationResult.IsSuccess == false)
-        {
-            return RedirectToAction(nameof(Create));
-        }
-
-        var farmDto = serverResponse.GetData<FarmDto>();
-        var farmViewModel = _mapper.Map<FarmViewModel>(farmDto);
-
-        return View(farmViewModel);
+            var farmViewModel = _mapper.Map<FarmViewModel>(farm);
+            IActionResult view = View(farmViewModel);
+            return Task.FromResult(view);
+        });
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateFarmViewModel createFarmViewModel)
+    public Task<IActionResult> Create([FromBody] CreateFarmViewModel createFarmViewModel)
     {
         var createFarmDto = _mapper.Map<CreateFarmDto>(createFarmViewModel);
-        var serverResponse =
-            await SendAuthorizedPostRequestAsync<FarmDto>(new CreateFarmRequest(createFarmDto));
 
-        if (serverResponse.IsSuccess == false)
+        return FromAuthorizedPost(new CreateFarmRequest(createFarmDto), farm =>
         {
-            return BadRequest();
-        }
-
-        var data = serverResponse.GetData<FarmDto>();
-        var viewModel = _mapper.Map<FarmViewModel>(data);
-
-        return View(nameof(Index), viewModel);
+            var viewModel = _mapper.Map<FarmViewModel>(farm);
+            IActionResult view = View(nameof(Index), viewModel);
+            return Task.FromResult(view);
+        });
     }
 }

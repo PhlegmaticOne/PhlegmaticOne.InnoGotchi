@@ -1,8 +1,8 @@
-﻿using PhlegmaticOne.InnoGotchi.Data.Models.Base;
+﻿using PhlegmaticOne.DataService.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Data.Models;
 
-public class Farm : ModelBase
+public class Farm : EntityBase
 {
     public string Name { get; set; }
     public IEnumerable<InnoGotchiModel> InnoGotchies { get; set; }

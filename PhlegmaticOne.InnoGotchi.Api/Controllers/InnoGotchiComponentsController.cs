@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Data.Core.Services;
+using PhlegmaticOne.DataService.Interfaces;
+using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
 using PhlegmaticOne.OperationResults;
 
@@ -12,12 +13,12 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [Authorize]
 public class InnoGotchiComponentsController
 {
-    private readonly IInnoGotchiComponentsDataService _innoGotchiComponentsDataService;
+    private readonly IDataRepository<InnoGotchiComponent> _innoGotchiComponentsDataService;
     private readonly IMapper _mapper;
 
-    public InnoGotchiComponentsController(IInnoGotchiComponentsDataService innoGotchiComponentsDataService, IMapper mapper)
+    public InnoGotchiComponentsController(IDataService dataService, IMapper mapper)
     {
-        _innoGotchiComponentsDataService = innoGotchiComponentsDataService;
+        _innoGotchiComponentsDataService = dataService.GetDataRepository<InnoGotchiComponent>();
         _mapper = mapper;
     }
 

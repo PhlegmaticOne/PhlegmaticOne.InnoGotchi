@@ -1,8 +1,8 @@
-﻿using PhlegmaticOne.InnoGotchi.Data.Models.Base;
+﻿using PhlegmaticOne.DataService.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Data.Models;
 
-public class UserProfile : ModelBase
+public class UserProfile : EntityBase
 {
     public DateTime JoinDate { get; set; }
     public string FirstName { get; set; } = null!;

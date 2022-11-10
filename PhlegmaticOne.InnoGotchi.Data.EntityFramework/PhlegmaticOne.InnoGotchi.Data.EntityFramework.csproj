@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.Core\PhlegmaticOne.InnoGotchi.Data.Core.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.Models\PhlegmaticOne.InnoGotchi.Data.Models.csproj" />
   </ItemGroup>
 

@@ -4,5 +4,5 @@ public class RegisterProfileDto : UserDtoBase
 {
     public string FirstName { get; set; }
     public string SecondName { get; set; }
-    public byte[] AvatarData { get; set; }
+    public byte[] AvatarData { get; set; } = Array.Empty<byte>();
 }
