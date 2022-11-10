@@ -20,7 +20,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new(JwtRegisteredClaimNames.Email, userRegisteringModel.Email),
             new(JwtRegisteredClaimNames.GivenName, userRegisteringModel.FirstName),
             new(JwtRegisteredClaimNames.FamilyName, userRegisteringModel.LastName),
-            new(CustomJwtClaimNames.UserId, userRegisteringModel.Id.ToString())
+            new(CustomJwtClaimNames.UserId, userRegisteringModel.Id.ToString()),
+            new(CustomJwtClaimNames.Email, userRegisteringModel.Email)
         };
 
         var securityKey = _jwtOptions.GetSecretKey();

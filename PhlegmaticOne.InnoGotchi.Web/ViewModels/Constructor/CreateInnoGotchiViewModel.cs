@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Web.ViewModels;
+﻿namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Constructor;
 
 public class CreateInnoGotchiViewModel
 {

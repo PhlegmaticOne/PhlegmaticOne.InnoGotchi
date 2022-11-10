@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
 using System.Diagnostics;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Other;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 

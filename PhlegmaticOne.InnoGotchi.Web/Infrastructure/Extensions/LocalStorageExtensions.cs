@@ -1,6 +1,6 @@
 ﻿using PhlegmaticOne.LocalStorage.Base;
 
-namespace PhlegmaticOne.InnoGotchi.Web.Extentions;
+namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 
 public static class LocalStorageExtensions
 {

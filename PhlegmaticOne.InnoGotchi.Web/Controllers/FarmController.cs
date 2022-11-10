@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
-using PhlegmaticOne.InnoGotchi.Web.ViewModels;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Farms;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
@@ -32,11 +31,11 @@ public class FarmController : ClientRequestsController
             var farmViewModel = _mapper.Map<FarmViewModel>(farm);
             IActionResult view = View(farmViewModel);
             return Task.FromResult(view);
-        });
+        }, onOperationFailed: _ => RedirectToAction(nameof(Create)));
     }
 
     [HttpPost]
-    public Task<IActionResult> Create([FromBody] CreateFarmViewModel createFarmViewModel)
+    public Task<IActionResult> Create(CreateFarmViewModel createFarmViewModel)
     {
         var createFarmDto = _mapper.Map<CreateFarmDto>(createFarmViewModel);
 

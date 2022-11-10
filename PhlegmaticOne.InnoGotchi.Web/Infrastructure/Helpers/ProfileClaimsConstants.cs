@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Web.Helpers;
+﻿namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 
 public class ProfileClaimsConstants
 {

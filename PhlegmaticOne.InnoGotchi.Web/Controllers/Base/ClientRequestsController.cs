@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Web.Extentions;
-using PhlegmaticOne.InnoGotchi.Web.Helpers;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Services;
 using System.Security.Claims;
+using FluentValidation.Results;
+using FluentValidation.AspNetCore;
+using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
+using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 
@@ -48,17 +51,19 @@ public class ClientRequestsController : Controller
             onOperationFailed, onServerResponseFailed, onUnauthorized);
     }
 
-    protected IActionResult LoginRedirect()
+    protected IActionResult ToLoginView()
     {
         var loginPath = LocalStorageService.GetLoginPath();
-        return LocalRedirect(loginPath ?? Constants.HomeUrl);
+        return View(loginPath ?? Constants.HomeUrl);
     }
 
-    protected IActionResult ErrorRedirect()
+    protected IActionResult ToErrorView()
     {
         var errorPath = LocalStorageService.GetErrorPath();
-        return LocalRedirect(errorPath ?? Constants.HomeUrl);
+        return View(errorPath ?? Constants.HomeUrl);
     }
+
+    protected IActionResult ToHomeView() => View(Constants.HomeUrl);
 
     protected async Task SignOutAsync()
     {
@@ -70,6 +75,12 @@ public class ClientRequestsController : Controller
     {
         SetJwtToken(jwtToken);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+    }
+
+    protected IActionResult AddErrorsAndReturnView(ValidationResult validationResult, string viewName, object model)
+    {
+        validationResult.AddToModelState(ModelState);
+        return View(viewName, model);
     }
 
     protected string? GetJwtToken() => LocalStorageService.GetJwtToken();
@@ -84,19 +95,19 @@ public class ClientRequestsController : Controller
         if (serverResponse.IsUnauthorized)
         {
             await SignOutAsync();
-            return onUnauthorized is not null ? onUnauthorized(serverResponse) : LoginRedirect();
+            return onUnauthorized is not null ? onUnauthorized(serverResponse) : ToLoginView();
         }
 
         if (serverResponse.IsSuccess == false)
         {
-            return onServerResponseFailed is not null ? onServerResponseFailed(serverResponse) : ErrorRedirect();
+            return onServerResponseFailed is not null ? onServerResponseFailed(serverResponse) : ToErrorView();
         }
 
         var operationResult = serverResponse.OperationResult!;
 
         if (operationResult.IsSuccess == false)
         {
-            return onOperationFailed is not null ? onOperationFailed(operationResult) : ErrorRedirect();
+            return onOperationFailed is not null ? onOperationFailed(operationResult) : ToErrorView();
         }
 
         var data = serverResponse.GetData()!;

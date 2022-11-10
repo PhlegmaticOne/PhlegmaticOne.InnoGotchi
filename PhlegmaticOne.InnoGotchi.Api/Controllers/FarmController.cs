@@ -18,8 +18,7 @@ public class FarmController : ControllerBase
     private readonly IDataRepository<Farm> _farmDataService;
     private readonly IMapper _mapper;
 
-    public FarmController(IDataService dataService,
-        IMapper mapper)
+    public FarmController(IDataService dataService, IMapper mapper)
     {
         _userProfilesDataService = dataService.GetDataRepository<UserProfile>();
         _farmDataService = dataService.GetDataRepository<Farm>();
@@ -56,7 +55,8 @@ public class FarmController : ControllerBase
 
         if (farm is null)
         {
-            return OperationResult.FromFail<FarmDto>();
+            var notExistsMessage = $"There is not farm created for user: {User.GetUserEmail()}";
+            return OperationResult.FromFail<FarmDto>(customMessage: notExistsMessage);
         }
 
         var mapped = _mapper.Map<FarmDto>(farm);

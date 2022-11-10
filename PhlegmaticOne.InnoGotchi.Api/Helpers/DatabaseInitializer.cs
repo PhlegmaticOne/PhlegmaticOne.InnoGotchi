@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Data.Models;
+using PhlegmaticOne.PasswordHasher.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Helpers;
 
@@ -12,6 +13,7 @@ public static class DatabaseInitializer
 
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+        var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
 
         if (dbContext.Database.IsRelational())
         {
@@ -42,6 +44,20 @@ public static class DatabaseInitializer
                 });
             }
         }
+
+        var userProfiles = dbContext.Set<UserProfile>();
+
+        userProfiles.Add(new UserProfile
+        {
+            User = new User
+            {
+                Email = "qwe",
+                Password = passwordHasher.Hash("qwe")
+            },
+            FirstName = "qwe",
+            SecondName = "qwe",
+            JoinDate = DateTime.Now
+        });
 
         await dbContext.SaveChangesAsync();
     }

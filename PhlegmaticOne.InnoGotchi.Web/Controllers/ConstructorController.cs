@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
-using PhlegmaticOne.InnoGotchi.Web.Extentions;
-using PhlegmaticOne.InnoGotchi.Web.ViewModels;
+using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Constructor;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 
@@ -39,9 +39,8 @@ public class ConstructorController : ClientRequestsController
 
     private IEnumerable<IGrouping<string, string>> GetComponentsByCategories(InnoGotchiComponentCollectionDto data)
     {
-        var serverAddress = LocalStorageService.GetServerAddress();
+        var serverAddress = LocalStorageService.GetServerAddress()!;
         return data.Components.GroupBy(x => x.Name,
                 s => serverAddress.Combine(s.ImageUrl).ToString());
     }
-
 }

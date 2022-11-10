@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
-using PhlegmaticOne.InnoGotchi.Web.ViewModels;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
-namespace PhlegmaticOne.InnoGotchi.Web.MappersConfigurations;
+namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.MappersConfigurations;
 
 public class AccountMapperConfiguration : Profile
 {
@@ -14,9 +14,9 @@ public class AccountMapperConfiguration : Profile
         CreateMap<LoginViewModel, LoginDto>();
     }
 
-    public class FormFileToByteArrayConverter : IValueConverter<IFormFile, byte[]>
+    public class FormFileToByteArrayConverter : IValueConverter<IFormFile?, byte[]>
     {
-        public byte[] Convert(IFormFile sourceMember, ResolutionContext context)
+        public byte[] Convert(IFormFile? sourceMember, ResolutionContext context)
         {
             if (sourceMember is null)
             {
