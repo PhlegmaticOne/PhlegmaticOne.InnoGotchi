@@ -6,9 +6,9 @@ using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Api.Models;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Constructor;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.InnoGotchies;
+using PhlegmaticOne.InnoGotchi.Shared.Constructor;
+using PhlegmaticOne.InnoGotchi.Shared.Farms;
+using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.JwtTokensGeneration.Extensions;
 using PhlegmaticOne.OperationResults;
 
@@ -45,8 +45,7 @@ public class FarmController : DataController
             return OperationResult.FromFail<FarmDto>(customMessage: notExistsMessage);
         }
 
-        var mapped = Mapper.Map<FarmDto>(farm);
-        return OperationResult.FromSuccess(mapped);
+        return ResultFromMap<FarmDto>(farm);
     }
 
     [HttpPost]

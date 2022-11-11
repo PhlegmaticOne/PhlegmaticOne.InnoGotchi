@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Dtos.Constructor;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.Constructor;
 
 public class CreateInnoGotchiDto
 {

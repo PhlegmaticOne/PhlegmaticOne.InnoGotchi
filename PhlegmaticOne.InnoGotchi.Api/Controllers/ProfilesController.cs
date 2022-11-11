@@ -6,7 +6,7 @@ using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.PasswordHasher.Base;
 
@@ -28,39 +28,48 @@ public class ProfilesController : DataController
         _passwordHasher = passwordHasher;
         _userProfileVerifyingService = userProfileVerifyingService;
     }
-
+    
     [HttpPost]
-    public async Task<OperationResult<ProfileDto>> Register([FromBody] RegisterProfileDto registerProfileDto)
+    public async Task<OperationResult<AuthorizedProfileDto>> Register([FromBody] RegisterProfileDto registerProfileDto)
     {
         var validationResult = await _userProfileVerifyingService.ValidateAsync(registerProfileDto);
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<ProfileDto>(validationResult.ToString());
+            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToString());
         }
 
         var userProfile = await _userProfileVerifyingService.MapAsync(registerProfileDto);
-        return await MapFromInsertionResult<ProfileDto, UserProfile>(userProfile);
+        return await MapFromInsertionResult<AuthorizedProfileDto, UserProfile>(userProfile);
     }
 
     [HttpPost]
-    public async Task<OperationResult<ProfileDto>> Login([FromBody] LoginDto loginDto)
+    public async Task<OperationResult<AuthorizedProfileDto>> Login([FromBody] LoginDto loginDto)
     {
         var profile = await GetProfile(loginDto.Email);
 
         if (profile is null)
         {
             var notExistingUserErrorMessage = $"There is no user with email: {loginDto.Email}";
-            return OperationResult.FromFail<ProfileDto>(customMessage: notExistingUserErrorMessage);
+            return OperationResult.FromFail<AuthorizedProfileDto>(customMessage: notExistingUserErrorMessage);
         }
 
         if (PasswordsAreEqual(loginDto.Password, profile.User.Password) == false)
         {
             const string incorrectPasswordMessage = "You've entered incorrect password";
-            return OperationResult.FromFail<ProfileDto>(incorrectPasswordMessage);
+            return OperationResult.FromFail<AuthorizedProfileDto>(incorrectPasswordMessage);
         }
 
-        return OperationResult.FromSuccess(Mapper.Map<ProfileDto>(profile));
+        return ResultFromMap<AuthorizedProfileDto>(profile);
+    }
+
+    [HttpGet]
+    public async Task<OperationResult<DetailedProfileDto>> GetDetailed()
+    {
+        var repository = DataService.GetDataRepository<UserProfile>();
+        var userProfile = await repository.GetByIdOrDefaultAsync(UserId(),
+            i => i.Include(x => x.User).Include(x => x.Avatar!));
+        return ResultFromMap<DetailedProfileDto>(userProfile!);
     }
 
     private Task<UserProfile?> GetProfile(string email) =>

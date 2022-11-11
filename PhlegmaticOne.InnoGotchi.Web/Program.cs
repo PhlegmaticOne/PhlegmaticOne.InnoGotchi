@@ -32,9 +32,13 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 {
     a.ConfigureRequest<RegisterProfileRequest>("Profiles/Register");
     a.ConfigureRequest<LoginRequest>("Profiles/Login");
-    a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
+    a.ConfigureRequest<DetailedProfileGetRequest>("Profiles/GetDetailed");
+    a.ConfigureRequest<UpdateAccountRequest>("Profiles/Update");
+
     a.ConfigureRequest<GetFarmRequest>("Farm/Get");
     a.ConfigureRequest<CreateFarmRequest>("Farm/Create");
+
+    a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 });
 
 builder.Services.AddLocalStorage(startConf =>

@@ -2,6 +2,7 @@
 
 public enum InvitationStatus
 {
+    Declined,
     WaitingForAccepting,
     Accepted
 }

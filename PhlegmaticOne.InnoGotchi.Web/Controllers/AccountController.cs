@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
-using System.Security.Claims;
 using FluentValidation;
+using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
@@ -39,6 +38,17 @@ public class AccountController : ClientRequestsController
     [HttpGet]
     public IActionResult Register() => View();
 
+    [HttpGet]
+    [Authorize]
+    public Task<IActionResult> Details()
+    {
+        return FromAuthorizedGet(new DetailedProfileGetRequest(), profile =>
+        {
+            var profileViewModel = _mapper.Map<ProfileViewModel>(profile);
+            IActionResult view = View(nameof(Details), profileViewModel);
+            return Task.FromResult(view);
+        });
+    }
 
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
@@ -55,7 +65,7 @@ public class AccountController : ClientRequestsController
         return await FromAuthorizedPost(new RegisterProfileRequest(registerDto), async profile =>
         {
             await AuthenticateAsync(profile);
-            return ToHomeView();
+            return RedirectToAction(nameof(Details));
         });
     }
 
@@ -74,30 +84,19 @@ public class AccountController : ClientRequestsController
         return await FromAuthorizedPost(new LoginRequest(loginDto), async profile =>
         {
             await AuthenticateAsync(profile);
-            return loginViewModel.ReturnUrl is null ? ToHomeView() : LocalRedirect(loginViewModel.ReturnUrl);
+            return RedirectToAction(nameof(Details));
         });
     }
 
-    private async Task AuthenticateAsync(ProfileDto profileDto)
+    [HttpPost]
+    public async Task<IActionResult> Update(UpdateAccountViewModel updateAccountViewModel)
     {
-        var claimsPrincipal = CreatePrincipalFromProfile(profileDto);
-        await SignInAsync(claimsPrincipal, profileDto.JwtToken.Token!);
+        return RedirectToAction(nameof(Details));
     }
 
-    private static ClaimsPrincipal CreatePrincipalFromProfile(ProfileDto profileDto)
+    private async Task AuthenticateAsync(AuthorizedProfileDto profileDto)
     {
-        var claims = new List<Claim>
-        {
-            new(ClaimsIdentity.DefaultNameClaimType, profileDto.Email),
-            new(ProfileClaimsConstants.FirstNameClaimName, profileDto.FirstName),
-            new(ProfileClaimsConstants.SecondNameClaimName, profileDto.SecondName)
-        };
-
-        var claimsIdentity = new ClaimsIdentity(claims,
-            Constants.CookieAuthenticationType,
-            ClaimsIdentity.DefaultNameClaimType,
-            ClaimsIdentity.DefaultRoleClaimType);
-
-        return new(claimsIdentity);
+        var claimsPrincipal = ClaimsPrincipalGenerator.GenerateClaimsPrincipal(profileDto);
+        await SignInAsync(claimsPrincipal, profileDto.JwtToken.Token!);
     }
 }

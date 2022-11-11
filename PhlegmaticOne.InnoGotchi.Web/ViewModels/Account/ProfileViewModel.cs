@@ -1,0 +1,10 @@
+﻿namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
+
+public class ProfileViewModel
+{
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public DateTime JoinDate { get; set; }
+    public byte[] AvatarData { get; set; } = null!;
+}

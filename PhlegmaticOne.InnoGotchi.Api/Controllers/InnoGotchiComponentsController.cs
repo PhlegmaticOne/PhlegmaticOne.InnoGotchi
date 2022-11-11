@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
+using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;

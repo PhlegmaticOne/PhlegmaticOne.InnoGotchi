@@ -26,7 +26,7 @@ public class RegisterViewModelValidator : AbstractValidator<RegisterViewModel>
             .MaximumLength(50)
             .WithMessage("Too long first name");
 
-        RuleFor(x => x.SecondName)
+        RuleFor(x => x.LastName)
             .NotEmpty()
             .WithMessage("Second name cannot be empty")
             .MaximumLength(50)

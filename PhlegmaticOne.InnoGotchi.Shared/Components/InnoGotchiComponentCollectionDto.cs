@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.Components;
 
 public record InnoGotchiComponentCollectionDto(List<InnoGotchiComponentDto> Components)
 {

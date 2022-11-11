@@ -7,7 +7,7 @@ public class RegisterViewModel
 
     public string FirstName { get; set; } = null!;
 
-    public string SecondName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
 
     public IFormFile? Avatar { get; set; }
     [DataType(DataType.EmailAddress)] public string Email { get; set; } = null!;

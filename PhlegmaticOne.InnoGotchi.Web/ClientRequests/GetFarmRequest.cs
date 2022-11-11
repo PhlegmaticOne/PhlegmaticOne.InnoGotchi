@@ -1,4 +1,4 @@
-﻿using PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
+﻿using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.ServerRequesting.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ClientRequests;

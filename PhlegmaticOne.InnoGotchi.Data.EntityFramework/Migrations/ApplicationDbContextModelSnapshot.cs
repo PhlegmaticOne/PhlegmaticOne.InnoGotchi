@@ -231,7 +231,7 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("SecondName")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -372,8 +372,7 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Data.Models.UserProfile", b =>
                 {
-                    b.Navigation("Avatar")
-                        .IsRequired();
+                    b.Navigation("Avatar");
 
                     b.Navigation("Collaborations");
 

@@ -4,7 +4,7 @@ using PhlegmaticOne.InnoGotchi.Api.Models;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Data.Models.Enums;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Constructor;
+using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
 

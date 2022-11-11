@@ -2,7 +2,7 @@
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.PasswordHasher.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
@@ -16,8 +16,9 @@ public class UserProfileVerifyingService : VerifyingServiceBase<RegisterProfileD
         base(fluentValidator, dataService) =>
         _passwordHasher = passwordHasher;
 
-    public override Task<UserProfile> MapAsync(RegisterProfileDto from) =>
-        Task.FromResult(new UserProfile
+    public override Task<UserProfile> MapAsync(RegisterProfileDto from)
+    {
+        return Task.FromResult(new UserProfile
         {
             User = new User
             {
@@ -30,6 +31,7 @@ public class UserProfileVerifyingService : VerifyingServiceBase<RegisterProfileD
             },
             JoinDate = DateTime.UtcNow,
             FirstName = from.FirstName,
-            SecondName = from.SecondName
+            LastName = from.LastName
         });
+    }
 }

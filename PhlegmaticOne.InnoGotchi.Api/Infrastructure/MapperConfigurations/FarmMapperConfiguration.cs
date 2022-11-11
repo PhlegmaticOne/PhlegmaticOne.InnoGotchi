@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
+using PhlegmaticOne.InnoGotchi.Shared.Farms;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperConfigurations;
 

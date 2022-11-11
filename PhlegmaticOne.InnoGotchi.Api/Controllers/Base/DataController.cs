@@ -24,7 +24,12 @@ public class DataController : ControllerBase
         var repository = DataService.GetDataRepository<TEntity>();
         var created = await repository.CreateAsync(entity);
         await DataService.SaveChangesAsync();
-        var result = Mapper.Map<TResult>(created);
+        return ResultFromMap<TResult>(created);
+    }
+
+    protected OperationResult<TResult> ResultFromMap<TResult>(object toMap)
+    {
+        var result = Mapper.Map<TResult>(toMap);
         return OperationResult.FromSuccess(result);
     }
 }

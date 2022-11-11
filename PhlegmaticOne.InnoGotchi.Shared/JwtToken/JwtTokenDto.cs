@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Dtos;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.JwtToken;
 
 public class JwtTokenDto
 {

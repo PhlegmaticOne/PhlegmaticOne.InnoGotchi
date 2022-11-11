@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.Farms;
 
 public class FarmDto
 {

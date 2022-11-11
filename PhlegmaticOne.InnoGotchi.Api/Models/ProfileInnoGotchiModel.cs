@@ -1,4 +1,4 @@
-﻿using PhlegmaticOne.InnoGotchi.Shared.Dtos.Constructor;
+﻿using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Models;
 

@@ -11,6 +11,6 @@ public class InnoGotchiModel : EntityBase
     public DateTime LastDrinkTime { get; set; }
     public int Age { get; set; }
     public string Name { get; set; } = null!;
-    public IList<InnoGotchiModelComponent> Components { get; set; } = null!;
     public Farm Farm { get; set; } = null!;
+    public IList<InnoGotchiModelComponent> Components { get; set; } = new List<InnoGotchiModelComponent>();
 }

@@ -14,7 +14,7 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 
         builder.Property(x => x.FirstName).IsRequired();
 
-        builder.Property(x => x.SecondName).IsRequired();
+        builder.Property(x => x.LastName).IsRequired();
 
         builder.Property(x => x.JoinDate);
 

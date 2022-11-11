@@ -12,7 +12,7 @@ using PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.JwtTokensGeneration.Extensions;
 using PhlegmaticOne.JwtTokensGeneration.Options;
 using PhlegmaticOne.PasswordHasher.Extensions;
@@ -68,6 +68,7 @@ builder.Services.AddDataService<ApplicationDbContext>();
 
 
 builder.Services.AddTransient<ProfileDtoJwtTokenPropertyResolver>();
+builder.Services.AddTransient<ProfileAvatarPropertyResolver>();
 builder.Services.AddScoped<IVerifyingService<ProfileFarmModel, Farm>, FarmVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<ProfileInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<RegisterProfileDto, UserProfile>, UserProfileVerifyingService>();

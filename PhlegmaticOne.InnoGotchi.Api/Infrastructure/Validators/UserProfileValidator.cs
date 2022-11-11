@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Users;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Validators;
 

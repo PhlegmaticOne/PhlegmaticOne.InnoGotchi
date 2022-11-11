@@ -55,7 +55,7 @@ public static class DatabaseInitializer
                 Password = passwordHasher.Hash("Qwerty_1234")
             },
             FirstName = "Firstname",
-            SecondName = "Secondname",
+            LastName = "Secondname",
             JoinDate = DateTime.UtcNow
         });
 
