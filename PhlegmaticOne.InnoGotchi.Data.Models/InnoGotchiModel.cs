@@ -9,7 +9,8 @@ public class InnoGotchiModel : EntityBase
     public ThirstyLevel ThirstyLevel { get; set; }
     public DateTime LastFeedTime { get; set; }
     public DateTime LastDrinkTime { get; set; }
-    public string Name { get; set; }
-    public IEnumerable<InnoGotchiModelComponent> Components { get; set; }
-    public Farm Farm { get; set; }
+    public int Age { get; set; }
+    public string Name { get; set; } = null!;
+    public IList<InnoGotchiModelComponent> Components { get; set; } = null!;
+    public Farm Farm { get; set; } = null!;
 }

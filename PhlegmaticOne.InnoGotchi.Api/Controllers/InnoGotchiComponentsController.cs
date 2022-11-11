@@ -27,7 +27,6 @@ public class InnoGotchiComponentsController
     {
         var components = await _innoGotchiComponentsDataService.GetAllAsync();
         var result = _mapper.Map<InnoGotchiComponentCollectionDto>(components);
-
         return OperationResult.FromSuccess(result);
     }
 }

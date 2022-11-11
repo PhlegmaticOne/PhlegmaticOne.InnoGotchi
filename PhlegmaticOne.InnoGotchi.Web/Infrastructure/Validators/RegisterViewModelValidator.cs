@@ -1,13 +1,13 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
-using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Validators;
 
 public class RegisterViewModelValidator : AbstractValidator<RegisterViewModel>
 {
-    public RegisterViewModelValidator()
+    public RegisterViewModelValidator(IMapper mapper)
     {
         RuleFor(x => x.Email)
             .EmailAddress()

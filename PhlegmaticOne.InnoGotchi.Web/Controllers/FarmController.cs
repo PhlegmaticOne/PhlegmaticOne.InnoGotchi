@@ -42,7 +42,7 @@ public class FarmController : ClientRequestsController
         return FromAuthorizedPost(new CreateFarmRequest(createFarmDto), farm =>
         {
             var viewModel = _mapper.Map<FarmViewModel>(farm);
-            IActionResult view = View(nameof(Index), viewModel);
+            IActionResult view = RedirectToAction(nameof(Index));
             return Task.FromResult(view);
         });
     }

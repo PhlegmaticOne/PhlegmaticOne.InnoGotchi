@@ -1,6 +1,6 @@
-﻿using PhlegmaticOne.DataService.Interfaces;
+﻿using PhlegmaticOne.PagedList.Base;
 
-namespace PhlegmaticOne.DataService.Implementation;
+namespace PhlegmaticOne.PagedList;
 
 public class PagedList<T> : IPagedList<T>
 {
@@ -14,7 +14,7 @@ public class PagedList<T> : IPagedList<T>
 
     public int IndexFrom { get; init; }
 
-    public IList<T> Items { get; init; }
+    public IList<T> Items { get; init; } = null!;
 
     public bool HasPreviousPage => PageIndex - IndexFrom > 0;
 

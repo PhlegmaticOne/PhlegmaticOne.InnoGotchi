@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.MappersConfigurations;
+using PhlegmaticOne.InnoGotchi.Web.Infrastructure.TagHelpers.PagedList.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Validators;
 using PhlegmaticOne.LocalStorage.Extensions;
 using PhlegmaticOne.ServerRequesting.Extensions;
@@ -43,9 +44,10 @@ builder.Services.AddLocalStorage(startConf =>
     startConf.SetErrorPath("/Home/Error");
 });
 
+builder.Services.AddTransient<IPagedListPagesGenerator, PagedListPagesGenerator>();
+
 
 var app = builder.Build();
-
 
 if (!app.Environment.IsDevelopment())
 {
@@ -54,7 +56,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseStaticFiles();
 

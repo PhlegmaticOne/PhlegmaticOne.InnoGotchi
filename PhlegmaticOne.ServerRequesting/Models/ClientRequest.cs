@@ -15,7 +15,6 @@ public abstract class ClientPostRequest<TRequest, TResponse> : ClientRequest<TRe
     protected ClientPostRequest(TRequest requestData) : base(requestData) { }
 }
 
-
 public abstract class ClientGetRequest<TRequest, TResponse> : ClientRequest<TRequest, TResponse>
 {
     protected ClientGetRequest(TRequest requestData) : base(requestData) => RequestData = requestData;
@@ -30,6 +29,6 @@ public abstract class ClientGetRequest<TRequest, TResponse> : ClientRequest<TReq
 
 public abstract class EmptyClientGetRequest<TResponse> : ClientGetRequest<object, TResponse>
 {
-    protected EmptyClientGetRequest() : base(default) => IsEmpty = true;
+    protected EmptyClientGetRequest() : base(default!) => IsEmpty = true;
     public sealed override string BuildQueryString() => string.Empty;
 }

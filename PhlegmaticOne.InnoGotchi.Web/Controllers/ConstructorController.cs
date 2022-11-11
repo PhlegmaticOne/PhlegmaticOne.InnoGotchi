@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
+using PhlegmaticOne.InnoGotchi.Shared.Dtos.Constructor;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
@@ -13,9 +15,15 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [Authorize]
 public class ConstructorController : ClientRequestsController
 {
-    public ConstructorController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService) :
+    private readonly IMapper _mapper;
+
+    public ConstructorController(IClientRequestsService clientRequestsService,
+        ILocalStorageService localStorageService,
+        IMapper mapper) :
         base(clientRequestsService, localStorageService)
-    { }
+    {
+        _mapper = mapper;
+    }
 
     [HttpGet]
     public Task<IActionResult> Build()
@@ -31,10 +39,15 @@ public class ConstructorController : ClientRequestsController
     }
 
     [HttpPost]
-    public string CreateNew([FromBody] CreateInnoGotchiViewModel createInnoGotchiViewModel)
+    public Task<IActionResult> CreateNew([FromBody] CreateInnoGotchiViewModel createInnoGotchiViewModel)
     {
-        var result = createInnoGotchiViewModel.Components.First();
-        return result.ImageUrl;
+        var createInnoGotchiDto = _mapper.Map<CreateInnoGotchiDto>(createInnoGotchiViewModel);
+
+        return FromAuthorizedPost(new CreateInnoGotchiRequest(createInnoGotchiDto), innoGotchi =>
+        {
+            IActionResult result = View("/Farm/Index");
+            return Task.FromResult(result);
+        });
     }
 
     private IEnumerable<IGrouping<string, string>> GetComponentsByCategories(InnoGotchiComponentCollectionDto data)

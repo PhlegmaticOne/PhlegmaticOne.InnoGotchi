@@ -1,9 +1,7 @@
 ﻿namespace PhlegmaticOne.InnoGotchi.Shared.Dtos.Components;
 
-public record InnoGotchiComponentDto(string ImageUrl, string Name)
+public class InnoGotchiComponentDto
 {
-    public InnoGotchiComponentDto() : this(null, null)
-    {
-
-    }
+    public string ImageUrl { get; set; } = null!;
+    public string Name { get; set; } = null!;
 }

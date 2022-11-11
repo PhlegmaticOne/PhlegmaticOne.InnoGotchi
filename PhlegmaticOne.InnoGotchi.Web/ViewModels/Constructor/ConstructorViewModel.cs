@@ -2,5 +2,5 @@
 
 public class ConstructorViewModel
 {
-    public IEnumerable<IGrouping<string, string>> ComponentsByCategories { get; init; }
+    public IEnumerable<IGrouping<string, string>> ComponentsByCategories { get; init; } = null!;
 }

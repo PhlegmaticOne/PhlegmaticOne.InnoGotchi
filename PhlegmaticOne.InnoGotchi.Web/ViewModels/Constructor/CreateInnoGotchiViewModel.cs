@@ -2,7 +2,7 @@
 
 public class CreateInnoGotchiViewModel
 {
-    public List<CreateInnoGotchiComponentViewModel> Components { get; set; }
+    public List<CreateInnoGotchiComponentViewModel> Components { get; set; } = null!;
 }
 
 public class CreateInnoGotchiComponentViewModel
@@ -11,5 +11,5 @@ public class CreateInnoGotchiComponentViewModel
     public float TranslateY { get; set; }
     public float ScaleX { get; set; }
     public float ScaleY { get; set; }
-    public string ImageUrl { get; set; }
+    public string ImageUrl { get; set; } = null!;
 }

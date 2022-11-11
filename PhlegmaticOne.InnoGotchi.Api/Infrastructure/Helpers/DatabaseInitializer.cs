@@ -3,7 +3,7 @@ using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.PasswordHasher.Base;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Helpers;
+namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
 
 public static class DatabaseInitializer
 {
@@ -51,12 +51,12 @@ public static class DatabaseInitializer
         {
             User = new User
             {
-                Email = "qwe",
-                Password = passwordHasher.Hash("qwe")
+                Email = "test@gmail.com",
+                Password = passwordHasher.Hash("Qwerty_1234")
             },
-            FirstName = "qwe",
-            SecondName = "qwe",
-            JoinDate = DateTime.Now
+            FirstName = "Firstname",
+            SecondName = "Secondname",
+            JoinDate = DateTime.UtcNow
         });
 
         await dbContext.SaveChangesAsync();

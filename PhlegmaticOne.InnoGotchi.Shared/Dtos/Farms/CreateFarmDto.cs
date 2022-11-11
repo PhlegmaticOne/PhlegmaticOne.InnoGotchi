@@ -2,5 +2,5 @@
 
 public class CreateFarmDto
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 }

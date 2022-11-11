@@ -43,7 +43,7 @@ public class ClientRequestsService : IClientRequestsService
         return await GetServerResponse<TResponse>(httpResponseMessage);
     }
 
-    private HttpClient CreateHttpClientWithToken(string jwtToken)
+    private HttpClient CreateHttpClientWithToken(string? jwtToken)
     {
         var httpClient = _httpClientFactory.CreateClient(_httpClientName);
         httpClient.DefaultRequestHeaders.Authorization =

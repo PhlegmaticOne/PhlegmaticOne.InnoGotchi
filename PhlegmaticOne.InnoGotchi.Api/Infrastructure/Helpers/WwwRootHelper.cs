@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Api.Helpers;
+﻿namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
 
 internal static class WwwRootHelper
 {

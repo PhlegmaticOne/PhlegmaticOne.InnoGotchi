@@ -1,10 +1,18 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PhlegmaticOne.DataService.Extensions;
-using PhlegmaticOne.InnoGotchi.Api.Helpers;
-using PhlegmaticOne.InnoGotchi.Api.MapperConfigurations;
+using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperConfigurations;
+using PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperResolvers;
+using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Validators;
+using PhlegmaticOne.InnoGotchi.Api.Models;
+using PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
+using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
+using PhlegmaticOne.InnoGotchi.Data.Models;
+using PhlegmaticOne.InnoGotchi.Shared.Dtos.Users;
 using PhlegmaticOne.JwtTokensGeneration.Extensions;
 using PhlegmaticOne.JwtTokensGeneration.Options;
 using PhlegmaticOne.PasswordHasher.Extensions;
@@ -37,14 +45,10 @@ builder.Services.AddAuthentication(x =>
         ClockSkew = TimeSpan.Zero
     };
 });
-
 builder.Services.AddAutoMapper(x =>
 {
-    x.AddProfile<ProfileMapperConfiguration>();
-    x.AddProfile<InnoGotchiComponentsMapperConfiguration>();
-    x.AddProfile<FarmMapperConfiguration>();
+    x.AddMaps(typeof(ProfileMapperConfiguration).Assembly);
 });
-
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
 {
     //var connectionString = builder.Configuration.GetConnectionString("DbConnection");
@@ -52,7 +56,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(x =>
 
     x.UseInMemoryDatabase("MEMORY");
 });
-
+builder.Services.AddValidatorsFromAssemblyContaining<UserProfileValidator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -61,6 +65,12 @@ builder.Services.AddControllers();
 builder.Services.AddPasswordHasher();
 builder.Services.AddJwtTokenGeneration(jwtOptions);
 builder.Services.AddDataService<ApplicationDbContext>();
+
+
+builder.Services.AddTransient<ProfileDtoJwtTokenPropertyResolver>();
+builder.Services.AddScoped<IVerifyingService<ProfileFarmModel, Farm>, FarmVerifyingService>();
+builder.Services.AddScoped<IVerifyingService<ProfileInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();
+builder.Services.AddScoped<IVerifyingService<RegisterProfileDto, UserProfile>, UserProfileVerifyingService>();
 
 var app = builder.Build();
 

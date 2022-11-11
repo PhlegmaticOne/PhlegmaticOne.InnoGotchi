@@ -2,7 +2,7 @@
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Dtos.Farms;
 
-namespace PhlegmaticOne.InnoGotchi.Api.MapperConfigurations;
+namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperConfigurations;
 
 public class FarmMapperConfiguration : Profile
 {

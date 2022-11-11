@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.DataService.Interfaces;
+﻿namespace PhlegmaticOne.PagedList.Base;
 
 public interface IPagedList<T>
 {

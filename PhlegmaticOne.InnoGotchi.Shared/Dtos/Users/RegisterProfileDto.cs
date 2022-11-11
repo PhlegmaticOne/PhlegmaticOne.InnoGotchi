@@ -2,7 +2,7 @@
 
 public class RegisterProfileDto : UserDtoBase
 {
-    public string FirstName { get; set; }
-    public string SecondName { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string SecondName { get; set; } = null!;
     public byte[] AvatarData { get; set; } = Array.Empty<byte>();
 }

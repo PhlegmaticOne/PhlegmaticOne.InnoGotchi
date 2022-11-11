@@ -108,6 +108,9 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("FarmId")
                         .HasColumnType("uniqueidentifier");
 

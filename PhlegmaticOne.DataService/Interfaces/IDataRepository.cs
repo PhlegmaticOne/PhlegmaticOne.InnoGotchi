@@ -1,16 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using PhlegmaticOne.DataService.Models;
 using System.Linq.Expressions;
+using PhlegmaticOne.PagedList.Base;
 
 namespace PhlegmaticOne.DataService.Interfaces;
 
 public interface IDataRepository<TEntity> where TEntity : EntityBase
 {
     Task<TEntity> CreateAsync(TEntity entity);
-    Task<TEntity?> UpdateAsync(Guid id, Action<TEntity> actionOverExistingEntity);
+    Task<TEntity> UpdateAsync(TEntity entity, Action<TEntity> actionOverExistingEntity);
+    Task<TEntity?> UpdateAsync(Guid entityId, Action<TEntity> actionOverExistingEntity);
     Task<bool> DeleteAsync(Guid id);
     Task<TEntity?> GetByIdOrDefaultAsync(Guid id,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+    Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+
     Task<IList<TEntity>> GetAllAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
@@ -28,4 +35,5 @@ public interface IDataRepository<TEntity> where TEntity : EntityBase
 
     Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>>? predicate = null);
+    Task<bool> AllAsync(Expression<Func<TEntity, bool>> predicate);
 }

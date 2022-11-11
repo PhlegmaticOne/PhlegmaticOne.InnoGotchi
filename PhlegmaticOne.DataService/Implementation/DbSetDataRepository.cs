@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using PhlegmaticOne.DataService.Extensions;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.DataService.Models;
 using System.Linq.Expressions;
+using PhlegmaticOne.PagedList.Base;
+using PhlegmaticOne.PagedList.Extensions;
 
 namespace PhlegmaticOne.DataService.Implementation;
 
@@ -19,11 +20,18 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
         return result.Entity;
     }
 
+    public Task<TEntity> UpdateAsync(TEntity entity, Action<TEntity> actionOverExistingEntity)
+    {
+        actionOverExistingEntity(entity);
+        _set.Update(entity);
+        return Task.FromResult(entity);
+    }
+
     public async Task<TEntity?> UpdateAsync(Guid id, Action<TEntity> actionOverExistingEntity)
     {
         var existing = await GetByIdOrDefaultAsync(id);
 
-        if (existing == null)
+        if (existing is null)
         {
             return null;
         }
@@ -49,7 +57,7 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
     public Task<TEntity?> GetByIdOrDefaultAsync(Guid id,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
     {
-        var query = _set.AsNoTracking();
+        IQueryable<TEntity> query = _set;
 
         if (include is not null)
         {
@@ -59,11 +67,37 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
         return query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        
+    public async Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
     {
-        var query = _set.AsNoTracking();
+        IQueryable<TEntity> query = _set;
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        if (orderBy is not null)
+        {
+            query = orderBy(query);
+        }
+
+        return await query.Select(selector).ToListAsync();
+    }
+
+    public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, 
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> query = _set;
 
         if (include is not null)
         {
@@ -89,7 +123,7 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
         int pageIndex = 0,
         int pageSize = 20)
     {
-        var query = _set.AsNoTracking();
+        IQueryable<TEntity> query = _set;
 
         if (include is not null)
         {
@@ -112,7 +146,7 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
     public Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
     {
-        var query = _set.AsNoTracking();
+        IQueryable<TEntity> query = _set;
 
         if (include is not null)
         {
@@ -127,4 +161,7 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
 
     public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>>? predicate = null) =>
         predicate is null ? _set.AnyAsync() : _set.AnyAsync(predicate);
+
+    public Task<bool> AllAsync(Expression<Func<TEntity, bool>> predicate) => 
+        _set.AllAsync(predicate);
 }

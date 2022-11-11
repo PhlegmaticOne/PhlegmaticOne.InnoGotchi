@@ -23,6 +23,8 @@ public class InnoGotchiConfiguration : IEntityTypeConfiguration<InnoGotchiModel>
 
         builder.Property(x => x.LastDrinkTime);
 
+        builder.Property(x => x.Age);
+
         builder.Property(x => x.LastFeedTime);
 
         builder.Property(x => x.Name)

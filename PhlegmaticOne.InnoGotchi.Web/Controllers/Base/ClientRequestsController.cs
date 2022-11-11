@@ -10,7 +10,6 @@ using FluentValidation.Results;
 using FluentValidation.AspNetCore;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
-using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 
@@ -54,16 +53,16 @@ public class ClientRequestsController : Controller
     protected IActionResult ToLoginView()
     {
         var loginPath = LocalStorageService.GetLoginPath();
-        return View(loginPath ?? Constants.HomeUrl);
+        return Redirect(loginPath ?? Constants.HomeUrl);
     }
 
     protected IActionResult ToErrorView()
     {
         var errorPath = LocalStorageService.GetErrorPath();
-        return View(errorPath ?? Constants.HomeUrl);
+        return Redirect(errorPath ?? Constants.HomeUrl);
     }
 
-    protected IActionResult ToHomeView() => View(Constants.HomeUrl);
+    protected IActionResult ToHomeView() => Redirect(Constants.HomeUrl);
 
     protected async Task SignOutAsync()
     {
