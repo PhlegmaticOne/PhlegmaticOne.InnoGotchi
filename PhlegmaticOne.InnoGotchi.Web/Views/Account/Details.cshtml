@@ -23,7 +23,7 @@
                     <h4 class="text-white-50">Profile Settings</h4>
                 </div>
                 <div class="row mt-3">
-                    @{ await Html.RenderPartialAsync("Update", new UpdateAccountViewModel()); }
+                    <a asp-controller="Account" asp-action="Update">Update profile</a>
                 </div>
             </div>
         </div>

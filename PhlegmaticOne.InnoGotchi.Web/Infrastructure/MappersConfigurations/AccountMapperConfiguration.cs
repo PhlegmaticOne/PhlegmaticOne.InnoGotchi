@@ -13,5 +13,15 @@ public class AccountMapperConfiguration : Profile
             .ForMember(x => x.AvatarData, o => o.ConvertUsing(new FormFileToByteArrayConverter(), y => y.Avatar));
         CreateMap<LoginViewModel, LoginDto>();
         CreateMap<DetailedProfileDto, ProfileViewModel>();
+
+        CreateMap<DetailedProfileDto, UpdateAccountViewModel>()
+            .ForMember(x => x.CurrentAvatar, o => o.MapFrom(x => x.AvatarData));
+
+        CreateMap<UpdateAccountViewModel, UpdateProfileDto>()
+            .ForMember(x => x.AvatarData, o => o.ConvertUsing(new FormFileToByteArrayConverter(), y => y.Avatar))
+            .ForMember(x => x.FirstName, o => o.MapFrom(x => x.FirstName ?? ""))
+            .ForMember(x => x.LastName, o => o.MapFrom(x => x.LastName ?? ""))
+            .ForMember(x => x.NewPassword, o => o.MapFrom(x => x.NewPassword ?? ""))
+            .ForMember(x => x.OldPassword, o => o.MapFrom(x => x.OldPassword ?? ""));
     }
 }

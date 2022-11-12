@@ -21,15 +21,15 @@ public class RegisterViewModelValidator : AbstractValidator<RegisterViewModel>
             .WithMessage("Passwords don't match");
 
         RuleFor(x => x.FirstName)
-            .NotEmpty()
-            .WithMessage("First name cannot be empty")
+            .MinimumLength(3)
             .MaximumLength(50)
-            .WithMessage("Too long first name");
+            .When(x => string.IsNullOrEmpty(x.FirstName))
+            .WithMessage("Specify firstname with length of 3 to 50");
 
         RuleFor(x => x.LastName)
-            .NotEmpty()
-            .WithMessage("Second name cannot be empty")
+            .MinimumLength(3)
             .MaximumLength(50)
-            .WithMessage("Too long second name");
+            .When(x => string.IsNullOrEmpty(x.FirstName))
+            .WithMessage("Specify firstname with length of 3 to 50");
     }
 }

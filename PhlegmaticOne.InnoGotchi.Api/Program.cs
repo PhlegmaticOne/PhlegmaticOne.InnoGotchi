@@ -72,6 +72,7 @@ builder.Services.AddTransient<ProfileAvatarPropertyResolver>();
 builder.Services.AddScoped<IVerifyingService<ProfileFarmModel, Farm>, FarmVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<ProfileInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<RegisterProfileDto, UserProfile>, UserProfileVerifyingService>();
+builder.Services.AddScoped<IVerifyingService<UpdateProfileDto, UserProfile>, UpdateProfileVerifyingService>();
 
 var app = builder.Build();
 

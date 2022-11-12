@@ -76,7 +76,7 @@ public class ClientRequestsController : Controller
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
     }
 
-    protected IActionResult AddErrorsAndReturnView(ValidationResult validationResult, string viewName, object model)
+    protected IActionResult ErrorView(ValidationResult validationResult, string viewName, object model)
     {
         validationResult.AddToModelState(ModelState);
         return View(viewName, model);

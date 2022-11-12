@@ -1,0 +1,27 @@
+.box:before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(0deg, #f89b29 16%, #ff0f7b 165% );
+    transform: translate3d(0px, 0px, 0) scale(1.3, 0.95);
+    filter: blur(63px);
+    opacity: 0.6;
+    transition: opacity 0.3s;
+    border-radius: inherit;
+}
+
+.box::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: inherit;
+    border-radius: inherit;
+}

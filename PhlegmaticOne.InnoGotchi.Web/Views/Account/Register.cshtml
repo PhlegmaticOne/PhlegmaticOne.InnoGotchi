@@ -1,41 +1,71 @@
 ﻿@model RegisterViewModel
 
-<h2>Registration</h2>
+<section>
+    <div class="container my-1">
+        <div class="row d-flex justify-content-center align-items-center ">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white m-3" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center box">
 
-<form asp-action="Register" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
-        <div>
-            <label asp-for="Email" class="text-white-50">Enter Email</label><br />
-            <input type="text" asp-for="Email" />
-            <span asp-validation-for="Email" ></span>
-        </div>
-        <div>
-            <label asp-for="FirstName" class="text-white">Enter first name</label><br />
-            <input type="text" asp-for="FirstName" />
-            <span asp-validation-for="FirstName" ></span>
-        </div>
-        <div>
-            <label asp-for="LastName" class="text-white">Enter second name</label><br />
-            <input type="text" asp-for="LastName" />
-            <span asp-validation-for="LastName"></span>
-        </div>
-        <div>
-            <label asp-for="Password" class="text-white">Enter password</label><br />
-            <input asp-for="Password" />
-            <span asp-validation-for="Password" />
-        </div>
-        <div>
-            <label asp-for="ConfirmPassword" class="text-white">Confirm password</label><br />
-            <input asp-for="ConfirmPassword" />
-            <span asp-validation-for="ConfirmPassword" ></span>
-        </div>
-        <div>
-            <label asp-for="Avatar" class="text-white">Add avatar</label>
-            <input name="Avatar" type="file" class="form-control" />
-        </div>
-        <div>
-            <input type="submit" value="Registration" />
+                        <div class="mb-md-2 mt-md-2">
+
+                            <h2 class="fw-bold text-uppercase">Register</h2>
+                            
+                            <form asp-action="Register" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
+                                <div class="validation" asp-validation-summary="ModelOnly"></div>
+                                <div>
+                                    <div class="form-outline form-white mb-2">
+                                        <label asp-for="Email" class="mb-2">Enter Email</label><br />
+                                        <input type="text" asp-for="Email" class="form-control form-control-sm" />
+                                        <span asp-validation-for="Email" class="form-label"></span>
+                                    </div>
+                                    <div class="form-outline form-white mb-2">
+                                        <label asp-for="FirstName" class="mb-2">Enter first name</label><br />
+                                        <input type="text" asp-for="FirstName" class="form-control form-control-sm" />
+                                        <span asp-validation-for="FirstName" class="form-label"></span>
+                                    </div>
+                                    <div class="form-outline form-white mb-2">
+                                        <label asp-for="LastName" class="mb-2">Enter second name</label><br />
+                                        <input type="text" asp-for="LastName" class="form-control form-control-sm" />
+                                        <span asp-validation-for="LastName" class="form-label"></span>
+                                    </div>
+                                    <div class="form-outline form-white mb-2">
+                                        <label asp-for="Password" class="mb-2">Enter password</label><br />
+                                        <input asp-for="Password" class="form-control form-control-sm" />
+                                        <span asp-validation-for="Password" class="form-label" />
+                                    </div>
+                                    <div class="form-outline form-white mb-2">
+                                        <label asp-for="ConfirmPassword" class="mb-2">Confirm password</label><br />
+                                        <input asp-for="ConfirmPassword" class="form-control form-control-sm" />
+                                        <span asp-validation-for="ConfirmPassword" class="form-label"></span>
+                                    </div>
+                                    <div class="form-outline form-white mb-2">
+                                        <label asp-for="Avatar" class="mb-2">Add avatar</label>
+                                        <input name="Avatar" type="file" class="form-control form-control-sm" />
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-outline-light btn-lg my-4" type="submit">Register</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div>
+                            <p>
+                                Already have an account?
+                                <button class="btn btn-outline-light btn-lg px-5 m-1"
+                                        onclick="location.href = '@Url.Action("Login", "Account")'">
+                                    Login
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</form>
+</section>
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/account-pages.css" asp-append-version="true" />
+}

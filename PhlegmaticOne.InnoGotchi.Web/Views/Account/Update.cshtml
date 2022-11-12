@@ -3,29 +3,37 @@
 <form asp-action="Update" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
+        <input hidden asp-for="Id" />
         <div>
-            @Html.LabelFor(x => x.FirstName, "Change first name", new { @class = "text-white" })<br/>
-            <input type="text" asp-for="FirstName"/>
+            <label asp-for="FirstName">Update first name</label><br />
+            <input type="text" asp-for="FirstName" placeholder="@Model.FirstName"/>
             <span asp-validation-for="FirstName"></span>
         </div>
         <div>
-            @Html.LabelFor(x => x.LastName, "Change last name", new { @class = "text-white" })<br />
-            <input type="text" asp-for="LastName" />
+            <label asp-for="LastName">Update last name</label><br />
+            <input type="text" asp-for="LastName" placeholder="@Model.LastName" />
             <span asp-validation-for="LastName"></span>
         </div>
         <div>
-            @Html.LabelFor(x => x.OldPassword, "Enter old password", new { @class = "text-white" })<br />
-            <input asp-for="OldPassword" />
-            <span asp-validation-for="OldPassword" />
+            <label asp-for="OldPassword">Enter old password</label><br />
+            <input type="password" asp-for="OldPassword" />
+            <span asp-validation-for="OldPassword"></span>
         </div>
         <div>
-            @Html.LabelFor(x => x.FirstName, "Enter new password", new { @class = "text-white" })<br />
-            <input asp-for="NewPassword" />
+            <label asp-for="NewPassword">Enter new password</label><br />
+            <input type="password" asp-for="NewPassword" />
             <span asp-validation-for="NewPassword"></span>
         </div>
+        <div>
+            <label asp-for="NewPasswordConfirm">Confirm new password</label><br />
+            <input type="password" asp-for="NewPasswordConfirm" />
+            <span asp-validation-for="NewPasswordConfirm"></span>
+        </div>
         <div class="col-9">
-            @Html.LabelFor(x => x.Avatar, "Change avatar", new { @class = "text-white" })<br />
-            <input name="Avatar" type="file" class="form-control" />
+            <img class="rounded-circle mt-5" width="128"
+                 src="@($"data:image/png;base64,{Convert.ToBase64String(Model.CurrentAvatar)}")" alt="No avatar" />
+            <label asp-for="Avatar">Choose new avatar</label><br/>
+            <input name="Avatar" type="file" class="form-control"/>
         </div>
         <div class="m-5">
             <button class="btn btn-primary profile-button" type="submit">Save Profile</button>

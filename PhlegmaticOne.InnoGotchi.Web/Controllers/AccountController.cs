@@ -18,17 +18,20 @@ public class AccountController : ClientRequestsController
     private readonly IMapper _mapper;
     private readonly IValidator<RegisterViewModel> _registerViewModelValidator;
     private readonly IValidator<LoginViewModel> _loginViewModelValidator;
+    private readonly IValidator<UpdateAccountViewModel> _updateAccountViewModel;
 
     public AccountController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService,
         IMapper mapper,
         IValidator<RegisterViewModel> registerViewModelValidator,
-        IValidator<LoginViewModel> loginViewModelValidator) : 
+        IValidator<LoginViewModel> loginViewModelValidator,
+        IValidator<UpdateAccountViewModel> updateAccountViewModel) : 
         base(clientRequestsService, localStorageService)
     {
         _mapper = mapper;
         _registerViewModelValidator = registerViewModelValidator;
         _loginViewModelValidator = loginViewModelValidator;
+        _updateAccountViewModel = updateAccountViewModel;
     }
 
 
@@ -57,7 +60,7 @@ public class AccountController : ClientRequestsController
 
         if (validationResult.IsValid == false)
         {
-            return AddErrorsAndReturnView(validationResult, nameof(Register), registerViewModel);
+            return ErrorView(validationResult, nameof(Register), registerViewModel);
         }
 
         var registerDto = _mapper.Map<RegisterProfileDto>(registerViewModel);
@@ -76,7 +79,7 @@ public class AccountController : ClientRequestsController
 
         if (validationResult.IsValid == false)
         {
-            return AddErrorsAndReturnView(validationResult, nameof(Login), loginViewModel);
+            return ErrorView(validationResult, nameof(Login), loginViewModel);
         }
 
         var loginDto = _mapper.Map<LoginDto>(loginViewModel);
@@ -88,10 +91,41 @@ public class AccountController : ClientRequestsController
         });
     }
 
+    [HttpGet]
+    public Task<IActionResult> Update()
+    {
+        return FromAuthorizedGet(new DetailedProfileGetRequest(), profile =>
+        {
+            var profileViewModel = _mapper.Map<UpdateAccountViewModel>(profile);
+            IActionResult view = View(nameof(Update), profileViewModel);
+            return Task.FromResult(view);
+        });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Update(UpdateAccountViewModel updateAccountViewModel)
     {
-        return RedirectToAction(nameof(Details));
+        var validationResult = await _updateAccountViewModel.ValidateAsync(updateAccountViewModel);
+
+        if (validationResult.IsValid == false)
+        {
+            return View(nameof(Update), updateAccountViewModel);
+        }
+
+        var updateDto = _mapper.Map<UpdateProfileDto>(updateAccountViewModel);
+        return await FromAuthorizedPost(new UpdateAccountRequest(updateDto), async profile =>
+        {
+            await SignOutAsync();
+            await AuthenticateAsync(profile);
+            return RedirectToAction(nameof(Details));
+        });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        await SignOutAsync();
+        return ToHomeView();
     }
 
     private async Task AuthenticateAsync(AuthorizedProfileDto profileDto)
