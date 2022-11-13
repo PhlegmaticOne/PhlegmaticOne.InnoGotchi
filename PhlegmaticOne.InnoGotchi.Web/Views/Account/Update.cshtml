@@ -1,42 +1,108 @@
 ﻿@model UpdateAccountViewModel
 
-<form asp-action="Update" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
+<section class="mt-4">
+    <form asp-action="Update" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
         <input hidden asp-for="Id" />
-        <div>
-            <label asp-for="FirstName">Update first name</label><br />
-            <input type="text" asp-for="FirstName" placeholder="@Model.FirstName"/>
-            <span asp-validation-for="FirstName"></span>
+        <input hidden asp-for="OldFirstName" />
+        <input hidden asp-for="OldLastName" />
+        <input hidden asp-for="CurrentAvatar" />
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                    <div class="card bg-dark h-100">
+                        <div class="card-body">
+                            <div class="account-settings">
+                                <div class="user-profile">
+                                    <div class="user-avatar">
+                                        <img class="rounded-circle mt-5" 
+                                             width="96"
+                                             src="@($"data:image/png;base64,{Model.CurrentAvatar}")" 
+                                             alt="No avatar" />
+                                    </div>
+                                    <h5 class="user-name">@Model.OldFirstName @Model.OldLastName</h5>
+                                    <h6 class="user-email">@User.Identity!.Name</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                    <div class="card bg-dark h-100">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h6 class="text-white mt-2">Personal Details</h6>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label asp-for="FirstName" class="text-white-50 mb-2">Update first name</label><br />
+                                        <input type="text" asp-for="FirstName" class="form-control placeholder-glow"
+                                               value="@(Model.OldFirstName == Model.FirstName ? "" : Model.FirstName)"
+                                               placeholder="@Model.OldFirstName" />
+                                        <span asp-validation-for="FirstName" class="text-white"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4  col-12">
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="text-white-50 mb-2">Update last name</label><br />
+                                        <input type="text" asp-for="LastName" class="form-control"
+                                               value="@(Model.LastName == Model.OldLastName ? "" : Model.LastName)"
+                                               placeholder="@Model.OldLastName" />
+                                        <span asp-validation-for="LastName" class="text-white"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4  col-12">
+                                    <div class="form-group">
+                                        <label asp-for="Avatar" class="text-white-50">Update avatar</label><br />
+                                        <input type="file" name="Avatar" class="form-control" placeholder="Choose avatar">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h6 class="text-primary text-white">Passwords</h6>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label asp-for="OldPassword" class="text-white-50 mb-2">Enter old password</label><br />
+                                        <input type="password" class="form-control" asp-for="OldPassword" />
+                                        <span asp-validation-for="OldPassword" class="text-white"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label asp-for="NewPassword" class="text-white-50 mb-2">Enter new password</label><br />
+                                        <input type="password" class="form-control" asp-for="NewPassword" />
+                                        <span asp-validation-for="NewPassword" class="text-white"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label asp-for="NewPasswordConfirm" class="text-white-50 mb-2">Confirm new password</label><br />
+                                        <input type="password" class="form-control" asp-for="NewPasswordConfirm" />
+                                        <span asp-validation-for="NewPasswordConfirm" class="text-white"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <a asp-action="Details" asp-controller="Account" class="btn btn-secondary">
+                                        Cancel
+                                    </a>
+                                    <button class="btn btn-primary" type="submit">Save Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <label asp-for="LastName">Update last name</label><br />
-            <input type="text" asp-for="LastName" placeholder="@Model.LastName" />
-            <span asp-validation-for="LastName"></span>
-        </div>
-        <div>
-            <label asp-for="OldPassword">Enter old password</label><br />
-            <input type="password" asp-for="OldPassword" />
-            <span asp-validation-for="OldPassword"></span>
-        </div>
-        <div>
-            <label asp-for="NewPassword">Enter new password</label><br />
-            <input type="password" asp-for="NewPassword" />
-            <span asp-validation-for="NewPassword"></span>
-        </div>
-        <div>
-            <label asp-for="NewPasswordConfirm">Confirm new password</label><br />
-            <input type="password" asp-for="NewPasswordConfirm" />
-            <span asp-validation-for="NewPasswordConfirm"></span>
-        </div>
-        <div class="col-9">
-            <img class="rounded-circle mt-5" width="128"
-                 src="@($"data:image/png;base64,{Convert.ToBase64String(Model.CurrentAvatar)}")" alt="No avatar" />
-            <label asp-for="Avatar">Choose new avatar</label><br/>
-            <input name="Avatar" type="file" class="form-control"/>
-        </div>
-        <div class="m-5">
-            <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
-        </div>
-    </div>
-</form>
+    </form>
+</section>
+
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/account_update.css" asp-append-version="true" />
+}

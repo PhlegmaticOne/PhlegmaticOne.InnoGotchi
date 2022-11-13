@@ -7,6 +7,7 @@ using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 
@@ -109,7 +110,8 @@ public class AccountController : ClientRequestsController
 
         if (validationResult.IsValid == false)
         {
-            return View(nameof(Update), updateAccountViewModel);
+            validationResult.AddToModelState(ModelState);
+            return View(updateAccountViewModel);
         }
 
         var updateDto = _mapper.Map<UpdateProfileDto>(updateAccountViewModel);
@@ -119,6 +121,14 @@ public class AccountController : ClientRequestsController
             await AuthenticateAsync(profile);
             return RedirectToAction(nameof(Details));
         });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAvatar()
+    {
+        var result = await ClientRequestsService.GetAsync(new GetAvatarGetRequest(), GetJwtToken());
+        var data = result.GetData()!;
+        return File(data, "image/png", "image.png");
     }
 
     [HttpGet]

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;

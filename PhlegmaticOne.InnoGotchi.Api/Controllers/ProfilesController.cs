@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
@@ -18,14 +19,17 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 public class ProfilesController : DataController
 {
     private readonly IPasswordHasher _passwordHasher;
+    private readonly IAvatarConvertingService _avatarConvertingService;
     private readonly IVerifyingService<RegisterProfileDto, UserProfile> _userProfileVerifyingService;
     private readonly IVerifyingService<UpdateProfileDto, UserProfile> _updateProfileVerifyingService;
 
     public ProfilesController(IDataService dataService, IMapper mapper, IPasswordHasher passwordHasher,
+        IAvatarConvertingService avatarConvertingService,
         IVerifyingService<RegisterProfileDto, UserProfile> userProfileVerifyingService,
         IVerifyingService<UpdateProfileDto, UserProfile> updateProfileVerifyingService) : base(dataService, mapper)
     {
         _passwordHasher = passwordHasher;
+        _avatarConvertingService = avatarConvertingService;
         _userProfileVerifyingService = userProfileVerifyingService;
         _updateProfileVerifyingService = updateProfileVerifyingService;
     }
@@ -87,6 +91,16 @@ public class ProfilesController : DataController
         return ResultFromMap<DetailedProfileDto>(userProfile!);
     }
 
+    [HttpGet]
+    public async Task<OperationResult<byte[]>> GetAvatar()
+    {
+        var userId = UserId();
+        var repository = DataService.GetDataRepository<Avatar>();
+        var avatar = await repository.GetFirstOrDefaultAsync(x => x.UserProfileId == userId);
+        var result = _avatarConvertingService.ConvertAvatar(avatar);
+        return OperationResult.FromSuccess(result);
+    }
+
     private async Task<UserProfile> UpdateProfile(UpdateProfileDto updateProfileDto)
     {
         var repository = DataService.GetDataRepository<UserProfile>();
@@ -116,5 +130,5 @@ public class ProfilesController : DataController
         newAvatarData.Any() == false ? oldAvatar : new() { AvatarData = newAvatarData };
 
     private static string GetNewValueOrExisting(string newValue, string existing) => 
-        string.IsNullOrEmpty(newValue) ? newValue : existing;
+        string.IsNullOrEmpty(newValue) == false ? newValue : existing;
 }

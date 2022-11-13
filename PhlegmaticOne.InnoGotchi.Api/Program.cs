@@ -8,6 +8,7 @@ using PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperConfigurations;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperResolvers;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Validators;
 using PhlegmaticOne.InnoGotchi.Api.Models;
+using PhlegmaticOne.InnoGotchi.Api.Services;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
@@ -69,6 +70,7 @@ builder.Services.AddDataService<ApplicationDbContext>();
 
 builder.Services.AddTransient<ProfileDtoJwtTokenPropertyResolver>();
 builder.Services.AddTransient<ProfileAvatarPropertyResolver>();
+builder.Services.AddTransient<IAvatarConvertingService, AvatarConvertingService>();
 builder.Services.AddScoped<IVerifyingService<ProfileFarmModel, Farm>, FarmVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<ProfileInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<RegisterProfileDto, UserProfile>, UserProfileVerifyingService>();

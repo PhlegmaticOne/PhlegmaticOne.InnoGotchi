@@ -34,23 +34,26 @@
                     </li>
                 </ul>
                 <div class="d-flex align-items-center">
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity!.IsAuthenticated)
                     {
+                        <div class="me-2">
+                            <span class="text-white-50">@User.Identity.Name</span>
+                        </div>
                         <div class="dropdown">
                             <button class="btn btn-dark dropdown-toggle" href="#"
                                     id="navbarDropdownMenuLink"
                                     data-toggle="dropdown"
                                     aria-haspopup="true"
                                     aria-expanded="false">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                                     class="rounded-circle"
-                                     height="36"
-                                     alt="Avatar"
-                                     loading="lazy"/>
+                                <img class="rounded-circle"
+                                     src="@Url.Action("GetAvatar", "Account")"
+                                     height="40"
+                                     asp-append-version="true" 
+                                     alt="Avatar"/>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" asp-controller="Account" asp-action="Details">Details</a>
-                                <a class="dropdown-item" asp-controller="Account" asp-action="Update">Update</a>
+                                <a class="dropdown-item" asp-controller="Account" asp-action="Update">Settings</a>
                                 <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a>
                             </div>
                         </div>
@@ -72,19 +75,19 @@
     </nav>
 </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
 
-    <footer class="footer text-muted">
-        <div class="container">
-            &copy; 2022 - PhlegmaticOne.InnoGotchi.Web
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+<footer class="footer text-muted">
+    <div class="container">
+        &copy; 2022 - PhlegmaticOne
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

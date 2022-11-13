@@ -15,7 +15,9 @@ public class AccountMapperConfiguration : Profile
         CreateMap<DetailedProfileDto, ProfileViewModel>();
 
         CreateMap<DetailedProfileDto, UpdateAccountViewModel>()
-            .ForMember(x => x.CurrentAvatar, o => o.MapFrom(x => x.AvatarData));
+            .ForMember(x => x.CurrentAvatar, o => o.MapFrom(x => Convert.ToBase64String(x.AvatarData)))
+            .ForMember(x => x.OldFirstName, o =>o.MapFrom(x => x.FirstName))
+            .ForMember(x => x.OldLastName, o =>o.MapFrom(x => x.LastName));
 
         CreateMap<UpdateAccountViewModel, UpdateProfileDto>()
             .ForMember(x => x.AvatarData, o => o.ConvertUsing(new FormFileToByteArrayConverter(), y => y.Avatar))

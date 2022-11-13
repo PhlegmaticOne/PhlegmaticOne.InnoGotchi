@@ -34,6 +34,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<LoginRequest>("Profiles/Login");
     a.ConfigureRequest<DetailedProfileGetRequest>("Profiles/GetDetailed");
     a.ConfigureRequest<UpdateAccountRequest>("Profiles/Update");
+    a.ConfigureRequest<GetAvatarGetRequest>("Profiles/GetAvatar");
 
     a.ConfigureRequest<GetFarmRequest>("Farm/Get");
     a.ConfigureRequest<CreateFarmRequest>("Farm/Create");
