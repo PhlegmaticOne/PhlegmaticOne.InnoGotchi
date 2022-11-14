@@ -14,11 +14,10 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 public class FarmController : ClientRequestsController
 {
     private readonly IMapper _mapper;
-
-    public FarmController(IClientRequestsService clientRequestsService,
-        ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService) =>
+    public FarmController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService,
+        IMapper mapper) : base(clientRequestsService, localStorageService) =>
         _mapper = mapper;
+
 
     [HttpGet]
     public IActionResult Create() => View();

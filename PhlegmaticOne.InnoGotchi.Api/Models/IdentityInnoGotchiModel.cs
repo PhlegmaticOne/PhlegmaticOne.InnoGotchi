@@ -6,5 +6,5 @@ namespace PhlegmaticOne.InnoGotchi.Api.Models;
 public class IdentityInnoGotchiModel : IdentityModelBase
 {
     public string Name { get; set; } = null!;
-    public List<InnoGotchiComponentDto> Components { get; set; } = null!;
+    public List<CreateInnoGotchiComponentDto> Components { get; set; } = null!;
 }

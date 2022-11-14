@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
@@ -16,44 +17,52 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 public class ConstructorController : ClientRequestsController
 {
     private readonly IMapper _mapper;
+    private readonly IValidator<CreateInnoGotchiViewModel> _createInnoGotchiViewModelValidator;
 
-    public ConstructorController(IClientRequestsService clientRequestsService,
-        ILocalStorageService localStorageService,
-        IMapper mapper) :
-        base(clientRequestsService, localStorageService)
+    public ConstructorController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService,
+        IMapper mapper, IValidator<CreateInnoGotchiViewModel> createInnoGotchiViewModelValidator) : base(clientRequestsService, localStorageService)
     {
         _mapper = mapper;
+        _createInnoGotchiViewModelValidator = createInnoGotchiViewModelValidator;
     }
 
     [HttpGet]
-    public Task<IActionResult> Build()
+    public Task<IActionResult> Create()
     {
-        return FromAuthorizedGet(new GetAllInnoGotchiComponentsRequest(), components =>
+        return FromAuthorizedGet(new GetAllInnoGotchiComponentsRequest(), componentsDto =>
         {
-            IActionResult view = View(new ConstructorViewModel
-            {
-                ComponentsByCategories = GetComponentsByCategories(components)
-            });
+            var mapped = _mapper.Map<ConstructorViewModel>(componentsDto);
+            IActionResult view = View(mapped);
             return Task.FromResult(view);
         });
     }
 
     [HttpPost]
-    public Task<IActionResult> CreateNew([FromBody] CreateInnoGotchiViewModel createInnoGotchiViewModel)
+    public async Task<IActionResult> Create([FromBody] CreateInnoGotchiViewModel createInnoGotchiViewModel)
     {
+        var validationResult = await _createInnoGotchiViewModelValidator.ValidateAsync(createInnoGotchiViewModel);
+
+        if (validationResult.IsValid == false)
+        {
+            validationResult.AddToModelState(ModelState);
+            createInnoGotchiViewModel.ErrorMessage = validationResult.ToString(".");
+            return CreateInnoGotchiPartialView(createInnoGotchiViewModel);
+        }
+
         var createInnoGotchiDto = _mapper.Map<CreateInnoGotchiDto>(createInnoGotchiViewModel);
 
-        return FromAuthorizedPost(new CreateInnoGotchiRequest(createInnoGotchiDto), innoGotchi =>
+        return await FromAuthorizedPost(new CreateInnoGotchiRequest(createInnoGotchiDto), _ =>
         {
-            IActionResult result = View("/Farm/Index");
+            IActionResult result = CreateInnoGotchiPartialView(createInnoGotchiViewModel);
             return Task.FromResult(result);
+        }, result =>
+        {
+            result.AddErrorsToModelState(ModelState);
+            createInnoGotchiViewModel.ErrorMessage = result.ErrorMessage;
+            return CreateInnoGotchiPartialView(createInnoGotchiViewModel);
         });
     }
 
-    private IEnumerable<IGrouping<string, string>> GetComponentsByCategories(InnoGotchiComponentCollectionDto data)
-    {
-        var serverAddress = LocalStorageService.GetServerAddress()!;
-        return data.Components.GroupBy(x => x.Name,
-                s => serverAddress.Combine(s.ImageUrl).ToString());
-    }
+    private IActionResult CreateInnoGotchiPartialView(CreateInnoGotchiViewModel createInnoGotchiViewModel) => 
+        PartialView("CreateInnoGotchiPartialView", createInnoGotchiViewModel);
 }

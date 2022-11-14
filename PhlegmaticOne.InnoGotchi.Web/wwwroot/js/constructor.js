@@ -1,8 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", onLoaded);
 document.addEventListener('keydown', onKeyDown);
 
-
-
 let currentDraggingElement;
 let currentScalingElement;
 let canDragInConstructorArea;
@@ -38,12 +36,14 @@ async function createNew() {
         const translate = get_element_translate(c);
         const scale = get_element_scale(c);
         const imageUrl = c.getAttribute('href');
+        const name = c.classList[0];
         result.push({
             translationX: translate.translateX,
             translationY: translate.translateY,
             scaleX: scale.scaleX,
             scaleY: scale.scaleY,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            name: name
         });
     });
 
@@ -52,7 +52,7 @@ async function createNew() {
         components : result
     }
 
-    const response = await window.fetch("/Constructor/CreateNew", {
+    const response = await window.fetch("/Constructor/Create", {
         method: "POST",
         headers: {
             'Content-type': "application/json"
@@ -60,9 +60,10 @@ async function createNew() {
         body: JSON.stringify(viewModel)
     });
 
-    console.log(response);
-    const data = await response.json();
-    console.log(data);
+    if (response.ok) {
+        const partial = document.getElementById("create_form");
+        partial.innerHTML = await response.text();
+    }
 }
 
 function setup_dragging_elements() {
@@ -238,8 +239,6 @@ function onKeyDown(e) {
 
     const scale = get_element_scale(currentScalingElement);
     const dScale = 0.1;
-
-    console.log(e.key);
 
     if (e.key === "w") {
         set_element_scale(currentScalingElement, scale.scaleX, scale.scaleY + dScale);

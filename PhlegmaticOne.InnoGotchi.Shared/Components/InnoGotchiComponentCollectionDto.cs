@@ -1,9 +1,6 @@
 ﻿namespace PhlegmaticOne.InnoGotchi.Shared.Components;
 
-public record InnoGotchiComponentCollectionDto(List<InnoGotchiComponentDto> Components)
+public class InnoGotchiComponentCollectionDto
 {
-    public InnoGotchiComponentCollectionDto() : this(new List<InnoGotchiComponentDto>())
-    {
-
-    }
+    public List<InnoGotchiComponentDto> Components { get; set; } = null!;
 }

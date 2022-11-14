@@ -36,6 +36,9 @@ public class ValidationResult
         return this;
     }
 
+    public string OnlyErrors(string separator = "\n") => 
+        string.Join(separator, ValidationFailures.Select(x => x.ErrorMessage));
+
     public IDictionary<string, string> ToDictionary() =>
         ValidationFailures
             .GroupBy(x => x.PropertyName)

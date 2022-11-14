@@ -3,5 +3,5 @@
 public class CreateInnoGotchiDto
 {
     public string Name { get; set; } = null!;
-    public List<InnoGotchiComponentDto> Components { get; set; } = null!;
+    public List<CreateInnoGotchiComponentDto> Components { get; set; } = null!;
 }

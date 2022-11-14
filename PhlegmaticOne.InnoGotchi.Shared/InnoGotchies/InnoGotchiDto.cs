@@ -2,5 +2,5 @@
 
 public class InnoGotchiDto
 {
-
+    public string Name { get; set; }
 }

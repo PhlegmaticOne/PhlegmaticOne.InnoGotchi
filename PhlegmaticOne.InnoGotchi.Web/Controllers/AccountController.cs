@@ -87,7 +87,8 @@ public class AccountController : ClientRequestsController
         return await FromAuthorizedPost(new LoginRequest(loginDto), async profile =>
         {
             await AuthenticateAsync(profile);
-            return RedirectToAction(nameof(Details));
+            return loginViewModel.ReturnUrl is null ? RedirectToAction(nameof(Details)) :
+                LocalRedirect(loginViewModel.ReturnUrl);
         }, onOperationFailed: result => ViewWithErrorsFromOperationResult(result, nameof(Login), loginViewModel));
     }
 

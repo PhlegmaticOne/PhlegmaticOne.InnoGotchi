@@ -56,7 +56,7 @@ public class FarmController : DataController
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<FarmDto>(validationResult.ToString());
+            return OperationResult.FromFail<FarmDto>(validationResult.ToDictionary());
         }
 
         var newFarm = await _farmVerifyingService.MapAsync(profileFarmModel);
@@ -71,7 +71,7 @@ public class FarmController : DataController
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<InnoGotchiDto>(validationResult.ToString());
+            return OperationResult.FromFail<InnoGotchiDto>(validationResult.ToDictionary(), validationResult.OnlyErrors());
         }
 
         var created = await _innoGotchiVerifyingService.MapAsync(profileInnoGotchiModel);

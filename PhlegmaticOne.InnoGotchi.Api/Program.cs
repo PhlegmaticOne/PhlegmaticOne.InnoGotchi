@@ -52,10 +52,15 @@ builder.Services.AddAutoMapper(x =>
 });
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
 {
-    //var connectionString = builder.Configuration.GetConnectionString("DbConnection");
-    //x.UseSqlServer(connectionString);
-
-    x.UseInMemoryDatabase("MEMORY");
+    if (builder.Environment.IsDevelopment())
+    {
+        x.UseInMemoryDatabase("MEMORY");
+    }
+    else
+    {
+        var connectionString = builder.Configuration.GetConnectionString("DbConnection");
+        x.UseSqlServer(connectionString);
+    }
 });
 builder.Services.AddValidatorsFromAssemblyContaining<UserProfileValidator>();
 builder.Services.AddEndpointsApiExplorer();
@@ -70,6 +75,7 @@ builder.Services.AddDataService<ApplicationDbContext>();
 
 builder.Services.AddTransient<ProfileDtoJwtTokenPropertyResolver>();
 builder.Services.AddTransient<ProfileAvatarPropertyResolver>();
+builder.Services.AddTransient<ComponentsRemoveSiteAddressMapperResolver>();
 builder.Services.AddTransient<IAvatarConvertingService, AvatarConvertingService>();
 builder.Services.AddScoped<IVerifyingService<IdentityFarmModel, Farm>, FarmVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<IdentityInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();

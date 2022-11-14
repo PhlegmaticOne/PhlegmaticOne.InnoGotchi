@@ -1,0 +1,59 @@
+﻿@model ConstructorViewModel
+
+<section>
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-12 mb-4 mb-lg-0">
+                <div class="card mb-3 bg-dark">
+                    <div class="row g-0">
+                        <div class="col-md-8 bg-gradient text-center text-white">
+                            @{
+                                var i = 0;
+                            }
+                            @foreach (var componentCategory in Model.ComponentCategories)
+                            {
+                                <div class="row mt-3">
+                                    <p>@componentCategory.CategoryName</p>
+                                    @foreach (var component in componentCategory.Components)
+                                    {
+                                        <div class="col dragging" draggable="true">
+                                            <svg style="position: relative;"
+                                                 width="100px" height="100px">
+                                                <image class="@component.Name"
+                                                       style="position: absolute; transform: translate(0px, 0px) scale(1, 1)"
+                                                       width="100px" height="100px"
+                                                       href="@component.ImageUrl"
+                                                       orderInLayer="@i"/>
+                                            </svg>
+                                        </div>
+                                    }
+                                </div>
+                                i++;
+                            }
+                        </div>
+                        <div class="col-md-4 align-content-center justify-content-center">
+                            <svg class="drop-area" style="position: relative; background: wheat"
+                                 width="100%"
+                                 height="auto"></svg>
+                            
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mb-3">
+                        <div id="create_form">
+                            @Html.RenderPartialAsync("CreateInnoGotchiPartialView", new CreateInnoGotchiViewModel())
+                        </div>
+                        <div class="col-6 text-center mt-2">
+                            <input type="submit" class="btn-lg btn-info" id="createNew" value="Create new"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="~/js/constructor.js" asp-append-version="true"></script>
+}
+<link rel="stylesheet" href="~/css/constructor.css" asp-append-version="true" />

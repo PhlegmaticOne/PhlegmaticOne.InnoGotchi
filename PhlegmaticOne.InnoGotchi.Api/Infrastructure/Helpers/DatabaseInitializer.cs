@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.PasswordHasher.Base;
