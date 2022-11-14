@@ -11,7 +11,7 @@ public interface IAvatarConvertingService
 public class AvatarConvertingService : IAvatarConvertingService
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
-    private const string AvatarsDirectoryName = "Resources\\Avatars";
+    private const string AvatarsDirectoryName = "Avatars";
     public AvatarConvertingService(IWebHostEnvironment webHostEnvironment)
     {
         _webHostEnvironment = webHostEnvironment;

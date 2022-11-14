@@ -7,12 +7,12 @@ using PhlegmaticOne.InnoGotchi.Data.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
 
-public class FarmVerifyingService : VerifyingServiceBase<ProfileFarmModel, Farm>
+public class FarmVerifyingService : VerifyingServiceBase<IdentityFarmModel, Farm>
 {
-    public FarmVerifyingService(IValidator<ProfileFarmModel> fluentValidator, IDataService dataService) :
+    public FarmVerifyingService(IValidator<IdentityFarmModel> fluentValidator, IDataService dataService) :
         base(fluentValidator, dataService) { }
 
-    public override async Task<Farm> MapAsync(ProfileFarmModel from)
+    public override async Task<Farm> MapAsync(IdentityFarmModel from)
     {
         var userProfilesRepository = DataService.GetDataRepository<UserProfile>();
         var userProfile = await userProfilesRepository.GetByIdOrDefaultAsync(from.ProfileId, 
@@ -20,7 +20,7 @@ public class FarmVerifyingService : VerifyingServiceBase<ProfileFarmModel, Farm>
 
         return new()
         {
-            Name = from.FarmName,
+            Name = from.Name,
             Owner = userProfile!
         };
     }

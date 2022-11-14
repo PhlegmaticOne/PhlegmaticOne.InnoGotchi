@@ -5,13 +5,13 @@ using PhlegmaticOne.InnoGotchi.Data.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Validators;
 
-public class ProfileFarmValidator : AbstractValidator<ProfileFarmModel>
+public class ProfileFarmValidator : AbstractValidator<IdentityFarmModel>
 {
     public ProfileFarmValidator(IDataService dataService)
     {
         var farmRepository = dataService.GetDataRepository<Farm>();
 
-        RuleFor(x => x.FarmName)
+        RuleFor(x => x.Name)
             .MustAsync((x, _) => farmRepository.AllAsync(f => f.Name != x))
             .WithMessage(x => $"Farm name {x} already reserved");
 

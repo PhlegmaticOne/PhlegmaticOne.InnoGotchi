@@ -10,6 +10,7 @@ using FluentValidation.Results;
 using FluentValidation.AspNetCore;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 
@@ -28,41 +29,47 @@ public class ClientRequestsController : Controller
         ClientGetRequest<TRequest, TResponse> clientGetRequest,
         Func<TResponse, Task<IActionResult>> onSuccess,
         Func<OperationResult, IActionResult>? onOperationFailed = null,
-        Func<ServerResponse, IActionResult>? onServerResponseFailed = null,
-        Func<ServerResponse, IActionResult>? onUnauthorized = null)
+        Func<ServerResponse, IActionResult>? onServerResponseFailed = null)
     {
-        var jwtToken = GetJwtToken();
-        var serverResponse = await ClientRequestsService.GetAsync(clientGetRequest, jwtToken);
-        return await HandleResponse(serverResponse, onSuccess,
-            onOperationFailed, onServerResponseFailed, onUnauthorized);
+        var serverResponse = await ClientRequestsService.GetAsync(clientGetRequest, JwtToken());
+        return await HandleResponse(serverResponse, onSuccess, onOperationFailed, onServerResponseFailed);
     }
 
     protected async Task<IActionResult> FromAuthorizedPost<TRequest, TResponse>(
         ClientPostRequest<TRequest, TResponse> clientPostRequest,
         Func<TResponse, Task<IActionResult>> onSuccess,
         Func<OperationResult, IActionResult>? onOperationFailed = null,
-        Func<ServerResponse, IActionResult>? onServerResponseFailed = null,
-        Func<ServerResponse, IActionResult>? onUnauthorized = null)
+        Func<ServerResponse, IActionResult>? onServerResponseFailed = null)
     {
-        var jwtToken = GetJwtToken();
-        var serverResponse = await ClientRequestsService.PostAsync(clientPostRequest, jwtToken);
-        return await HandleResponse(serverResponse, onSuccess,
-            onOperationFailed, onServerResponseFailed, onUnauthorized);
+        var serverResponse = await ClientRequestsService.PostAsync(clientPostRequest, JwtToken());
+        return await HandleResponse(serverResponse, onSuccess, onOperationFailed, onServerResponseFailed);
     }
 
-    protected IActionResult ToLoginView()
+    protected IActionResult LoginView()
     {
         var loginPath = LocalStorageService.GetLoginPath();
         return Redirect(loginPath ?? Constants.HomeUrl);
     }
 
-    protected IActionResult ToErrorView()
+    protected IActionResult ErrorView(string errorMessage)
     {
-        var errorPath = LocalStorageService.GetErrorPath();
-        return Redirect(errorPath ?? Constants.HomeUrl);
+        return RedirectToAction("Error", "Home", new { errorMessage = errorMessage });
     }
 
-    protected IActionResult ToHomeView() => Redirect(Constants.HomeUrl);
+    protected IActionResult HomeView() => Redirect(Constants.HomeUrl);
+
+    protected IActionResult ViewWithErrorsFromOperationResult(OperationResult operationResult, string viewName, ErrorHavingViewModel viewModel)
+    {
+        operationResult.AddErrorsToModelState(ModelState);
+        viewModel.ErrorMessage = operationResult.ErrorMessage;
+        return View(viewName, viewModel);
+    }
+
+    protected IActionResult ViewWithErrorsFromValidationResult(ValidationResult validationResult, string viewName, ErrorHavingViewModel viewModel)
+    {
+        validationResult.AddToModelState(ModelState);
+        return View(viewName, viewModel);
+    }
 
     protected async Task SignOutAsync()
     {
@@ -76,37 +83,35 @@ public class ClientRequestsController : Controller
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
     }
 
-    protected IActionResult ErrorView(ValidationResult validationResult, string viewName, object model)
-    {
-        validationResult.AddToModelState(ModelState);
-        return View(viewName, model);
-    }
-
-    protected string? GetJwtToken() => LocalStorageService.GetJwtToken();
+    protected string? JwtToken() => LocalStorageService.GetJwtToken();
     protected void SetJwtToken(string jwtToken) => LocalStorageService.SetJwtToken(jwtToken);
 
-    private async Task<IActionResult> HandleResponse<TResponse>(ServerResponse<TResponse> serverResponse,
+    private async Task<IActionResult> HandleResponse<TResponse>(
+        ServerResponse<TResponse> serverResponse,
         Func<TResponse, Task<IActionResult>> onSuccess,
         Func<OperationResult, IActionResult>? onOperationFailed = null,
-        Func<ServerResponse, IActionResult>? onServerResponseFailed = null,
-        Func<ServerResponse, IActionResult>? onUnauthorized = null)
+        Func<ServerResponse, IActionResult>? onServerResponseFailed = null)
     {
         if (serverResponse.IsUnauthorized)
         {
             await SignOutAsync();
-            return onUnauthorized is not null ? onUnauthorized(serverResponse) : ToLoginView();
+            return LoginView();
         }
 
         if (serverResponse.IsSuccess == false)
         {
-            return onServerResponseFailed is not null ? onServerResponseFailed(serverResponse) : ToErrorView();
+            return onServerResponseFailed is not null ?
+                onServerResponseFailed(serverResponse) :
+                ErrorView(serverResponse.ToString());
         }
 
         var operationResult = serverResponse.OperationResult!;
 
         if (operationResult.IsSuccess == false)
         {
-            return onOperationFailed is not null ? onOperationFailed(operationResult) : ToErrorView();
+            return onOperationFailed is not null ? 
+                onOperationFailed(operationResult) :
+                ErrorView(operationResult.ErrorMessage!);
         }
 
         var data = serverResponse.GetData()!;

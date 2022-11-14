@@ -31,7 +31,7 @@ function onLoaded() {
 async function createNew() {
 
     const components = document.querySelectorAll('.in-constructor');
-
+    const name = document.getElementById('innogotchi_name').value;
     const result = [];
 
     components.forEach(c => {
@@ -39,8 +39,8 @@ async function createNew() {
         const scale = get_element_scale(c);
         const imageUrl = c.getAttribute('href');
         result.push({
-            translateX: translate.translateX,
-            translateY: translate.translateY,
+            translationX: translate.translateX,
+            translationY: translate.translateY,
             scaleX: scale.scaleX,
             scaleY: scale.scaleY,
             imageUrl: imageUrl
@@ -48,6 +48,7 @@ async function createNew() {
     });
 
     const viewModel = {
+        name: name,
         components : result
     }
 

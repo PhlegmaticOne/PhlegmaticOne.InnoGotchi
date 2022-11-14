@@ -19,7 +19,8 @@ public class DataController : ControllerBase
     }
 
     protected Guid UserId() => User.GetUserId();
-    protected async Task<OperationResult<TResult>> MapFromInsertionResult<TResult, TEntity>(TEntity entity) where TEntity : EntityBase
+    protected async Task<OperationResult<TResult>> MapFromInsertionResult<TResult, TEntity>(TEntity entity) 
+        where TEntity : EntityBase
     {
         var repository = DataService.GetDataRepository<TEntity>();
         var created = await repository.CreateAsync(entity);

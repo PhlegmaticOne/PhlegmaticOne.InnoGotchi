@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
-public class UpdateAccountViewModel
+public class UpdateAccountViewModel : ErrorHavingViewModel
 {
     public Guid Id { get; set; }
     public string OldFirstName { get; set; } = null!;

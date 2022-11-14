@@ -17,33 +17,34 @@
                                     <div class="form-outline form-white mb-2">
                                         <label asp-for="Email" class="mb-2">Enter Email</label><br />
                                         <input type="text" asp-for="Email" class="form-control form-control-sm" />
-                                        <span asp-validation-for="Email" class="form-label"></span>
+                                        <span asp-validation-for="Email" class="text-danger"></span>
                                     </div>
                                     <div class="form-outline form-white mb-2">
                                         <label asp-for="FirstName" class="mb-2">Enter first name</label><br />
                                         <input type="text" asp-for="FirstName" class="form-control form-control-sm" />
-                                        <span asp-validation-for="FirstName" class="form-label"></span>
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
                                     </div>
                                     <div class="form-outline form-white mb-2">
                                         <label asp-for="LastName" class="mb-2">Enter second name</label><br />
                                         <input type="text" asp-for="LastName" class="form-control form-control-sm" />
-                                        <span asp-validation-for="LastName" class="form-label"></span>
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
                                     </div>
                                     <div class="form-outline form-white mb-2">
                                         <label asp-for="Password" class="mb-2">Enter password</label><br />
                                         <input asp-for="Password" class="form-control form-control-sm" />
-                                        <span asp-validation-for="Password" class="form-label" />
+                                        <span asp-validation-for="Password" class="text-danger" />
                                     </div>
                                     <div class="form-outline form-white mb-2">
                                         <label asp-for="ConfirmPassword" class="mb-2">Confirm password</label><br />
                                         <input asp-for="ConfirmPassword" class="form-control form-control-sm" />
-                                        <span asp-validation-for="ConfirmPassword" class="form-label"></span>
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                                     </div>
                                     <div class="form-outline form-white mb-2">
                                         <label asp-for="Avatar" class="mb-2">Add avatar</label>
                                         <input name="Avatar" type="file" class="form-control form-control-sm" />
                                     </div>
                                     <div>
+                                        <h5 class="h5 text-danger">@Model?.ErrorMessage</h5>
                                         <button class="btn btn-outline-light btn-lg my-4" type="submit">Register</button>
                                     </div>
                                 </div>

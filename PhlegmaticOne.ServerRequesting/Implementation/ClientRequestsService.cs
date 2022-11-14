@@ -27,7 +27,15 @@ public class ClientRequestsService : IClientRequestsService
         var requestUrl = GetRequestUrl(postRequest);
         var httpClient = CreateHttpClientWithToken(jwtToken);
 
-        var httpResponseMessage = await httpClient.PostAsJsonAsync(requestUrl, postRequest.RequestData);
+        HttpResponseMessage httpResponseMessage;
+        try
+        {
+            httpResponseMessage = await httpClient.PostAsJsonAsync(requestUrl, postRequest.RequestData);
+        }
+        catch (HttpRequestException httpRequestException)
+        {
+            return ServerResponse.FromError<TResponse>(httpRequestException.StatusCode, httpRequestException.Message);
+        }
 
         return await GetServerResponse<TResponse>(httpResponseMessage);
     }
@@ -38,7 +46,15 @@ public class ClientRequestsService : IClientRequestsService
         var requestUrl = BuildGetQuery(getRequest);
         var httpClient = CreateHttpClientWithToken(jwtToken);
 
-        var httpResponseMessage = await httpClient.GetAsync(requestUrl);
+        HttpResponseMessage httpResponseMessage;
+        try
+        {
+            httpResponseMessage = await httpClient.GetAsync(requestUrl);
+        }
+        catch (HttpRequestException httpRequestException)
+        {
+            return ServerResponse.FromError<TResponse>(httpRequestException.StatusCode, httpRequestException.Message);
+        }
 
         return await GetServerResponse<TResponse>(httpResponseMessage);
     }

@@ -7,7 +7,6 @@ using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 
@@ -61,16 +60,16 @@ public class AccountController : ClientRequestsController
 
         if (validationResult.IsValid == false)
         {
-            return ErrorView(validationResult, nameof(Register), registerViewModel);
+            return ViewWithErrorsFromValidationResult(validationResult, nameof(Register), registerViewModel);
         }
 
         var registerDto = _mapper.Map<RegisterProfileDto>(registerViewModel);
 
-        return await FromAuthorizedPost(new RegisterProfileRequest(registerDto), async profile =>
+        return await FromAuthorizedPost(new RegisterProfileRequest(registerDto), onSuccess: async profile =>
         {
             await AuthenticateAsync(profile);
             return RedirectToAction(nameof(Details));
-        });
+        }, onOperationFailed: result => ViewWithErrorsFromOperationResult(result, nameof(Register), registerViewModel));
     }
 
     [HttpPost]
@@ -80,7 +79,7 @@ public class AccountController : ClientRequestsController
 
         if (validationResult.IsValid == false)
         {
-            return ErrorView(validationResult, nameof(Login), loginViewModel);
+            return ViewWithErrorsFromValidationResult(validationResult, nameof(Login), loginViewModel);
         }
 
         var loginDto = _mapper.Map<LoginDto>(loginViewModel);
@@ -89,7 +88,7 @@ public class AccountController : ClientRequestsController
         {
             await AuthenticateAsync(profile);
             return RedirectToAction(nameof(Details));
-        });
+        }, onOperationFailed: result => ViewWithErrorsFromOperationResult(result, nameof(Login), loginViewModel));
     }
 
     [HttpGet]
@@ -110,23 +109,23 @@ public class AccountController : ClientRequestsController
 
         if (validationResult.IsValid == false)
         {
-            validationResult.AddToModelState(ModelState);
-            return View(updateAccountViewModel);
+            return ViewWithErrorsFromValidationResult(validationResult, nameof(Update), updateAccountViewModel);
         }
 
         var updateDto = _mapper.Map<UpdateProfileDto>(updateAccountViewModel);
+
         return await FromAuthorizedPost(new UpdateAccountRequest(updateDto), async profile =>
         {
             await SignOutAsync();
             await AuthenticateAsync(profile);
             return RedirectToAction(nameof(Details));
-        });
+        }, onOperationFailed: result => ViewWithErrorsFromOperationResult(result, nameof(Update), updateAccountViewModel));
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAvatar()
     {
-        var result = await ClientRequestsService.GetAsync(new GetAvatarGetRequest(), GetJwtToken());
+        var result = await ClientRequestsService.GetAsync(new GetAvatarGetRequest(), JwtToken());
         var data = result.GetData()!;
         return File(data, "image/png", "image.png");
     }
@@ -135,7 +134,7 @@ public class AccountController : ClientRequestsController
     public async Task<IActionResult> Logout()
     {
         await SignOutAsync();
-        return ToHomeView();
+        return HomeView();
     }
 
     private async Task AuthenticateAsync(AuthorizedProfileDto profileDto)

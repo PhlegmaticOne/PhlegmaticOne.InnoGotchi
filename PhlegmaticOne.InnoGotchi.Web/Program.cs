@@ -21,8 +21,7 @@ builder.Services
 
 builder.Services.AddAutoMapper(x =>
 {
-    x.AddProfile<AccountMapperConfiguration>();
-    x.AddProfile<FarmMapperConfiguration>();
+    x.AddMaps(typeof(AccountMapperConfiguration).Assembly);
 });
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterViewModelValidator>();
@@ -38,6 +37,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 
     a.ConfigureRequest<GetFarmRequest>("Farm/Get");
     a.ConfigureRequest<CreateFarmRequest>("Farm/Create");
+    a.ConfigureRequest<CreateInnoGotchiRequest>("Farm/Add");
 
     a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 });

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
-public class LoginViewModel
+public class LoginViewModel : ErrorHavingViewModel
 {
     [DataType(DataType.EmailAddress)] public string Email { get; set; } = null!;
 

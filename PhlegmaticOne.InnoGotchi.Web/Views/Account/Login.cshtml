@@ -20,15 +20,16 @@
                                 <div class="form-outline form-white mb-2">
                                     <label asp-for="Email" class="mb-2">Enter Email</label><br/>
                                     <input type="text" asp-for="Email" class="form-control form-control-lg" />
-                                    <span asp-validation-for="Email" class="form-label"></span>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-outline form-white mb-2">
                                     <label asp-for="Password" class="mb-2">Enter Password</label><br />
                                     <input type="password" asp-for="Password" class="form-control form-control-lg" />
-                                    <span asp-validation-for="Password" class="form-label"></span>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
-
+                                
+                                <h5 class="h5 text-danger">@Model?.ErrorMessage</h5>
                                 <button class="btn btn-outline-light btn-lg my-4" type="submit">Login</button>
                             </form>
                         </div>

@@ -6,12 +6,12 @@ namespace PhlegmaticOne.ServerRequesting.Models;
 [Serializable]
 public class ServerResponse
 {
-    public HttpStatusCode StatusCode { get; init; }
+    public HttpStatusCode? StatusCode { get; init; }
     public string ReasonPhrase { get; init; } = string.Empty;
     public bool IsSuccess { get; init; }
     public bool IsUnauthorized => StatusCode == HttpStatusCode.Unauthorized;
 
-    public static ServerResponse<T> FromError<T>(HttpStatusCode statusCode, string? reasonPhrase) => new()
+    public static ServerResponse<T> FromError<T>(HttpStatusCode? statusCode, string? reasonPhrase) => new()
     {
         ReasonPhrase = reasonPhrase ?? string.Empty,
         StatusCode = statusCode,
@@ -19,13 +19,16 @@ public class ServerResponse
         OperationResult = default,
     };
 
-    public static ServerResponse<T> FromSuccess<T>(OperationResult<T> result, HttpStatusCode statusCode, string? reasonPhrase) => new()
+    public static ServerResponse<T> FromSuccess<T>(OperationResult<T> result, HttpStatusCode? statusCode, string? reasonPhrase) => new()
     {
         ReasonPhrase = reasonPhrase ?? string.Empty,
         StatusCode = statusCode,
         IsSuccess = true,
         OperationResult = result
     };
+
+    public override string ToString() => 
+        StatusCode is not null ? StatusCode + ": " + ReasonPhrase : ReasonPhrase;
 }
 
 [Serializable]

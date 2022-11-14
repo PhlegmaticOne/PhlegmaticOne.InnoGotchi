@@ -9,6 +9,7 @@ using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.OperationResults;
+using PhlegmaticOne.OperationResults.Validation;
 using PhlegmaticOne.PasswordHasher.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
@@ -41,7 +42,8 @@ public class ProfilesController : DataController
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToString());
+            const string emailErrorMessage = "Email error";
+            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToDictionary(), emailErrorMessage);
         }
 
         var userProfile = await _userProfileVerifyingService.MapAsync(registerProfileDto);
@@ -56,13 +58,17 @@ public class ProfilesController : DataController
         if (profile is null)
         {
             var notExistingUserErrorMessage = $"There is no user with email: {loginDto.Email}";
-            return OperationResult.FromFail<AuthorizedProfileDto>(customMessage: notExistingUserErrorMessage);
+            var validationResult = ValidationResult.Error
+                .AddError(nameof(loginDto.Email), notExistingUserErrorMessage);
+            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult, "Email error");
         }
 
         if (PasswordsAreEqual(loginDto.Password, profile.User.Password) == false)
         {
             const string incorrectPasswordMessage = "You've entered incorrect password";
-            return OperationResult.FromFail<AuthorizedProfileDto>(incorrectPasswordMessage);
+            var validationResult = ValidationResult.Error
+                .AddError(nameof(loginDto.Password), incorrectPasswordMessage);
+            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult, "Password error");
         }
 
         return ResultFromMap<AuthorizedProfileDto>(profile);
@@ -75,7 +81,7 @@ public class ProfilesController : DataController
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToString());
+            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToDictionary());
         }
 
         var updated = await UpdateProfile(updateProfileDto);

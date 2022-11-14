@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Api.Models;
 using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
@@ -19,13 +20,12 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [Authorize]
 public class FarmController : DataController
 {
-    private readonly IVerifyingService<ProfileInnoGotchiModel, InnoGotchiModel> _innoGotchiVerifyingService;
-    private readonly IVerifyingService<ProfileFarmModel, Farm> _farmVerifyingService;
+    private readonly IVerifyingService<IdentityInnoGotchiModel, InnoGotchiModel> _innoGotchiVerifyingService;
+    private readonly IVerifyingService<IdentityFarmModel, Farm> _farmVerifyingService;
 
-    public FarmController(IDataService dataService,
-        IMapper mapper,
-        IVerifyingService<ProfileFarmModel, Farm> farmVerifyingService,
-        IVerifyingService<ProfileInnoGotchiModel, InnoGotchiModel> innoGotchiVerifyingService) : 
+    public FarmController(IDataService dataService, IMapper mapper,
+        IVerifyingService<IdentityFarmModel, Farm> farmVerifyingService,
+        IVerifyingService<IdentityInnoGotchiModel, InnoGotchiModel> innoGotchiVerifyingService) : 
         base(dataService, mapper)
     {
         _farmVerifyingService = farmVerifyingService;
@@ -42,7 +42,7 @@ public class FarmController : DataController
         if (farm is null)
         {
             var notExistsMessage = $"There is not farm created for user: {User.GetUserEmail()}";
-            return OperationResult.FromFail<FarmDto>(customMessage: notExistsMessage);
+            return OperationResult.FromFail<FarmDto>(notExistsMessage);
         }
 
         return ResultFromMap<FarmDto>(farm);
@@ -51,12 +51,7 @@ public class FarmController : DataController
     [HttpPost]
     public async Task<OperationResult<FarmDto>> Create([FromBody] CreateFarmDto createFarmDto)
     {
-        var profileFarmModel = new ProfileFarmModel
-        {
-            FarmName = createFarmDto.Name,
-            ProfileId = UserId()
-        };
-
+        var profileFarmModel = Mapper.MapIdentity<IdentityFarmModel>(createFarmDto, UserId());
         var validationResult = await _farmVerifyingService.ValidateAsync(profileFarmModel);
 
         if (validationResult.IsValid == false)
@@ -64,20 +59,14 @@ public class FarmController : DataController
             return OperationResult.FromFail<FarmDto>(validationResult.ToString());
         }
 
-        var createdFarm = await _farmVerifyingService.MapAsync(profileFarmModel);
-        return await MapFromInsertionResult<FarmDto, Farm>(createdFarm);
+        var newFarm = await _farmVerifyingService.MapAsync(profileFarmModel);
+        return await MapFromInsertionResult<FarmDto, Farm>(newFarm);
     }
 
     [HttpPost]
     public async Task<OperationResult<InnoGotchiDto>> Add([FromBody] CreateInnoGotchiDto createInnoGotchiDto)
     {
-        var profileInnoGotchiModel = new ProfileInnoGotchiModel
-        {
-            Components = createInnoGotchiDto.Components,
-            Name = createInnoGotchiDto.Name,
-            ProfileId = UserId()
-        };
-
+        var profileInnoGotchiModel = Mapper.MapIdentity<IdentityInnoGotchiModel>(createInnoGotchiDto, UserId());
         var validationResult = await _innoGotchiVerifyingService.ValidateAsync(profileInnoGotchiModel);
 
         if (validationResult.IsValid == false)

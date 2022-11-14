@@ -71,10 +71,11 @@ builder.Services.AddDataService<ApplicationDbContext>();
 builder.Services.AddTransient<ProfileDtoJwtTokenPropertyResolver>();
 builder.Services.AddTransient<ProfileAvatarPropertyResolver>();
 builder.Services.AddTransient<IAvatarConvertingService, AvatarConvertingService>();
-builder.Services.AddScoped<IVerifyingService<ProfileFarmModel, Farm>, FarmVerifyingService>();
-builder.Services.AddScoped<IVerifyingService<ProfileInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();
+builder.Services.AddScoped<IVerifyingService<IdentityFarmModel, Farm>, FarmVerifyingService>();
+builder.Services.AddScoped<IVerifyingService<IdentityInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<RegisterProfileDto, UserProfile>, UserProfileVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<UpdateProfileDto, UserProfile>, UpdateProfileVerifyingService>();
+builder.Services.AddSingleton<IServerAddressProvider>(_ => new ServerAddressProvider("https://localhost:7142"));
 
 var app = builder.Build();
 

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
-public class RegisterViewModel
+public class RegisterViewModel : ErrorHavingViewModel
 {
-
     public string FirstName { get; set; } = null!;
 
     public string LastName { get; set; } = null!;
