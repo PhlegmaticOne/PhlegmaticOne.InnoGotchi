@@ -53,7 +53,7 @@ public class FarmController : DataController
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<DetailedFarmDto>(validationResult.ToDictionary());
+            return OperationResult.FromFail<DetailedFarmDto>(validationResult.ToDictionary(), validationResult.ToString());
         }
 
         var newFarm = await _farmVerifyingService.MapAsync(profileFarmModel);

@@ -13,10 +13,10 @@ public class ProfileFarmValidator : AbstractValidator<IdentityFarmModel>
 
         RuleFor(x => x.Name)
             .MustAsync((x, _) => farmRepository.AllAsync(f => f.Name != x))
-            .WithMessage(x => $"Farm name {x} already reserved");
+            .WithMessage(x => $"Farm name {x.Name} already reserved");
 
         RuleFor(x => x.ProfileId)
             .MustAsync((x, _) => farmRepository.AllAsync(f => f.OwnerId != x))
-            .WithMessage(x => $"Profile {x} already has a farm");
+            .WithMessage("You already have a farm");
     }
 }

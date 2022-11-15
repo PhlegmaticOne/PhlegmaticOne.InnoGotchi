@@ -19,25 +19,29 @@ public class OperationResult
     public static OperationResult<T> FromFail<T>(string? errorMessage = null) => new()
     {
         IsSuccess = false,
-        ErrorMessage = errorMessage,
+        ErrorMessage = errorMessage ?? "Operation error",
         Result = default,
         ValidationResult = ValidationResult.Error
     };
 
-    public static OperationResult<T> FromFail<T>(IDictionary<string, string[]> validationFailures, string? errorMessage = null) => new()
+    public static OperationResult<T> FromFail<T>(IDictionary<string, string[]> validationFailures, string? errorMessage = null)
     {
-        IsSuccess = false,
-        Result = default,
-        ValidationResult = ValidationResult.FromFailures(validationFailures),
-        ErrorMessage = errorMessage
-    };
+        var validationResult = ValidationResult.FromFailures(validationFailures);
+        return new()
+        {
+            IsSuccess = false,
+            Result = default,
+            ValidationResult = validationResult,
+            ErrorMessage = errorMessage ?? validationResult.OnlyErrors(".")
+        };
+    }
 
     public static OperationResult<T> FromFail<T>(ValidationResult validationResult, string? errorMessage = null) => new()
     {
         IsSuccess = false,
         Result = default,
         ValidationResult = validationResult,
-        ErrorMessage = errorMessage
+        ErrorMessage = errorMessage ?? validationResult.OnlyErrors(".")
     };
 }
 

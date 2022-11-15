@@ -7,7 +7,7 @@ namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Validators;
 
 public class RegisterViewModelValidator : AbstractValidator<RegisterViewModel>
 {
-    public RegisterViewModelValidator(IMapper mapper)
+    public RegisterViewModelValidator()
     {
         RuleFor(x => x.Email)
             .EmailAddress()

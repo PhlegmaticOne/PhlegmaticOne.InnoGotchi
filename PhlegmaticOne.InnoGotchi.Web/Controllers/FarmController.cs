@@ -42,6 +42,6 @@ public class FarmController : ClientRequestsController
         {
             IActionResult view = RedirectToAction(nameof(Index));
             return Task.FromResult(view);
-        });
+        }, result => ViewWithErrorsFromOperationResult(result, nameof(Create), createFarmViewModel));
     }
 }
