@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
-using PhlegmaticOne.InnoGotchi.Api.Services;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services.Other;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.OperationResults;
@@ -92,15 +92,15 @@ public class ProfilesController : DataController
     public async Task<OperationResult<DetailedProfileDto>> GetDetailed()
     {
         var repository = DataService.GetDataRepository<UserProfile>();
-        var userProfile = await repository.GetByIdOrDefaultAsync(UserId(), 
-            i => i.Include(x => x.User).Include(x => x.Avatar!));
+        var userProfile = await repository.GetByIdOrDefaultAsync(ProfileId(), 
+            include: i => i.Include(x => x.User).Include(x => x.Avatar!));
         return ResultFromMap<DetailedProfileDto>(userProfile!);
     }
 
     [HttpGet]
     public async Task<OperationResult<byte[]>> GetAvatar()
     {
-        var userId = UserId();
+        var userId = ProfileId();
         var repository = DataService.GetDataRepository<Avatar>();
         var avatar = await repository.GetFirstOrDefaultAsync(x => x.UserProfileId == userId);
         var result = _avatarConvertingService.ConvertAvatar(avatar);

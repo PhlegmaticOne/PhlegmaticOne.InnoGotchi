@@ -55,6 +55,7 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
     }
 
     public Task<TEntity?> GetByIdOrDefaultAsync(Guid id,
+        Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
     {
         IQueryable<TEntity> query = _set;
@@ -62,6 +63,11 @@ public class DbSetDataRepository<TEntity> : IDataRepository<TEntity> where TEnti
         if (include is not null)
         {
             query = include(query);
+        }
+
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
         }
 
         return query.FirstOrDefaultAsync(x => x.Id == id);

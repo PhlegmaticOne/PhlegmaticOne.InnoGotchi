@@ -2,7 +2,7 @@
 using FluentValidation.Results;
 using PhlegmaticOne.DataService.Interfaces;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+namespace PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 
 public abstract class VerifyingServiceBase<TFrom, TTo> : IVerifyingService<TFrom, TTo>
     where TFrom : class

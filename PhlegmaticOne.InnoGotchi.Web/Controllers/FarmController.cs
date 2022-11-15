@@ -27,7 +27,7 @@ public class FarmController : ClientRequestsController
     {
         return FromAuthorizedGet(new GetFarmRequest(), farm =>
         {
-            var farmViewModel = _mapper.Map<FarmViewModel>(farm);
+            var farmViewModel = _mapper.Map<DetailedFarmViewModel>(farm);
             IActionResult view = View(farmViewModel);
             return Task.FromResult(view);
         }, onOperationFailed: _ => RedirectToAction(nameof(Create)));
@@ -38,9 +38,8 @@ public class FarmController : ClientRequestsController
     {
         var createFarmDto = _mapper.Map<CreateFarmDto>(createFarmViewModel);
 
-        return FromAuthorizedPost(new CreateFarmRequest(createFarmDto), farm =>
+        return FromAuthorizedPost(new CreateFarmRequest(createFarmDto), _ =>
         {
-            var viewModel = _mapper.Map<FarmViewModel>(farm);
             IActionResult view = RedirectToAction(nameof(Index));
             return Task.FromResult(view);
         });

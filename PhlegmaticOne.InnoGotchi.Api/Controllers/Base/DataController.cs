@@ -18,7 +18,7 @@ public class DataController : ControllerBase
         Mapper = mapper;
     }
 
-    protected Guid UserId() => User.GetUserId();
+    protected Guid ProfileId() => User.GetUserId();
     protected async Task<OperationResult<TResult>> MapFromInsertionResult<TResult, TEntity>(TEntity entity) 
         where TEntity : EntityBase
     {

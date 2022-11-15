@@ -67,6 +67,11 @@ public static class DatabaseInitializer
             },
             FirstName = "Firstname",
             LastName = "Secondname",
-            JoinDate = DateTime.UtcNow
+            JoinDate = DateTime.UtcNow,
+            Farm = new Farm
+            {
+                FarmStatistics = new FarmStatistics(),
+                Name = "my farm"
+            }
         };
 }

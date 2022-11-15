@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PhlegmaticOne.InnoGotchi.Api.Services;
+using PhlegmaticOne.InnoGotchi.Api.Services.Other;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 

@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Models;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
+namespace PhlegmaticOne.InnoGotchi.Api.Services.Verifying;
 
 public class FarmVerifyingService : VerifyingServiceBase<IdentityFarmModel, Farm>
 {
@@ -21,6 +21,7 @@ public class FarmVerifyingService : VerifyingServiceBase<IdentityFarmModel, Farm
         return new()
         {
             Name = from.Name,
+            FarmStatistics = new FarmStatistics(),
             Owner = userProfile!
         };
     }

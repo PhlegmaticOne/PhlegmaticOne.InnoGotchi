@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
 using PhlegmaticOne.InnoGotchi.Api.Models;
-using PhlegmaticOne.InnoGotchi.Api.Services;
+using PhlegmaticOne.InnoGotchi.Api.Services.Other;
+using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperResolvers;
 
-public class ComponentsRemoveSiteAddressMapperResolver : IValueResolver<CreateInnoGotchiDto, IdentityInnoGotchiModel, List<CreateInnoGotchiComponentDto>>
+public class ComponentsRemoveSiteAddressMapperResolver : IValueResolver<CreateInnoGotchiDto, IdentityInnoGotchiModel, List<InnoGotchiModelComponentDto>>
 {
     private readonly IServerAddressProvider _serverAddressProvider;
     public ComponentsRemoveSiteAddressMapperResolver(IServerAddressProvider serverAddressProvider) => 
         _serverAddressProvider = serverAddressProvider;
 
-    public List<CreateInnoGotchiComponentDto> Resolve(CreateInnoGotchiDto source, IdentityInnoGotchiModel destination, List<CreateInnoGotchiComponentDto> destMember,
+    public List<InnoGotchiModelComponentDto> Resolve(CreateInnoGotchiDto source, IdentityInnoGotchiModel destination, List<InnoGotchiModelComponentDto> destMember,
         ResolutionContext context)
     {
         var serverAddress = _serverAddressProvider.ServerAddress;

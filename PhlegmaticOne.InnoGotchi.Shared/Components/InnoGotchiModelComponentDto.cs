@@ -1,6 +1,6 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Constructor;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.Components;
 
-public class CreateInnoGotchiComponentDto
+public class InnoGotchiModelComponentDto
 {
     public float TranslationX { get; set; }
     public float TranslationY { get; set; }

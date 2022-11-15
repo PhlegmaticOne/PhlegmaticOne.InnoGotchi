@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Models;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Data.Models.Enums;
+using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
+namespace PhlegmaticOne.InnoGotchi.Api.Services.Verifying;
 
 public class InnoGotchiVerifyingService : VerifyingServiceBase<IdentityInnoGotchiModel, InnoGotchiModel>
 {
@@ -33,7 +34,7 @@ public class InnoGotchiVerifyingService : VerifyingServiceBase<IdentityInnoGotch
         };
     }
 
-    private Task<IList<InnoGotchiComponent>> GetExistingComponents(List<CreateInnoGotchiComponentDto> componentsToCreate)
+    private Task<IList<InnoGotchiComponent>> GetExistingComponents(List<InnoGotchiModelComponentDto> componentsToCreate)
     {
         var urls = componentsToCreate.Select(x => x.ImageUrl).ToList();
         var componentsRepository = DataService.GetDataRepository<InnoGotchiComponent>();
@@ -46,7 +47,7 @@ public class InnoGotchiVerifyingService : VerifyingServiceBase<IdentityInnoGotch
         return farmRepository.GetFirstOrDefaultAsync(x => x.OwnerId == profileId)!;
     }
 
-    private static List<InnoGotchiModelComponent> CreateModelComponents(List<CreateInnoGotchiComponentDto> dtos, IEnumerable<InnoGotchiComponent> existingComponents) =>
+    private static List<InnoGotchiModelComponent> CreateModelComponents(List<InnoGotchiModelComponentDto> dtos, IEnumerable<InnoGotchiComponent> existingComponents) =>
         dtos.Join(existingComponents, on => on.ImageUrl, on => on.ImageUrl,
             (dto, component) => new InnoGotchiModelComponent
             {

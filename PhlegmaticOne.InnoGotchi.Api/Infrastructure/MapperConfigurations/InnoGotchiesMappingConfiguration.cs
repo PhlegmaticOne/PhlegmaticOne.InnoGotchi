@@ -8,6 +8,8 @@ public class InnoGotchiesMappingConfiguration : Profile
 {
     public InnoGotchiesMappingConfiguration()
     {
-        CreateMap<InnoGotchiModel, InnoGotchiDto>();
+        CreateMap<InnoGotchiModel, InnoGotchiDto>()
+            .ForMember(x => x.HungerLevel, o => o.MapFrom(y => y.HungerLevel.ToString()))
+            .ForMember(x => x.ThirstLevel, o => o.MapFrom(y => y.ThirstyLevel.ToString()));
     }
 }

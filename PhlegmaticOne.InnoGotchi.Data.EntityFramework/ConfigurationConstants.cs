@@ -11,4 +11,5 @@ internal class ConfigurationConstants
     internal const string UserProfilesTableName = "UserProfiles";
     internal const string CollaborationsTableName = "Collaborations";
     internal const string InvitationsTableName = "Invitations";
+    internal const string FarmStatisticsTableName = "FarmStatistics";
 }

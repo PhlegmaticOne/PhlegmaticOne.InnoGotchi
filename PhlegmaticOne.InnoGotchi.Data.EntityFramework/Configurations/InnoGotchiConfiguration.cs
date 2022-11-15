@@ -22,10 +22,10 @@ public class InnoGotchiConfiguration : IEntityTypeConfiguration<InnoGotchiModel>
             .HasConversion<string>();
 
         builder.Property(x => x.LastDrinkTime);
-
-        builder.Property(x => x.Age);
-
         builder.Property(x => x.LastFeedTime);
+        builder.Property(x => x.AgeUpdatedAt);
+        builder.Property(x => x.Age);
+        builder.Property(x => x.HappinessDaysCount);
 
         builder.Property(x => x.Name)
             .IsRequired()

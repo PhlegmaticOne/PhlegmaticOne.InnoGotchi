@@ -10,7 +10,7 @@ public class ConstructorMapperConfiguration : Profile
 {
     public ConstructorMapperConfiguration()
     {
-        CreateMap<CreateInnoGotchiComponentViewModel, CreateInnoGotchiComponentDto>();
+        CreateMap<CreateInnoGotchiComponentViewModel, InnoGotchiModelComponentDto>();
         CreateMap<CreateInnoGotchiViewModel, CreateInnoGotchiDto>();
         CreateMap<InnoGotchiComponentCollectionDto, ConstructorViewModel>()
             .ForMember(x => x.ComponentCategories,

@@ -5,12 +5,15 @@ using Microsoft.IdentityModel.Tokens;
 using PhlegmaticOne.DataService.Extensions;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperConfigurations;
+using PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperConverters;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.MapperResolvers;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Validators;
 using PhlegmaticOne.InnoGotchi.Api.Models;
-using PhlegmaticOne.InnoGotchi.Api.Services;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services.InnoGotchiPolicies;
+using PhlegmaticOne.InnoGotchi.Api.Services.Other;
+using PhlegmaticOne.InnoGotchi.Api.Services.Time;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
@@ -73,9 +76,17 @@ builder.Services.AddJwtTokenGeneration(jwtOptions);
 builder.Services.AddDataService<ApplicationDbContext>();
 
 
+builder.Services.AddTransient<ITimeProvider, TimeProvider>();
+builder.Services.AddTransient<IInnoGotchiActionsPolicy>(_ =>
+{
+    return new InnoGotchiActionsPolicy(TimeSpan.FromDays(1), TimeSpan.FromDays(1), TimeSpan.FromDays(1));
+});
+
 builder.Services.AddTransient<ProfileDtoJwtTokenPropertyResolver>();
 builder.Services.AddTransient<ProfileAvatarPropertyResolver>();
 builder.Services.AddTransient<ComponentsRemoveSiteAddressMapperResolver>();
+builder.Services.AddSingleton<ImageUrlConverter>();
+
 builder.Services.AddTransient<IAvatarConvertingService, AvatarConvertingService>();
 builder.Services.AddScoped<IVerifyingService<IdentityFarmModel, Farm>, FarmVerifyingService>();
 builder.Services.AddScoped<IVerifyingService<IdentityInnoGotchiModel, InnoGotchiModel>, InnoGotchiVerifyingService>();

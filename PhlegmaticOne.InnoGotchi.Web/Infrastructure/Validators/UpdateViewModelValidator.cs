@@ -20,7 +20,7 @@ public class UpdateViewModelValidator : AbstractValidator<UpdateAccountViewModel
             .When(x => string.IsNullOrEmpty(x.LastName) == false)
             .WithMessage("Specify lastname with length of 3 to 50");
 
-        RuleFor(x => x.NewPassword)
+        RuleFor(x => x.NewPassword!)
             .Password(10)
             .When(x => string.IsNullOrEmpty(x.OldPassword) == false);
 

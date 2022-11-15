@@ -1,2 +1,22 @@
-﻿@model FarmViewModel
-<h2>@Model.Name</h2>
+﻿@model DetailedFarmViewModel
+<h2 class="text-white">@Model.Name</h2>
+
+<div class="container">
+    @foreach (var componentCategory in Model.InnoGotchies)
+    {
+        <div class="row mt-3">
+            <p class="text-white">@componentCategory.Name</p>
+
+            <div class="col-md-4" style="height: 185px; width: 150px">
+                <svg class="drop-area" viewBox="0 0 420 620" style="position: relative; background: wheat;">
+                    @foreach (var component in componentCategory.Components)
+                    {
+                        <image style="position: absolute; transform: translate(@(component.TranslationX)px, @(component.TranslationY)px) scale(@component.ScaleX, @component.ScaleY)"
+                               width="100" height="100"
+                               href="@component.ImageUrl"/>
+                    }
+                </svg>
+            </div>
+        </div>
+    }
+</div>

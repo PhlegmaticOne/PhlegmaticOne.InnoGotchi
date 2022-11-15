@@ -83,6 +83,41 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                     b.ToTable("Farms", (string)null);
                 });
 
+            modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Data.Models.FarmStatistics", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan>("AverageDrinkTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("AverageFeedTime")
+                        .HasColumnType("time");
+
+                    b.Property<Guid>("FarmId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastDrinkTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastFeedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TotalDrinkingsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalFeedingsCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FarmId")
+                        .IsUnique();
+
+                    b.ToTable("FarmStatistics", (string)null);
+                });
+
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Data.Models.InnoGotchiComponent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -111,8 +146,14 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("AgeUpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("FarmId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("HappinessDaysCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("HungerLevel")
                         .IsRequired()
@@ -287,6 +328,17 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Data.Models.FarmStatistics", b =>
+                {
+                    b.HasOne("PhlegmaticOne.InnoGotchi.Data.Models.Farm", "Farm")
+                        .WithOne("FarmStatistics")
+                        .HasForeignKey("PhlegmaticOne.InnoGotchi.Data.Models.FarmStatistics", "FarmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Farm");
+                });
+
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Data.Models.InnoGotchiModel", b =>
                 {
                     b.HasOne("PhlegmaticOne.InnoGotchi.Data.Models.Farm", "Farm")
@@ -350,6 +402,9 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Data.Models.Farm", b =>
                 {
                     b.Navigation("Collaborations");
+
+                    b.Navigation("FarmStatistics")
+                        .IsRequired();
 
                     b.Navigation("InnoGotchies");
                 });

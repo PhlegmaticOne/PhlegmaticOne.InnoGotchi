@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.DataService.Interfaces;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
+namespace PhlegmaticOne.InnoGotchi.Api.Services.Verifying;
 
 public class UpdateProfileVerifyingService : VerifyingServiceBase<UpdateProfileDto, UserProfile>
 {

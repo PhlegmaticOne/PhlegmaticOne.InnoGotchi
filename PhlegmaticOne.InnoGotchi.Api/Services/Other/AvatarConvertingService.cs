@@ -1,12 +1,7 @@
 ﻿using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Services;
-
-public interface IAvatarConvertingService
-{
-    byte[] ConvertAvatar(Avatar? avatar);
-}
+namespace PhlegmaticOne.InnoGotchi.Api.Services.Other;
 
 public class AvatarConvertingService : IAvatarConvertingService
 {

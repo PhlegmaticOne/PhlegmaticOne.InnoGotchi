@@ -15,6 +15,7 @@ public class FarmConfiguration : IEntityTypeConfiguration<Farm>
         builder.Property(x => x.Name)
             .IsRequired()
             .HasMaxLength(ConfigurationConstants.NamePropertyMaxLength);
+
         builder.HasIndex(x => x.Name).IsUnique();
 
         builder.HasMany(x => x.InnoGotchies)
@@ -23,5 +24,9 @@ public class FarmConfiguration : IEntityTypeConfiguration<Farm>
         builder.HasMany(x => x.Collaborations)
             .WithOne(x => x.Farm)
             .HasForeignKey(x => x.FarmId);
+
+        builder.HasOne(x => x.FarmStatistics)
+            .WithOne(x => x.Farm)
+            .HasForeignKey<FarmStatistics>(x => x.FarmId);
     }
 }

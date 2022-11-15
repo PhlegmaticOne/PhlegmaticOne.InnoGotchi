@@ -3,6 +3,6 @@ using PhlegmaticOne.ServerRequesting.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 
-public class GetFarmRequest : EmptyClientGetRequest<FarmDto>
+public class GetFarmRequest : EmptyClientGetRequest<DetailedFarmDto>
 {
 }

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using PhlegmaticOne.DataService.Interfaces;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.PasswordHasher.Base;
 
-namespace PhlegmaticOne.InnoGotchi.Api.Services.Mapping;
+namespace PhlegmaticOne.InnoGotchi.Api.Services.Verifying;
 
 public class UserProfileVerifyingService : VerifyingServiceBase<RegisterProfileDto, UserProfile>
 {

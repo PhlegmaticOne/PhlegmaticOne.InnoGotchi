@@ -37,7 +37,8 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 
     a.ConfigureRequest<GetFarmRequest>("Farm/Get");
     a.ConfigureRequest<CreateFarmRequest>("Farm/Create");
-    a.ConfigureRequest<CreateInnoGotchiRequest>("Farm/Add");
+
+    a.ConfigureRequest<CreateInnoGotchiRequest>("InnoGotchies/Create");
 
     a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 });
@@ -46,7 +47,6 @@ builder.Services.AddLocalStorage(startConf =>
 {
     startConf.SetServerAddress("https://localhost:7142");
     startConf.SetLoginPath("/Account/Login");
-    startConf.SetErrorPath("/Home/Error");
 });
 
 builder.Services.AddTransient<IPagedListPagesGenerator, PagedListPagesGenerator>();

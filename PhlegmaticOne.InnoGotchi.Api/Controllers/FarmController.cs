@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Api.Models;
-using PhlegmaticOne.InnoGotchi.Api.Services.Mapping.Base;
+using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.Farms;
-using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.JwtTokensGeneration.Extensions;
 using PhlegmaticOne.OperationResults;
 
@@ -20,61 +19,44 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [Authorize]
 public class FarmController : DataController
 {
-    private readonly IVerifyingService<IdentityInnoGotchiModel, InnoGotchiModel> _innoGotchiVerifyingService;
     private readonly IVerifyingService<IdentityFarmModel, Farm> _farmVerifyingService;
 
     public FarmController(IDataService dataService, IMapper mapper,
-        IVerifyingService<IdentityFarmModel, Farm> farmVerifyingService,
-        IVerifyingService<IdentityInnoGotchiModel, InnoGotchiModel> innoGotchiVerifyingService) : 
+        IVerifyingService<IdentityFarmModel, Farm> farmVerifyingService) : 
         base(dataService, mapper)
     {
         _farmVerifyingService = farmVerifyingService;
-        _innoGotchiVerifyingService = innoGotchiVerifyingService;
     }
 
     [HttpGet]
-    public async Task<OperationResult<FarmDto>> Get()
+    public async Task<OperationResult<DetailedFarmDto>> Get()
     {
-        var userId = UserId();
+        var userId = ProfileId();
         var farmDataService = DataService.GetDataRepository<Farm>();
-        var farm = await farmDataService.GetFirstOrDefaultAsync(x => x.Owner.Id == userId);
+        var farm = await farmDataService.GetFirstOrDefaultAsync(x => x.Owner.Id == userId,
+            include: i => i.Include(x => x.InnoGotchies).ThenInclude(x => x.Components).ThenInclude(x => x.InnoGotchiComponent));
 
         if (farm is null)
         {
             var notExistsMessage = $"There is not farm created for user: {User.GetUserEmail()}";
-            return OperationResult.FromFail<FarmDto>(notExistsMessage);
+            return OperationResult.FromFail<DetailedFarmDto>(notExistsMessage);
         }
 
-        return ResultFromMap<FarmDto>(farm);
+        return ResultFromMap<DetailedFarmDto>(farm);
     }
 
     [HttpPost]
-    public async Task<OperationResult<FarmDto>> Create([FromBody] CreateFarmDto createFarmDto)
+    public async Task<OperationResult<DetailedFarmDto>> Create([FromBody] CreateFarmDto createFarmDto)
     {
-        var profileFarmModel = Mapper.MapIdentity<IdentityFarmModel>(createFarmDto, UserId());
+        var profileFarmModel = Mapper.MapIdentity<IdentityFarmModel>(createFarmDto, ProfileId());
         var validationResult = await _farmVerifyingService.ValidateAsync(profileFarmModel);
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<FarmDto>(validationResult.ToDictionary());
+            return OperationResult.FromFail<DetailedFarmDto>(validationResult.ToDictionary());
         }
 
         var newFarm = await _farmVerifyingService.MapAsync(profileFarmModel);
-        return await MapFromInsertionResult<FarmDto, Farm>(newFarm);
-    }
-
-    [HttpPost]
-    public async Task<OperationResult<InnoGotchiDto>> Add([FromBody] CreateInnoGotchiDto createInnoGotchiDto)
-    {
-        var profileInnoGotchiModel = Mapper.MapIdentity<IdentityInnoGotchiModel>(createInnoGotchiDto, UserId());
-        var validationResult = await _innoGotchiVerifyingService.ValidateAsync(profileInnoGotchiModel);
-
-        if (validationResult.IsValid == false)
-        {
-            return OperationResult.FromFail<InnoGotchiDto>(validationResult.ToDictionary(), validationResult.OnlyErrors());
-        }
-
-        var created = await _innoGotchiVerifyingService.MapAsync(profileInnoGotchiModel);
-        return await MapFromInsertionResult<InnoGotchiDto, InnoGotchiModel>(created);
+        return await MapFromInsertionResult<DetailedFarmDto, Farm>(newFarm);
     }
 }

@@ -11,7 +11,8 @@ public class FarmMapperConfiguration : Profile
 {
     public FarmMapperConfiguration()
     {
-        CreateMap<Farm, FarmDto>();
+        CreateMap<Farm, DetailedFarmDto>()
+            .ForMember(x => x.InnoGotchies, o => o.MapFrom(y => y.InnoGotchies.ToList()));
         CreateMap<CreateFarmDto, IdentityFarmModel>()
             .ForMember(x => x.ProfileId, o => o.Ignore());
         CreateMap<CreateInnoGotchiDto, IdentityInnoGotchiModel>()

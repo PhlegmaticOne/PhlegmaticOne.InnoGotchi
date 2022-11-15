@@ -12,6 +12,7 @@ public interface IDataRepository<TEntity> where TEntity : EntityBase
     Task<TEntity?> UpdateAsync(Guid entityId, Action<TEntity> actionOverExistingEntity);
     Task<bool> DeleteAsync(Guid id);
     Task<TEntity?> GetByIdOrDefaultAsync(Guid id,
+        Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
     Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,

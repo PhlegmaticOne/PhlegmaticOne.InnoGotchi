@@ -2,8 +2,8 @@
 
 public enum HungerLevel
 {
-    Normal,
     Full,
+    Normal,
     Hungry,
     Dead
 }

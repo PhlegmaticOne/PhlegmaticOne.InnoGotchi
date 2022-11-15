@@ -1,10 +1,4 @@
-namespace PhlegmaticOne.InnoGotchi.Api.Services;
-
-public interface IServerAddressProvider
-{
-    public string ServerAddress { get; }
-    public Uri ServerAddressUri { get; }
-}
+namespace PhlegmaticOne.InnoGotchi.Api.Services.Other;
 
 public class ServerAddressProvider : IServerAddressProvider
 {
