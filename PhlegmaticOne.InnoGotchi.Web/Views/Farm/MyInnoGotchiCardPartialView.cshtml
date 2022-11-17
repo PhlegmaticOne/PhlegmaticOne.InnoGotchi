@@ -1,0 +1,21 @@
+﻿@model PreviewInnoGotchiViewModel
+
+<div class="row mt-4 pet-card">
+    <div style="height: 186px; width: 150px">
+        @await Html.PartialAsync("ComponentsImagePartialView", Model.Components);
+    </div>
+    <div class="card-body">
+        <h4 class="card-title pt-1">@Model.Name</h4>
+        <div>
+            <label>Hunger level: @Model.HungerLevel</label><br/>
+            <label>Thirsty level: @Model.ThirstLevel</label><br/>
+            <label>Age: @Model.Age</label><br/>
+        </div>
+        <div class="mt-3 body-links">
+            <a href="#" class="btn btn-outline-secondary btn-dark">Feed</a>
+            <a href="#" class="btn btn-outline-secondary btn-dark">Drink</a>
+            <a asp-controller="Farm" asp-action="Pet" asp-route-petId="@Model.Id"
+               class="btn btn-outline-secondary btn-dark">Details</a>
+        </div>
+    </div>
+</div>

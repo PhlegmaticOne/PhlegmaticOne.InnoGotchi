@@ -26,6 +26,8 @@ public class InnoGotchiConfiguration : IEntityTypeConfiguration<InnoGotchiModel>
         builder.Property(x => x.AgeUpdatedAt);
         builder.Property(x => x.Age);
         builder.Property(x => x.HappinessDaysCount);
+        builder.Property(x => x.LiveSince);
+        builder.Property(x => x.DeadSince);
 
         builder.Property(x => x.Name)
             .IsRequired()

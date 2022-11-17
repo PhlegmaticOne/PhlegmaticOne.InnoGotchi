@@ -5,5 +5,5 @@ namespace PhlegmaticOne.InnoGotchi.Shared.Farms;
 public class DetailedFarmDto
 {
     public string Name { get; set; } = null!;
-    public List<InnoGotchiDto> InnoGotchies { get; set; } = new();
+    public List<PreviewInnoGotchiDto> InnoGotchies { get; set; } = new();
 }

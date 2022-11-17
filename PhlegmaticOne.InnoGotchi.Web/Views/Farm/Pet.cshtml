@@ -1,0 +1,46 @@
+﻿@model DetailedInnoGotchiViewModel
+
+<div class="container">
+    <h1 class="my-4">@Model.Name</h1>
+  
+    <div class="row">
+        <div class="col-md-3">
+            @await Html.PartialAsync("ComponentsImagePartialView", Model.Components)
+        </div>
+
+        <div class="col-md-3 bg-light pet-info">
+            <h3 class="my-3">Vital signs</h3>
+            <div>
+                <p>Hunger level: @Model.HungerLevel</p>
+                <p>Thirsty level: @Model.ThirstLevel</p>
+                <p>Age: @Model.Age</p>
+            </div>
+        </div>
+        <div class="col-md-3 bg-light pet-info">
+            <h3 class="my-3">Information</h3>
+            <div>
+                <p>Happiness days count: @Model.HappinessDaysCount</p>
+                @if (Model.IsDead)
+                {
+                    <p>Dead since: @Model.DeadSince</p>
+                }
+                else
+                {
+                    <p>Live since: @Model.LiveSince</p>
+                }
+            </div>
+        </div>
+        
+        <div class="col-md-3 bg-light pet-info">
+            <a href="#" class="btn btn-outline-secondary btn-dark">Feed</a>
+            <a href="#" class="btn btn-outline-secondary btn-dark">Drink</a>
+            <a asp-controller="Farm" asp-action="Details"
+               class="btn btn-outline-secondary btn-dark">Back to farm</a>
+        </div>
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/pet.css" asp-append-version="true"/>
+}

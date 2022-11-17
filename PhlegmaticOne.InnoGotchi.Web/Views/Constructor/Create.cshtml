@@ -40,7 +40,7 @@
                     </div>
                     <div class="row justify-content-center mb-3">
                         <div id="create_form">
-                            @Html.RenderPartialAsync("CreateInnoGotchiPartialView", new CreateInnoGotchiViewModel())
+                            @await Html.PartialAsync("CreateInnoGotchiPartialView", new CreateInnoGotchiViewModel())
                         </div>
                         <div class="col-6 text-center mt-2">
                             <input type="submit" class="btn-lg btn-info" id="createNew" value="Create new"/>
@@ -56,4 +56,8 @@
 {
     <script src="~/js/constructor.js" asp-append-version="true"></script>
 }
-<link rel="stylesheet" href="~/css/constructor.css" asp-append-version="true" />
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/constructor.css" asp-append-version="true" />
+}

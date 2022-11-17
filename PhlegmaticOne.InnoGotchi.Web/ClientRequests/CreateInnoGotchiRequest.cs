@@ -4,7 +4,7 @@ using PhlegmaticOne.ServerRequesting.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 
-public class CreateInnoGotchiRequest : ClientPostRequest<CreateInnoGotchiDto, InnoGotchiDto>
+public class CreateInnoGotchiRequest : ClientPostRequest<CreateInnoGotchiDto, PreviewInnoGotchiDto>
 {
     public CreateInnoGotchiRequest(CreateInnoGotchiDto requestData) : base(requestData) { }
 }

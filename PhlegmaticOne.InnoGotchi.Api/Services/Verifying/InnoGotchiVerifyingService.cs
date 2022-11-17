@@ -1,25 +1,31 @@
 ﻿using FluentValidation;
 using PhlegmaticOne.DataService.Interfaces;
 using PhlegmaticOne.InnoGotchi.Api.Models;
+using PhlegmaticOne.InnoGotchi.Api.Services.Time;
 using PhlegmaticOne.InnoGotchi.Api.Services.Verifying.Base;
 using PhlegmaticOne.InnoGotchi.Data.Models;
 using PhlegmaticOne.InnoGotchi.Data.Models.Enums;
 using PhlegmaticOne.InnoGotchi.Shared.Components;
-using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Services.Verifying;
 
 public class InnoGotchiVerifyingService : VerifyingServiceBase<IdentityInnoGotchiModel, InnoGotchiModel>
 {
-    public InnoGotchiVerifyingService(IValidator<IdentityInnoGotchiModel> fluentValidator, IDataService dataService) : 
-        base(fluentValidator, dataService) { }
+    private readonly ITimeProvider _timeProvider;
+
+    public InnoGotchiVerifyingService(IValidator<IdentityInnoGotchiModel> fluentValidator,
+        IDataService dataService, ITimeProvider timeProvider) : 
+        base(fluentValidator, dataService)
+    {
+        _timeProvider = timeProvider;
+    }
 
     public override async Task<InnoGotchiModel> MapAsync(IdentityInnoGotchiModel from)
     {
         var components = await GetExistingComponents(from.Components);
         var farm = await GetProfileFarm(from.ProfileId);
         var innoGotchiComponents = CreateModelComponents(from.Components, components);
-        var now = DateTime.Now;
+        var now = _timeProvider.Now();
 
         return new InnoGotchiModel
         {
@@ -30,7 +36,10 @@ public class InnoGotchiVerifyingService : VerifyingServiceBase<IdentityInnoGotch
             ThirstyLevel = ThirstyLevel.Normal,
             Components = innoGotchiComponents,
             Farm = farm,
-            Age = 0            
+            Age = 0,
+            AgeUpdatedAt = now,
+            HappinessDaysCount = 0,
+            LiveSince = now
         };
     }
 

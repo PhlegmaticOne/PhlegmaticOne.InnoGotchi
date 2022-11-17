@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
+﻿namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Components;
 
 public class InnoGotchiComponentViewModel
 {

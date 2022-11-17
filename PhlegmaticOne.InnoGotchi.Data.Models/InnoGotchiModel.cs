@@ -10,6 +10,8 @@ public class InnoGotchiModel : EntityBase
     public DateTime LastFeedTime { get; set; }
     public DateTime LastDrinkTime { get; set; }
     public DateTime AgeUpdatedAt { get; set; }
+    public DateTime LiveSince { get; set; }
+    public DateTime DeadSince { get; set; }
     public int Age { get; set; }
     public int HappinessDaysCount { get; set; }
     public string Name { get; set; } = null!;

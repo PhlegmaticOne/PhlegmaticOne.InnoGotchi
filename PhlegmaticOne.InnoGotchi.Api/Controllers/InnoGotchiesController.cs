@@ -36,37 +36,37 @@ public class InnoGotchiesController : DataController
     }
 
     [HttpPost]
-    public async Task<OperationResult<InnoGotchiDto>> Create([FromBody] CreateInnoGotchiDto createInnoGotchiDto)
+    public async Task<OperationResult<PreviewInnoGotchiDto>> Create([FromBody] CreateInnoGotchiDto createInnoGotchiDto)
     {
         var profileInnoGotchiModel = Mapper.MapIdentity<IdentityInnoGotchiModel>(createInnoGotchiDto, ProfileId());
         var validationResult = await _innoGotchiVerifyingService.ValidateAsync(profileInnoGotchiModel);
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<InnoGotchiDto>(validationResult.ToDictionary(),
+            return OperationResult.FromFail<PreviewInnoGotchiDto>(validationResult.ToDictionary(),
                 validationResult.OnlyErrors());
         }
 
         var created = await _innoGotchiVerifyingService.MapAsync(profileInnoGotchiModel);
-        return await MapFromInsertionResult<InnoGotchiDto, InnoGotchiModel>(created);
+        return await MapFromInsertionResult<PreviewInnoGotchiDto, InnoGotchiModel>(created);
     }
 
     [HttpGet]
-    public async Task<OperationResult<InnoGotchiDto>> Get(Guid innoGotchiId)
+    public async Task<OperationResult<DetailedInnoGotchiDto>> Get(Guid petId)
     {
         var repository = DataService.GetDataRepository<InnoGotchiModel>();
 
-        var innoGotchi = await repository.GetByIdOrDefaultAsync(innoGotchiId,
+        var innoGotchi = await repository.GetByIdOrDefaultAsync(petId,
             include: IncludeComponents(),
             predicate: WhereProfileIdIs(ProfileId()));
 
         if (innoGotchi is null)
         {
             const string errorMessage = "You haven't such InnoGotchi";
-            return OperationResult.FromFail<InnoGotchiDto>(errorMessage: errorMessage);
+            return OperationResult.FromFail<DetailedInnoGotchiDto>(errorMessage: errorMessage);
         }
 
-        return ResultFromMap<InnoGotchiDto>(innoGotchi);
+        return ResultFromMap<DetailedInnoGotchiDto>(innoGotchi);
     }
 
     [HttpGet]

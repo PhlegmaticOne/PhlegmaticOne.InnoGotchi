@@ -2,5 +2,5 @@
 
 public class InnoGotchiCollectionDto
 {
-    public List<InnoGotchiDto> InnoGotchies { get; set; } = null!;
+    public List<PreviewInnoGotchiDto> InnoGotchies { get; set; } = null!;
 }

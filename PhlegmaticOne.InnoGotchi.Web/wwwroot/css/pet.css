@@ -1,0 +1,10 @@
+.pet-info {
+    border-radius: 1rem !important;
+}
+
+
+@media (max-width: 768px) {
+    .pet-info {
+        margin-top: 1rem;
+    }
+}

@@ -1,11 +1,13 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
+﻿using PhlegmaticOne.InnoGotchi.Web.ViewModels.Components;
 
-public class InnoGotchiViewModel
+namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
+
+public class PreviewInnoGotchiViewModel
 {
+    public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public int Age { get; set; }
     public string HungerLevel { get; set; } = null!;
     public string ThirstLevel { get; set; } = null!;
-    public int HappinessDaysCount { get; set; }
     public List<InnoGotchiComponentViewModel> Components { get; set; } = null!;
 }
