@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PhlegmaticOne.DataService.Implementation;
-using PhlegmaticOne.DataService.Interfaces;
+using PhlegmaticOne.UnitOfWork.Implementation;
+using PhlegmaticOne.UnitOfWork.Interfaces;
 
-namespace PhlegmaticOne.DataService.Extensions;
+namespace PhlegmaticOne.UnitOfWork.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDataService<TContext>(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddUnitOfWork<TContext>(this IServiceCollection serviceCollection)
         where TContext : DbContext
     {
-        serviceCollection.AddScoped<IDataService>(x =>
+        serviceCollection.AddScoped<IUnitOfWork>(x =>
         {
             var dbContext = x.GetRequiredService<TContext>();
-            return new DbContextDataService(dbContext);
+            return new DbContextUnitOfWork(dbContext);
         });
         return serviceCollection;
     }

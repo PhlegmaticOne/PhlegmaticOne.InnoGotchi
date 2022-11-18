@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Web", "PhlegmaticOne.InnoGotchi.Web\PhlegmaticOne.InnoGotchi.Web.csproj", "{989A38CE-51DF-43FD-918D-FD577A25CEF6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Data.Models", "PhlegmaticOne.InnoGotchi.Data.Models\PhlegmaticOne.InnoGotchi.Data.Models.csproj", "{108706F6-F202-4412-A5C0-EE8881AAE398}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Data.EntityFramework", "PhlegmaticOne.InnoGotchi.Data.EntityFramework\PhlegmaticOne.InnoGotchi.Data.EntityFramework.csproj", "{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Shared", "PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj", "{CDA9B5DB-8F9B-45E3-81D3-44E69C1C200C}"
@@ -21,15 +19,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.OperationResu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{0CA3B202-3873-4B74-927A-8BF149ECF8C2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.JwtTokensGeneration", "PhlegmaticOne.JwtTokensGeneration\PhlegmaticOne.JwtTokensGeneration.csproj", "{BC6FC810-A31C-4B24-B31F-139662E4D01E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.LocalStorage", "PhlegmaticOne.LocalStorage\PhlegmaticOne.LocalStorage.csproj", "{700E0400-96D9-4CC4-BD9C-775307A3B8BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.DataService", "PhlegmaticOne.DataService\PhlegmaticOne.DataService.csproj", "{7A3D0149-19BB-4F46-917C-CB66857B788C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.UnitOfWork", "PhlegmaticOne.DataService\PhlegmaticOne.UnitOfWork.csproj", "{7A3D0149-19BB-4F46-917C-CB66857B788C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.PagedList", "PhlegmaticOne.PagedList\PhlegmaticOne.PagedList.csproj", "{C002AAA9-8E8C-4003-9C40-9C2C6D0C267A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Domain", "PhlegmaticOne.InnoGotchi.Domain\PhlegmaticOne.InnoGotchi.Domain.csproj", "{91C198B9-8EB0-41ED-9528-3B787CC03507}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.InnoGotchi.Services", "PhlegmaticOne.InnoGotchi.Services\PhlegmaticOne.InnoGotchi.Services.csproj", "{8CAB2A21-DAD6-48B3-9AC8-0F5C53A63D63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +45,6 @@ Global
 		{989A38CE-51DF-43FD-918D-FD577A25CEF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{989A38CE-51DF-43FD-918D-FD577A25CEF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{989A38CE-51DF-43FD-918D-FD577A25CEF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{108706F6-F202-4412-A5C0-EE8881AAE398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{108706F6-F202-4412-A5C0-EE8881AAE398}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{108706F6-F202-4412-A5C0-EE8881AAE398}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{108706F6-F202-4412-A5C0-EE8881AAE398}.Release|Any CPU.Build.0 = Release|Any CPU
 		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,13 +81,19 @@ Global
 		{C002AAA9-8E8C-4003-9C40-9C2C6D0C267A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C002AAA9-8E8C-4003-9C40-9C2C6D0C267A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C002AAA9-8E8C-4003-9C40-9C2C6D0C267A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C198B9-8EB0-41ED-9528-3B787CC03507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C198B9-8EB0-41ED-9528-3B787CC03507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C198B9-8EB0-41ED-9528-3B787CC03507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C198B9-8EB0-41ED-9528-3B787CC03507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CAB2A21-DAD6-48B3-9AC8-0F5C53A63D63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CAB2A21-DAD6-48B3-9AC8-0F5C53A63D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CAB2A21-DAD6-48B3-9AC8-0F5C53A63D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CAB2A21-DAD6-48B3-9AC8-0F5C53A63D63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{108706F6-F202-4412-A5C0-EE8881AAE398} = {0CA3B202-3873-4B74-927A-8BF149ECF8C2}
-		{457131F4-4C7A-4949-ABC4-F8EF61E1A21A} = {0CA3B202-3873-4B74-927A-8BF149ECF8C2}
 		{BF78CCD5-B532-4D33-8315-22E09FD3456A} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 		{EDECEE0E-B243-47B1-A9D3-EB6AF2E45DBE} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 		{F94DCE6C-4F95-402E-BDC8-65116DDEB406} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PhlegmaticOne.InnoGotchi.Data.Models;
-using PhlegmaticOne.InnoGotchi.Data.Models.Enums;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
+using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
 
 namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Configurations;
 

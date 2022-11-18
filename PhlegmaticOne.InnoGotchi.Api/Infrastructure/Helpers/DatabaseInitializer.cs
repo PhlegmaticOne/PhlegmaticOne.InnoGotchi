@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Extensions;
+using PhlegmaticOne.InnoGotchi.Api.Services;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
-using PhlegmaticOne.InnoGotchi.Data.Models;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.PasswordHasher.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
@@ -13,18 +15,23 @@ public static class DatabaseInitializer
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
         var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+        var serverAddressProvider = scope.ServiceProvider.GetRequiredService<IServerAddressProvider>();
 
         await CreateOrMigrate(dbContext);
 
-        var set = dbContext.Set<InnoGotchiComponent>();
+        var innoGotchiesSet = dbContext.Set<InnoGotchiComponent>();
+        var userProfilesSet = dbContext.Set<UserProfile>();
 
-        if (set.Any())
+        if (innoGotchiesSet.Any() == false)
         {
-            return;
+            await innoGotchiesSet.AddRangeAsync(SeedComponents(webHostEnvironment, serverAddressProvider));
         }
 
-        await set.AddRangeAsync(SeedComponents(webHostEnvironment));
-        await dbContext.Set<UserProfile>().AddAsync(SeedUserProfile(passwordHasher));
+        if (userProfilesSet.Any() == false)
+        {
+            await userProfilesSet.AddAsync(SeedUserProfile(passwordHasher));
+        }
+
         await dbContext.SaveChangesAsync();
     }
 
@@ -40,10 +47,10 @@ public static class DatabaseInitializer
         }
     }
 
-    private static IEnumerable<InnoGotchiComponent> SeedComponents(IWebHostEnvironment webHostEnvironment)
+    private static IEnumerable<InnoGotchiComponent> SeedComponents(IWebHostEnvironment webHostEnvironment, IServerAddressProvider serverAddressProvider)
     {
         var componentFiles = WwwRootHelper.GetComponents(webHostEnvironment);
-
+        var serverAddress = serverAddressProvider.ServerAddressUri;
         foreach (var component in componentFiles)
         {
             foreach (var componentImageUrl in component.Value)
@@ -51,7 +58,7 @@ public static class DatabaseInitializer
                 yield return new()
                 {
                     Name = component.Key,
-                    ImageUrl = componentImageUrl
+                    ImageUrl = serverAddress.Combine(componentImageUrl).AbsoluteUri
                 };
             }
         }
@@ -65,6 +72,7 @@ public static class DatabaseInitializer
                 Email = "test@gmail.com",
                 Password = passwordHasher.Hash("Qwerty_1234")
             },
+            Avatar = new Avatar(),
             FirstName = "Firstname",
             LastName = "Secondname",
             JoinDate = DateTime.UtcNow,

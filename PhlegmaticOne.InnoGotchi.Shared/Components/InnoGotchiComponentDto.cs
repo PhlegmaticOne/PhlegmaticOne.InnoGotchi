@@ -1,6 +1,8 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Components;
+﻿using PhlegmaticOne.InnoGotchi.Shared.Interfaces;
 
-public class InnoGotchiComponentDto
+namespace PhlegmaticOne.InnoGotchi.Shared.Components;
+
+public class InnoGotchiComponentDto : IHaveImageUrl
 {
     public string ImageUrl { get; set; } = null!;
     public string Name { get; set; } = null!;

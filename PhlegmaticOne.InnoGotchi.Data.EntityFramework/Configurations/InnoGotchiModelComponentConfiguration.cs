@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PhlegmaticOne.InnoGotchi.Data.Models;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Configurations;
 

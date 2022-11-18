@@ -29,19 +29,21 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterViewModelValidator>
 
 builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 {
-    a.ConfigureRequest<RegisterProfileRequest>("Profiles/Register");
-    a.ConfigureRequest<LoginRequest>("Profiles/Login");
+    a.ConfigureRequest<RegisterProfileRequest>("AnonymousProfiles/Register");
+    a.ConfigureRequest<LoginRequest>("AnonymousProfiles/Login");
+
     a.ConfigureRequest<DetailedProfileGetRequest>("Profiles/GetDetailed");
     a.ConfigureRequest<UpdateAccountRequest>("Profiles/Update");
-    a.ConfigureRequest<GetAvatarGetRequest>("Profiles/GetAvatar");
 
-    a.ConfigureRequest<GetFarmRequest>("Farm/Get");
-    a.ConfigureRequest<CreateFarmRequest>("Farm/Create");
+    a.ConfigureRequest<GetAvatarGetRequest>("Avatars/Get");
+
+    a.ConfigureRequest<GetFarmRequest>("Farms/Get");
+    a.ConfigureRequest<CreateFarmRequest>("Farms/Create");
+
+    a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 
     a.ConfigureRequest<GetInnoGotchiGetRequest>("InnoGotchies/Get");
     a.ConfigureRequest<CreateInnoGotchiRequest>("InnoGotchies/Create");
-
-    a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 });
 
 builder.Services.AddLocalStorage(startConf =>

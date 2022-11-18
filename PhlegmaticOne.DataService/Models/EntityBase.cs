@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.DataService.Models;
+﻿namespace PhlegmaticOne.UnitOfWork.Models;
 
 public abstract class EntityBase
 {
