@@ -12,7 +12,7 @@
             <h3 class="my-3">Vital signs</h3>
             <div>
                 <p>Hunger level: @Model.HungerLevel</p>
-                <p>Thirsty level: @Model.ThirstLevel</p>
+                <p>Thirsty level: @Model.ThirstyLevel</p>
                 <p>Age: @Model.Age</p>
             </div>
         </div>
@@ -20,6 +20,13 @@
             <h3 class="my-3">Information</h3>
             <div>
                 <p>Happiness days count: @Model.HappinessDaysCount</p>
+                <p>Created at: @Model.LiveSince</p>
+                <p>Last feed time: @Model.LastFeedTime</p>
+                <p>Last drink time: @Model.LastDrinkTime</p>
+                @if (Model.IsNewBorn)
+                {
+                    <p>Your pet is new born</p>
+                }
                 @if (Model.IsDead)
                 {
                     <p>Dead since: @Model.DeadSince</p>

@@ -16,7 +16,8 @@ public class ProfilesController : IdentityController
     private readonly IProfileAuthorizedActionsManager _profileAuthorizedActionsManager;
     private readonly IDefaultAvatarService _avatarConvertingService;
 
-    public ProfilesController(IProfileAuthorizedActionsManager profileAuthorizedActionsManager, IDefaultAvatarService avatarConvertingService)
+    public ProfilesController(IProfileAuthorizedActionsManager profileAuthorizedActionsManager, 
+        IDefaultAvatarService avatarConvertingService)
     {
         _profileAuthorizedActionsManager = profileAuthorizedActionsManager;
         _avatarConvertingService = avatarConvertingService;

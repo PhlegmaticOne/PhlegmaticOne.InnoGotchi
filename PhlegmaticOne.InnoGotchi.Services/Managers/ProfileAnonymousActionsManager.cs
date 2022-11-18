@@ -1,25 +1,33 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
-using PhlegmaticOne.InnoGotchi.Domain.Providers;
+using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
+using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.OperationResults;
+using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Managers;
 
 public class ProfileAnonymousActionsManager : IProfileAnonymousActionsManager
 {
-    private readonly IProfilesProvider _profilesProvider;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IReadableProfileProvider _readableProfileProvider;
+    private readonly IWritableProfilesProvider _profilesProvider;
     private readonly IJwtTokenGenerationService _jwtTokenGenerationService;
     private readonly IValidator<RegisterProfileDto> _registerValidator;
     private readonly IMapper _mapper;
 
-    public ProfileAnonymousActionsManager(IProfilesProvider profilesProvider,
+    public ProfileAnonymousActionsManager(IUnitOfWork unitOfWork,
+        IReadableProfileProvider readableProfileProvider,
+        IWritableProfilesProvider profilesProvider,
         IJwtTokenGenerationService jwtTokenGenerationService,
         IValidator<RegisterProfileDto> registerValidator,
         IMapper mapper)
     {
+        _unitOfWork = unitOfWork;
+        _readableProfileProvider = readableProfileProvider;
         _profilesProvider = profilesProvider;
         _jwtTokenGenerationService = jwtTokenGenerationService;
         _registerValidator = registerValidator;
@@ -43,6 +51,8 @@ public class ProfileAnonymousActionsManager : IProfileAnonymousActionsManager
             return OperationResult.FromFail<AuthorizedProfileDto>(createdProfileOperationResult.ErrorMessage);
         }
 
+        await _unitOfWork.SaveChangesAsync();
+
         var createdProfile = createdProfileOperationResult.Result!;
 
         var result = _mapper.Map<AuthorizedProfileDto>(createdProfile);
@@ -53,7 +63,7 @@ public class ProfileAnonymousActionsManager : IProfileAnonymousActionsManager
 
     public async Task<OperationResult<AuthorizedProfileDto>> LoginAsync(LoginDto loginDto)
     {
-        var existingOperationResult = await _profilesProvider.GetExistingOrDefaultAsync(loginDto.Email, loginDto.Password);
+        var existingOperationResult = await _readableProfileProvider.GetExistingOrDefaultAsync(loginDto.Email, loginDto.Password);
 
         if (existingOperationResult.IsSuccess == false)
         {

@@ -8,6 +8,6 @@ public class PreviewInnoGotchiDto
     public string Name { get; set; } = null!;
     public int Age { get; set; }
     public string HungerLevel { get; set; } = null!;
-    public string ThirstLevel { get; set; } = null!;
+    public string ThirstyLevel { get; set; } = null!;
     public List<InnoGotchiModelComponentDto> Components { get; set; } = null!;
 }

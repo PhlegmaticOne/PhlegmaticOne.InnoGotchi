@@ -73,7 +73,27 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
         return query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-        
+    public async Task<TResult?> GetByIdOrDefaultAsync<TResult>(Guid id, 
+        Expression<Func<TEntity, TResult>> selector, 
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> query = _set;
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        return await query.Select(selector).FirstOrDefaultAsync();
+    }
+
+
     public async Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,

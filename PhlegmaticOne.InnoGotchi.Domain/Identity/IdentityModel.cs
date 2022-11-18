@@ -3,5 +3,5 @@
 public class IdentityModel<T>
 {
     public Guid ProfileId { get; init; }
-    public T Entity { get; init; }
+    public T Entity { get; init; } = default!;
 }

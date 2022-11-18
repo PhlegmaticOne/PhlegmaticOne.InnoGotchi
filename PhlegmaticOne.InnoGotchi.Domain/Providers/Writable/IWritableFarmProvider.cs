@@ -3,10 +3,9 @@ using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.OperationResults;
 
-namespace PhlegmaticOne.InnoGotchi.Domain.Providers;
+namespace PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 
-public interface IFarmProvider
+public interface IWritableFarmProvider
 {
     Task<OperationResult<Farm>> CreateAsync(IdentityModel<CreateFarmDto> createFarmDto);
-    Task<OperationResult<Farm>> GetWithPetsAsync(Guid profileId);
 }

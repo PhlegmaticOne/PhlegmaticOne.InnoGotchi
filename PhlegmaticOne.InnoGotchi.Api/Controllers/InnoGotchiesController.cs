@@ -13,9 +13,9 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [Authorize]
 public class InnoGotchiesController : IdentityController
 {
-    private readonly IInnoGotchiesManager _innoGotchiesManager;
+    private readonly IInnoGotchiManager _innoGotchiesManager;
 
-    public InnoGotchiesController(IInnoGotchiesManager innoGotchiesManager) => 
+    public InnoGotchiesController(IInnoGotchiManager innoGotchiesManager) => 
         _innoGotchiesManager = innoGotchiesManager;
 
     [HttpPost]

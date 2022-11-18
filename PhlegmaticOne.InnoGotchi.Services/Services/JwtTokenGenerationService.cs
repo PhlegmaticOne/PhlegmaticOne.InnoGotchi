@@ -10,10 +10,8 @@ public class JwtTokenGenerationService : IJwtTokenGenerationService
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-    public JwtTokenGenerationService(IJwtTokenGenerator jwtTokenGenerator)
-    {
+    public JwtTokenGenerationService(IJwtTokenGenerator jwtTokenGenerator) => 
         _jwtTokenGenerator = jwtTokenGenerator;
-    }
 
     public JwtTokenDto GenerateJwtToken(UserProfile userProfile)
     {

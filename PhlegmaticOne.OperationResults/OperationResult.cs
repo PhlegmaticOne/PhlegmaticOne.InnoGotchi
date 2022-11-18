@@ -24,6 +24,13 @@ public class OperationResult
         ValidationResult = ValidationResult.Error
     };
 
+    public static OperationResult FromFail(string? errorMessage = null) => new()
+    {
+        IsSuccess = false,
+        ErrorMessage = errorMessage ?? "Operation error",
+        ValidationResult = ValidationResult.Error
+    };
+
     public static OperationResult<T> FromFail<T>(IDictionary<string, string[]> validationFailures, string? errorMessage = null)
     {
         var validationResult = ValidationResult.FromFailures(validationFailures);

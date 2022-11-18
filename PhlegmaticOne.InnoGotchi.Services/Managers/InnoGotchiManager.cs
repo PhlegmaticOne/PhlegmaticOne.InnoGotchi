@@ -2,23 +2,31 @@
 using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Domain.Identity;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
-using PhlegmaticOne.InnoGotchi.Domain.Providers;
+using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
+using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.OperationResults;
+using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Managers;
 
-public class InnoGotchiManager : IInnoGotchiesManager
+public class InnoGotchiManager : IInnoGotchiManager
 {
-    private readonly IInnoGotchiesProvider _innoGotchiesProvider;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
+    private readonly IWritableInnoGotchiesProvider _innoGotchiesProvider;
     private readonly IValidator<IdentityModel<CreateInnoGotchiDto>> _createValidator;
     private readonly IMapper _mapper;
 
-    public InnoGotchiManager(IInnoGotchiesProvider innoGotchiesProvider,
+    public InnoGotchiManager(IUnitOfWork unitOfWork,
+        IReadableInnoGotchiProvider readableInnoGotchiProvider,
+        IWritableInnoGotchiesProvider innoGotchiesProvider,
         IValidator<IdentityModel<CreateInnoGotchiDto>> createValidator,
         IMapper mapper)
     {
+        _unitOfWork = unitOfWork;
+        _readableInnoGotchiProvider = readableInnoGotchiProvider;
         _innoGotchiesProvider = innoGotchiesProvider;
         _createValidator = createValidator;
         _mapper = mapper;
@@ -40,21 +48,25 @@ public class InnoGotchiManager : IInnoGotchiesManager
             return OperationResult.FromFail<DetailedInnoGotchiDto>(created.ErrorMessage);
         }
 
+        await _unitOfWork.SaveChangesAsync();
+
         var mapped = _mapper.Map<DetailedInnoGotchiDto>(created.Result);
         return OperationResult.FromSuccess(mapped);
     }
 
     public async Task<OperationResult<DetailedInnoGotchiDto>> GetDetailedAsync(IdentityModel<Guid> petIdModel)
     {
-        var result = await _innoGotchiesProvider.GetDetailedAsync(petIdModel);
+        await _innoGotchiesProvider.SynchronizeSignsAsync(petIdModel);
+        await _unitOfWork.SaveChangesAsync();
 
-        if (result.IsSuccess == false)
+        var petResult = await _readableInnoGotchiProvider.GetDetailedAsync(petIdModel.Entity, petIdModel.ProfileId);
+
+        if (petResult.IsSuccess == false)
         {
-            return OperationResult.FromFail<DetailedInnoGotchiDto>(result.ErrorMessage);
+            return OperationResult.FromFail<DetailedInnoGotchiDto>(petResult.ErrorMessage);
         }
 
-        var mapped = _mapper.Map<DetailedInnoGotchiDto>(result.Result);
-
+        var mapped = _mapper.Map<DetailedInnoGotchiDto>(petResult.Result);
         return OperationResult.FromSuccess(mapped);
     }
 }

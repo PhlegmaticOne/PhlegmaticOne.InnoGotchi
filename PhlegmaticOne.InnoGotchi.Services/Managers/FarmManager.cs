@@ -2,21 +2,36 @@
 using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Domain.Identity;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
-using PhlegmaticOne.InnoGotchi.Domain.Providers;
+using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
+using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.OperationResults;
+using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Managers;
 
 public class FarmManager : IFarmManager
 {
-    private readonly IFarmProvider _farmProvider;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IReadableInnoGotchiProvider _readableInnoGotchiesProvider;
+    private readonly IWritableInnoGotchiesProvider _writableInnoGotchiesProvider;
+    private readonly IReadableFarmProvider _readableFarmProvider;
+    private readonly IWritableFarmProvider _farmProvider;
     private readonly IMapper _mapper;
     private readonly IValidator<IdentityModel<CreateFarmDto>> _createValidator;
 
-    public FarmManager(IFarmProvider farmProvider, IMapper mapper,
-        IValidator<IdentityModel<CreateFarmDto>> createValidator)
+    public FarmManager(IUnitOfWork unitOfWork, 
+        IReadableInnoGotchiProvider readableInnoGotchiesProvider,
+        IWritableInnoGotchiesProvider writableInnoGotchiesProvider,
+        IReadableFarmProvider readableFarmProvider,
+        IWritableFarmProvider farmProvider,
+        IValidator<IdentityModel<CreateFarmDto>> createValidator,
+        IMapper mapper)
     {
+        _unitOfWork = unitOfWork;
+        _readableInnoGotchiesProvider = readableInnoGotchiesProvider;
+        _writableInnoGotchiesProvider = writableInnoGotchiesProvider;
+        _readableFarmProvider = readableFarmProvider;
         _farmProvider = farmProvider;
         _mapper = mapper;
         _createValidator = createValidator;
@@ -24,15 +39,29 @@ public class FarmManager : IFarmManager
 
     public async Task<OperationResult<DetailedFarmDto>> GetWithPetsAsync(Guid profileId)
     {
-        var result = await _farmProvider.GetWithPetsAsync(profileId);
+        var farmResult = await _readableFarmProvider.GetFarmAsync(profileId);
+        var farm = farmResult.Result!;
+        var innoGotchiIdsResult = await _readableInnoGotchiesProvider.GetAllIds(farm.Id);
+        var innoGotchiIds = innoGotchiIdsResult.Result!;
 
-        if (result.IsSuccess == false)
+        //TODO: update collection instead of updating each element
+
+        foreach (var innoGotchiId in innoGotchiIds)
         {
-            return OperationResult.FromFail<DetailedFarmDto>(result.ErrorMessage);
+            await _writableInnoGotchiesProvider.SynchronizeSignsAsync(new IdentityModel<Guid>
+            {
+                Entity = innoGotchiId,
+                ProfileId = profileId
+            });
         }
 
-        var mapped = _mapper.Map<DetailedFarmDto>(result.Result!);
+        await _unitOfWork.SaveChangesAsync();
 
+
+        var allPets = await _readableInnoGotchiesProvider.GetAllDetailedAsync(farm.Id);
+        farm.InnoGotchies = allPets.Result!;
+
+        var mapped = _mapper.Map<DetailedFarmDto>(farm);
         return OperationResult.FromSuccess(mapped);
     }
 
@@ -51,6 +80,8 @@ public class FarmManager : IFarmManager
         {
             return OperationResult.FromFail<DetailedFarmDto>(created.ErrorMessage);
         }
+
+        await _unitOfWork.SaveChangesAsync();
 
         var mapped = _mapper.Map<DetailedFarmDto>(created.Result);
         return OperationResult.FromSuccess(mapped);

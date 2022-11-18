@@ -2,8 +2,8 @@
 
 public enum ThirstyLevel
 {
-    Full,
-    Normal,
-    Thirsty,
-    Dead
+    Full = 0,
+    Normal = 1,
+    Thirsty = 2,
+    Dead = 3
 }

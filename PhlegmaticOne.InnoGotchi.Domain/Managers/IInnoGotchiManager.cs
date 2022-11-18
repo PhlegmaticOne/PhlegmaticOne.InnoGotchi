@@ -5,7 +5,7 @@ using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Domain.Managers;
 
-public interface IInnoGotchiesManager
+public interface IInnoGotchiManager
 {
     Task<OperationResult<DetailedInnoGotchiDto>> CreateAsync(IdentityModel<CreateInnoGotchiDto> createInnoGotchiDto);
     Task<OperationResult<DetailedInnoGotchiDto>> GetDetailedAsync(IdentityModel<Guid> petIdModel);

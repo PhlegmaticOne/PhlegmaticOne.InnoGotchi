@@ -14,6 +14,10 @@ public interface IRepository<TEntity> where TEntity : EntityBase
     Task<TEntity?> GetByIdOrDefaultAsync(Guid id,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+    Task<TResult?> GetByIdOrDefaultAsync<TResult>(Guid id,
+        Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
     Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
