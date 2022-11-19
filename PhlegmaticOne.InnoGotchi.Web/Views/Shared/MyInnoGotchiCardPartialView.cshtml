@@ -5,6 +5,7 @@
         @await Html.PartialAsync("ComponentsImagePartialView", Model.Components)
     </div>
     <div class="card-body">
+        <input class="pet_id" hidden asp-for="Id"/>
         <h4 class="card-title pt-1">@Model.Name</h4>
         <div>
             <label>Hunger level: @Model.HungerLevel</label><br/>
@@ -12,10 +13,16 @@
             <label>Age: @Model.Age</label><br/>
         </div>
         <div class="mt-3 body-links">
-            <a href="#" class="btn btn-outline-secondary btn-dark">Feed</a>
-            <a href="#" class="btn btn-outline-secondary btn-dark">Drink</a>
+            <button class="btn btn-outline-secondary btn-dark feed_button @(TryDisableFeed())">Feed</button>
+            <button class="btn btn-outline-secondary btn-dark drink_button @(TryDisableDrink())">Drink</button>
             <a asp-controller="InnoGotchies" asp-action="Pet" asp-route-petId="@Model.Id"
                class="btn btn-outline-secondary btn-dark">Details</a>
         </div>
     </div>
 </div>
+
+@functions
+{
+    string TryDisableFeed() => Model.IsFeedingAllowable == false ? "disabled" : string.Empty;
+    string TryDisableDrink() => Model.IsDrinkingAllowable == false ? "disabled" : string.Empty;
+}

@@ -14,6 +14,7 @@ public class InnoGotchiesMapperConfiguration : Profile
         CreateMap<InnoGotchiModelComponentDto, InnoGotchiComponentViewModel>();
         CreateMap<PreviewInnoGotchiDto, PreviewInnoGotchiViewModel>();
         CreateMap<DetailedInnoGotchiDto, DetailedInnoGotchiViewModel>();
+        CreateMap<DetailedInnoGotchiDto, PreviewInnoGotchiViewModel>();
         CreateMap<InnoGotchiActionViewModel, IdDto>()
             .ForMember(x => x.Id, o => o.MapFrom(x => x.InnoGotchiId));
     }

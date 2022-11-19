@@ -37,10 +37,29 @@ public class InnoGotchiesController : ClientRequestsController
         return FromAuthorizedPut(new DrinkInnoGotchiRequest(identityDto), InnoGotchiView);
     }
 
+    [HttpPost]
+    public Task<IActionResult> FeedPartial([FromBody] IdDto innoGotchiIdDto)
+    {
+        return FromAuthorizedPut(new FeedInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
+    }
+
+    [HttpPost]
+    public Task<IActionResult> DrinkPartial([FromBody] IdDto innoGotchiIdDto)
+    {
+        return FromAuthorizedPut(new DrinkInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
+    }
+
     private Task<IActionResult> InnoGotchiView(DetailedInnoGotchiDto innoGotchi)
     {
         var result = _mapper.Map<DetailedInnoGotchiViewModel>(innoGotchi);
         IActionResult view = View(nameof(Pet), result);
+        return Task.FromResult(view);
+    }
+
+    private Task<IActionResult> InnoGotchiCardPartialView(DetailedInnoGotchiDto innoGotchi)
+    {
+        var result = _mapper.Map<PreviewInnoGotchiViewModel>(innoGotchi);
+        IActionResult view = PartialView("MyInnoGotchiCardPartialView", result);
         return Task.FromResult(view);
     }
 }

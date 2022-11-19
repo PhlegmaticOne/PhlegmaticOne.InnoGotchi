@@ -50,7 +50,7 @@
                     {
                         ActionText = "Feed me",
                         ActionName = "Feed",
-                        IsDisabled = Model.IsDead || Model.HungerLevel == "Full",
+                        IsDisabled = Model.IsFeedingAllowable == false,
                         InnoGotchiId = Model.Id
                     })
                 </div>
@@ -60,7 +60,7 @@
                     {
                         ActionText = "Give a drink",
                         ActionName = "Drink",
-                        IsDisabled = Model.IsDead || Model.ThirstyLevel == "Full",
+                        IsDisabled = Model.IsDrinkingAllowable == false,
                         InnoGotchiId = Model.Id
                     })
                 </div>

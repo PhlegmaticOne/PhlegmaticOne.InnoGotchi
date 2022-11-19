@@ -7,7 +7,9 @@
     <div class="card-group vgr-cards mt-2" style="justify-content: space-around">
         @foreach (var innoGotchi in Model.InnoGotchies)
         {
-            @await Html.PartialAsync("MyInnoGotchiCardPartialView", innoGotchi)
+            <div>
+                @await Html.PartialAsync("MyInnoGotchiCardPartialView", innoGotchi)
+            </div>
         }
     </div>
 </div>

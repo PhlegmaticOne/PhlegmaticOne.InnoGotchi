@@ -20,9 +20,6 @@ public class FarmsController : IdentityController
         _farmManager.GetWithPetsAsync(ProfileId());
 
     [HttpPost]
-    public Task<OperationResult<DetailedFarmDto>> Create([FromBody] CreateFarmDto createFarmDto)
-    {
-        var identityModel = IdentityModel(createFarmDto);
-        return _farmManager.CreateAsync(identityModel);
-    }
+    public Task<OperationResult<DetailedFarmDto>> Create([FromBody] CreateFarmDto createFarmDto) => 
+        _farmManager.CreateAsync(IdentityModel(createFarmDto));
 }
