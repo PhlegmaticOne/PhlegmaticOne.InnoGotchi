@@ -3,6 +3,7 @@ using PhlegmaticOne.InnoGotchi.Api.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Api.Services;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
+using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.PasswordHasher.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
@@ -16,6 +17,7 @@ public static class DatabaseInitializer
         var webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
         var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
         var serverAddressProvider = scope.ServiceProvider.GetRequiredService<IServerAddressProvider>();
+        var timeService = scope.ServiceProvider.GetRequiredService<ITimeService>();
 
         await CreateOrMigrate(dbContext);
 
@@ -29,7 +31,7 @@ public static class DatabaseInitializer
 
         if (userProfilesSet.Any() == false)
         {
-            await userProfilesSet.AddAsync(SeedUserProfile(passwordHasher));
+            await userProfilesSet.AddAsync(SeedUserProfile(passwordHasher, timeService));
         }
 
         await dbContext.SaveChangesAsync();
@@ -64,7 +66,7 @@ public static class DatabaseInitializer
         }
     }
 
-    private static UserProfile SeedUserProfile(IPasswordHasher passwordHasher) =>
+    private static UserProfile SeedUserProfile(IPasswordHasher passwordHasher, ITimeService timeService) =>
         new()
         {
             User = new User
@@ -75,10 +77,14 @@ public static class DatabaseInitializer
             Avatar = new Avatar(),
             FirstName = "Firstname",
             LastName = "Secondname",
-            JoinDate = DateTime.UtcNow,
+            JoinDate = timeService.Now(),
             Farm = new Farm
             {
-                FarmStatistics = new FarmStatistics(),
+                FarmStatistics = new FarmStatistics
+                {
+                    LastDrinkTime = timeService.Now(),
+                    LastFeedTime = timeService.Now()
+                },
                 Name = "my farm"
             }
         };

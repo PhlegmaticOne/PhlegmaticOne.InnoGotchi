@@ -15,6 +15,11 @@ public abstract class ClientPostRequest<TRequest, TResponse> : ClientRequest<TRe
     protected ClientPostRequest(TRequest requestData) : base(requestData) { }
 }
 
+public abstract class ClientPutRequest<TRequest, TResponse> : ClientRequest<TRequest, TResponse>
+{
+    protected ClientPutRequest(TRequest requestData) : base(requestData) { }
+}
+
 public abstract class ClientGetRequest<TRequest, TResponse> : ClientRequest<TRequest, TResponse>
 {
     protected ClientGetRequest(TRequest requestData) : base(requestData) => RequestData = requestData;

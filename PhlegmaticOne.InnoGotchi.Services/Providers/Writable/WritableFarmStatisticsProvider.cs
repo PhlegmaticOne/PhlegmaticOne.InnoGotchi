@@ -1,5 +1,6 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
+using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
@@ -8,14 +9,19 @@ namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITimeService _timeService;
 
-    public WritableFarmStatisticsProvider(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public WritableFarmStatisticsProvider(IUnitOfWork unitOfWork, ITimeService timeService)
+    {
+        _unitOfWork = unitOfWork;
+        _timeService = timeService;
+    }
 
     public async Task<OperationResult<FarmStatistics>> ProcessFeedingAsync(Guid profileId)
     {
         var repository = _unitOfWork.GetDataRepository<FarmStatistics>();
         var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId);
-        var now = DateTime.Now;
+        var now = _timeService.Now();
 
         var updated = await repository.UpdateAsync(farmStatistics!, statistics =>
         {
@@ -32,7 +38,7 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
     {
         var repository = _unitOfWork.GetDataRepository<FarmStatistics>();
         var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId);
-        var now = DateTime.Now;
+        var now = _timeService.Now();
 
         var updated = await repository.UpdateAsync(farmStatistics!, statistics =>
         {

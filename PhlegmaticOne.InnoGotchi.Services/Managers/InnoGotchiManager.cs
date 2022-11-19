@@ -4,6 +4,7 @@ using PhlegmaticOne.InnoGotchi.Domain.Identity;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
+using PhlegmaticOne.InnoGotchi.Shared;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.OperationResults;
@@ -54,12 +55,12 @@ public class InnoGotchiManager : IInnoGotchiManager
         return OperationResult.FromSuccess(mapped);
     }
 
-    public async Task<OperationResult<DetailedInnoGotchiDto>> GetDetailedAsync(IdentityModel<Guid> petIdModel)
+    public async Task<OperationResult<DetailedInnoGotchiDto>> GetDetailedAsync(IdentityModel<IdDto> petIdModel)
     {
         await _innoGotchiesProvider.SynchronizeSignsAsync(petIdModel);
         await _unitOfWork.SaveChangesAsync();
 
-        var petResult = await _readableInnoGotchiProvider.GetDetailedAsync(petIdModel.Entity, petIdModel.ProfileId);
+        var petResult = await _readableInnoGotchiProvider.GetDetailedAsync(petIdModel.Entity.Id, petIdModel.ProfileId);
 
         if (petResult.IsSuccess == false)
         {

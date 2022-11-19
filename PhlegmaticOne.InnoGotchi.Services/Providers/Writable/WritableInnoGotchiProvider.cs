@@ -8,6 +8,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 using System.Linq.Expressions;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.InnoGotchi.Shared;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 
@@ -15,11 +16,15 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IInnoGotchiSignsUpdateService _innoGotchiSignsUpdateService;
+    private readonly ITimeService _timeService;
 
-    public WritableInnoGotchiProvider(IUnitOfWork unitOfWork, IInnoGotchiSignsUpdateService innoGotchiSignsUpdateService)
+    public WritableInnoGotchiProvider(IUnitOfWork unitOfWork, 
+        IInnoGotchiSignsUpdateService innoGotchiSignsUpdateService,
+        ITimeService timeService)
     {
         _unitOfWork = unitOfWork;
         _innoGotchiSignsUpdateService = innoGotchiSignsUpdateService;
+        _timeService = timeService;
     }
 
     public async Task<OperationResult<InnoGotchiModel>> CreateAsync(IdentityModel<CreateInnoGotchiDto> createInnoGotchiDto)
@@ -30,47 +35,58 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         return OperationResult.FromSuccess(createdInnoGotchi);
     }
 
-    public Task<OperationResult> DrinkAsync(IdentityModel<Guid> petIdModel) =>
+    public Task<OperationResult> DrinkAsync(IdentityModel<IdDto> petIdModel) =>
         ProcessPetUpdating(petIdModel, pet =>
         {
             pet.ThirstyLevel = ThirstyLevel.Full;
-            pet.LastDrinkTime = DateTime.Now;
+            pet.LastDrinkTime = _timeService.Now();
         });
 
-    public Task<OperationResult> FeedAsync(IdentityModel<Guid> petIdModel) =>
+    public Task<OperationResult> FeedAsync(IdentityModel<IdDto> petIdModel) =>
         ProcessPetUpdating(petIdModel, pet =>
         {
-            pet.ThirstyLevel = ThirstyLevel.Full;
-            pet.LastDrinkTime = DateTime.Now;
+            pet.HungerLevel = HungerLevel.Full;
+            pet.LastFeedTime = _timeService.Now();
         });
 
-    public Task<OperationResult> SynchronizeSignsAsync(IdentityModel<Guid> petIdModel) =>
-        ProcessPetUpdating(petIdModel, pet =>
-        {
-            var now = DateTime.Now;
-            var currentPetAge = pet.Age;
+    public Task<OperationResult> SynchronizeSignsAsync(IdentityModel<IdDto> petIdModel) =>
+        ProcessPetUpdating(petIdModel, SynchronizeAction);
 
-            pet.HungerLevel = _innoGotchiSignsUpdateService.TryIncreaseHungerLevel(pet.HungerLevel, pet.LastFeedTime);
-            pet.ThirstyLevel = _innoGotchiSignsUpdateService.TryIncreaseThirstLevel(pet.ThirstyLevel, pet.LastDrinkTime);
-            pet.Age = _innoGotchiSignsUpdateService.TryIncreaseAge(pet.Age, pet.AgeUpdatedAt);
-            pet.HappinessDaysCount =
-                _innoGotchiSignsUpdateService.CalculateHappinessDaysCount(pet.HungerLevel, pet.ThirstyLevel, pet.LiveSince);
-
-            if (currentPetAge < pet.Age)
-            {
-                pet.AgeUpdatedAt = now;
-            }
-
-            if (_innoGotchiSignsUpdateService.IsDeadNow(pet.HungerLevel, pet.ThirstyLevel, pet.Age))
-            {
-                pet.DeadSince = now;
-            }
-        });
-
-    private async Task<OperationResult> ProcessPetUpdating(IdentityModel<Guid> petIdModel, Action<InnoGotchiModel> updateAction)
+    public async Task<OperationResult> SynchronizeSignsAsync(Guid farmId)
     {
         var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
-        var pet = await repository.GetByIdOrDefaultAsync(petIdModel.Entity,
+        var pets = await repository.GetAllAsync(predicate: p => p.Farm.Id == farmId);
+        await repository.UpdateRangeAsync(pets, SynchronizeAction);
+        return OperationResult.FromSuccess("Updated");
+    }
+
+    private void SynchronizeAction(InnoGotchiModel pet)
+    {
+        var now = _timeService.Now();
+        var currentPetAge = pet.Age;
+
+        pet.HungerLevel = _innoGotchiSignsUpdateService.TryIncreaseHungerLevel(pet.HungerLevel, pet.LastFeedTime);
+        pet.ThirstyLevel = _innoGotchiSignsUpdateService.TryIncreaseThirstLevel(pet.ThirstyLevel, pet.LastDrinkTime);
+        pet.Age = _innoGotchiSignsUpdateService.TryIncreaseAge(pet.Age, pet.AgeUpdatedAt);
+        pet.HappinessDaysCount =
+            _innoGotchiSignsUpdateService.CalculateHappinessDaysCount(pet.HungerLevel, pet.ThirstyLevel, pet.LiveSince);
+
+        if (currentPetAge < pet.Age)
+        {
+            pet.AgeUpdatedAt = now;
+        }
+
+        if (_innoGotchiSignsUpdateService.IsDeadNow(pet.HungerLevel, pet.ThirstyLevel, pet.Age))
+        {
+            pet.DeadSince = now;
+        }
+    }
+
+
+    private async Task<OperationResult> ProcessPetUpdating(IdentityModel<IdDto> petIdModel, Action<InnoGotchiModel> updateAction)
+    {
+        var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
+        var pet = await repository.GetByIdOrDefaultAsync(petIdModel.Entity.Id,
             predicate: WhereProfileIdIs(petIdModel.ProfileId));
 
         if (pet is null)
@@ -94,7 +110,7 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         var components = await GetExistingComponents(componentsToCreate);
         var farm = await GetProfileFarm(from.ProfileId);
         var innoGotchiComponents = CreateModelComponents(componentsToCreate, components);
-        var now = DateTime.Now;
+        var now = _timeService.Now();
 
         return new InnoGotchiModel
         {

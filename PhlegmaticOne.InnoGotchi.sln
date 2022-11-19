@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.PagedList", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Domain", "PhlegmaticOne.InnoGotchi.Domain\PhlegmaticOne.InnoGotchi.Domain.csproj", "{91C198B9-8EB0-41ED-9528-3B787CC03507}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhlegmaticOne.InnoGotchi.Services", "PhlegmaticOne.InnoGotchi.Services\PhlegmaticOne.InnoGotchi.Services.csproj", "{8CAB2A21-DAD6-48B3-9AC8-0F5C53A63D63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Services", "PhlegmaticOne.InnoGotchi.Services\PhlegmaticOne.InnoGotchi.Services.csproj", "{8CAB2A21-DAD6-48B3-9AC8-0F5C53A63D63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

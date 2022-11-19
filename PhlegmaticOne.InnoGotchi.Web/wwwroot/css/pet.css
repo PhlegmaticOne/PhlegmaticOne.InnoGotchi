@@ -3,7 +3,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .pet-info {
         margin-top: 1rem;
     }

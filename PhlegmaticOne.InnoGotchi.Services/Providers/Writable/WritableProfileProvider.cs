@@ -1,5 +1,6 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
+using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Users;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.PasswordHasher.Base;
@@ -11,11 +12,13 @@ public class WritableProfileProvider : IWritableProfilesProvider
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly ITimeService _timeService;
 
-    public WritableProfileProvider(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
+    public WritableProfileProvider(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher, ITimeService timeService)
     {
         _unitOfWork = unitOfWork;
         _passwordHasher = passwordHasher;
+        _timeService = timeService;
     }
     public async Task<OperationResult<UserProfile>> CreateAsync(RegisterProfileDto registerProfileDto)
     {
@@ -54,7 +57,7 @@ public class WritableProfileProvider : IWritableProfilesProvider
             {
                 AvatarData = registerProfileDto.AvatarData
             },
-            JoinDate = DateTime.UtcNow,
+            JoinDate = _timeService.Now(),
             FirstName = registerProfileDto.FirstName,
             LastName = registerProfileDto.LastName
         };

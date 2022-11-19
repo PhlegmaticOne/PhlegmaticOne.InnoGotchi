@@ -5,7 +5,6 @@ using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Farms;
-using PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 
@@ -32,17 +31,6 @@ public class FarmController : ClientRequestsController
             IActionResult view = View(farmViewModel);
             return Task.FromResult(view);
         }, onOperationFailed: _ => RedirectToAction(nameof(Create)));
-    }
-
-    [HttpGet]
-    public Task<IActionResult> Pet(Guid petId)
-    {
-        return FromAuthorizedGet(new GetInnoGotchiGetRequest(petId), innoGotchi =>
-        {
-            var result = _mapper.Map<DetailedInnoGotchiViewModel>(innoGotchi);
-            IActionResult view = View(nameof(Pet), result);
-            return Task.FromResult(view);
-        });
     }
 
     [HttpPost]

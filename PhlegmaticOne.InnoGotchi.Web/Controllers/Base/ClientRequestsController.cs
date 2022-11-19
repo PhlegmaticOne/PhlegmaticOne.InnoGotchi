@@ -45,16 +45,21 @@ public class ClientRequestsController : Controller
         return await HandleResponse(serverResponse, onSuccess, onOperationFailed, onServerResponseFailed);
     }
 
-    protected IActionResult LoginView()
+    protected async Task<IActionResult> FromAuthorizedPut<TRequest, TResponse>(
+        ClientPutRequest<TRequest, TResponse> clientPostRequest,
+        Func<TResponse, Task<IActionResult>> onSuccess,
+        Func<OperationResult, IActionResult>? onOperationFailed = null,
+        Func<ServerResponse, IActionResult>? onServerResponseFailed = null)
     {
-        var loginPath = LocalStorageService.GetLoginPath();
-        return Redirect(loginPath ?? Constants.HomeUrl);
+        var serverResponse = await ClientRequestsService.PutAsync(clientPostRequest, JwtToken());
+        return await HandleResponse(serverResponse, onSuccess, onOperationFailed, onServerResponseFailed);
     }
 
-    protected IActionResult ErrorView(string errorMessage)
-    {
-        return RedirectToAction("Error", "Home", new { errorMessage = errorMessage });
-    }
+    protected IActionResult LoginView() => 
+        Redirect(LocalStorageService.GetLoginPath() ?? Constants.HomeUrl);
+
+    protected IActionResult ErrorView(string errorMessage) => 
+        RedirectToAction("Error", "Home", new { errorMessage = errorMessage });
 
     protected IActionResult HomeView() => Redirect(Constants.HomeUrl);
 

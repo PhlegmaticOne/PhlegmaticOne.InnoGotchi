@@ -10,6 +10,7 @@ public interface IRepository<TEntity> where TEntity : EntityBase
     Task<TEntity> CreateAsync(TEntity entity);
     Task<TEntity> UpdateAsync(TEntity entity, Action<TEntity> actionOverExistingEntity);
     Task<TEntity?> UpdateAsync(Guid entityId, Action<TEntity> actionOverExistingEntity);
+    Task<IEnumerable<TEntity>> UpdateRangeAsync(IEnumerable<TEntity> entities, Action<TEntity> actionOverExistingEntities);
     Task<bool> DeleteAsync(Guid id);
     Task<TEntity?> GetByIdOrDefaultAsync(Guid id,
         Expression<Func<TEntity, bool>>? predicate = null,

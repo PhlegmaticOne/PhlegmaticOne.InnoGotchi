@@ -1,0 +1,81 @@
+﻿@model DetailedInnoGotchiViewModel
+
+<div class="container">
+    <h1 class="my-4 text-white text-center">@Model.Name</h1>
+    <div class="row" style="justify-content: center">
+        <div class="col-lg-3 col-md-6">
+            @await Html.PartialAsync("ComponentsImagePartialView", Model.Components)
+        </div>
+
+        <div class="col-lg-9 bg-dark pet-info text-white">
+
+            <div class="row">
+                @if (Model.IsNewBorn)
+                {
+                    <h4 class="h4 text-center">@(Model.Name) is newborn</h4>
+                }
+                else if (Model.IsDead)
+                {
+                    <h4 class="h4 text-center">@(Model.Name) is dead. Lived: @(Model.DeadSince - Model.LiveSince)</h4>
+                }
+                else
+                {
+                    <h4 class="h4 text-center">@(Model.Name) is alive</h4>
+                }
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="my-3 h3">Vital signs</h3>
+                    <div>
+                        <h6 class="h6">Hunger level: @Model.HungerLevel</h6>
+                        <h6 class="h6">Thirsty level: @Model.ThirstyLevel</h6>
+                        <h6 class="h6">Age: @Model.Age</h6>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="my-3 h3">Information</h3>
+                    <div>
+                        <h6 class="h6">Happiness days count: @Model.HappinessDaysCount</h6>
+                        <h6 class="h6">Created at: @Model.LiveSince</h6>
+                        <h6 class="h6">Last feed time: @Model.LastFeedTime</h6>
+                        <h6 class="h6">Last drink time: @Model.LastDrinkTime</h6>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row my-4">
+                <div class="col-6 text-center">
+                    @await Html.PartialAsync("InnoGotchiActionButton", new InnoGotchiActionViewModel
+                    {
+                        ActionText = "Feed me",
+                        ActionName = "Feed",
+                        IsDisabled = Model.IsDead || Model.HungerLevel == "Full",
+                        InnoGotchiId = Model.Id
+                    })
+                </div>
+                
+                <div class="col-6 text-center">
+                    @await Html.PartialAsync("InnoGotchiActionButton", new InnoGotchiActionViewModel
+                    {
+                        ActionText = "Give a drink",
+                        ActionName = "Drink",
+                        IsDisabled = Model.IsDead || Model.ThirstyLevel == "Full",
+                        InnoGotchiId = Model.Id
+                    })
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row text-center my-4" style="justify-content: center">
+        <div class="col-6">
+            <a asp-controller="Farm" asp-action="Details" class="btn btn-outline-secondary btn-dark">Back to farm</a>
+        </div>
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/pet.css" asp-append-version="true"/>
+}

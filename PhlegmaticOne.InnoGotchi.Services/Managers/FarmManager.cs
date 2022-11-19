@@ -41,22 +41,9 @@ public class FarmManager : IFarmManager
     {
         var farmResult = await _readableFarmProvider.GetFarmAsync(profileId);
         var farm = farmResult.Result!;
-        var innoGotchiIdsResult = await _readableInnoGotchiesProvider.GetAllIds(farm.Id);
-        var innoGotchiIds = innoGotchiIdsResult.Result!;
 
-        //TODO: update collection instead of updating each element
-
-        foreach (var innoGotchiId in innoGotchiIds)
-        {
-            await _writableInnoGotchiesProvider.SynchronizeSignsAsync(new IdentityModel<Guid>
-            {
-                Entity = innoGotchiId,
-                ProfileId = profileId
-            });
-        }
-
+        await _writableInnoGotchiesProvider.SynchronizeSignsAsync(farm.Id);
         await _unitOfWork.SaveChangesAsync();
-
 
         var allPets = await _readableInnoGotchiesProvider.GetAllDetailedAsync(farm.Id);
         farm.InnoGotchies = allPets.Result!;

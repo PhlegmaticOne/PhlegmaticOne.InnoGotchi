@@ -41,6 +41,17 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
         return existing;
     }
 
+    public Task<IEnumerable<TEntity>> UpdateRangeAsync(IEnumerable<TEntity> entities, Action<TEntity> actionOverExistingEntities)
+    {
+        var entityBases = entities as TEntity[] ?? entities.ToArray();
+        foreach (var entity in entityBases)
+        {
+            actionOverExistingEntities(entity);
+        }
+        _set.UpdateRange(entityBases);
+        return Task.FromResult((IEnumerable<TEntity>)entityBases);
+    }
+
     public async Task<bool> DeleteAsync(Guid id)
     {
         var entity = await GetByIdOrDefaultAsync(id);

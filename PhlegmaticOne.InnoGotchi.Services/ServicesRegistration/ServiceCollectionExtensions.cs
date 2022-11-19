@@ -45,11 +45,15 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProfileAuthorizedActionsManager, ProfileAuthorizedActionsManager>();
 
         services.AddScoped<IJwtTokenGenerationService, JwtTokenGenerationService>();
-        services.AddScoped<IInnoGotchiSignsUpdateService>(_ =>
-            new InnoGotchiSignsUpdateService(
-                timeToIncreaseHungerLevel: TimeSpan.FromSeconds(20),
-                timeToIncreaseThirstLevel: TimeSpan.FromSeconds(40),
-                timeToIncreaseAge: TimeSpan.FromSeconds(20)));
+        services.AddScoped<ITimeService, TimeService>();
+        services.AddScoped<IInnoGotchiSignsUpdateService>(x =>
+        {
+            var timeService = x.GetRequiredService<ITimeService>();
+            return new InnoGotchiSignsUpdateService(timeService,
+                timeToIncreaseHungerLevel: TimeSpan.FromDays(1),
+                timeToIncreaseThirstLevel: TimeSpan.FromDays(1),
+                timeToIncreaseAge: TimeSpan.FromMinutes(20));
+        });
 
         return services;
     }

@@ -1,0 +1,13 @@
+﻿@model InnoGotchiActionViewModel
+
+@if (Model.IsDisabled)
+{
+    <a href="#" class="btn btn-outline-secondary disabled">@Model.ActionText</a>
+}
+else
+{
+    <form method="post" asp-controller="InnoGotchies" asp-action="@Model.ActionName">
+        <input hidden asp-for="InnoGotchiId"/>
+        <button class="btn btn-outline-secondary btn-dark" type="submit">@Model.ActionText</button>
+    </form>
+}

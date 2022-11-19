@@ -40,6 +40,25 @@ public class ClientRequestsService : IClientRequestsService
         return await GetServerResponse<TResponse>(httpResponseMessage);
     }
 
+    public async Task<ServerResponse<TResponse>> PutAsync<TRequest, TResponse>(
+        ClientPutRequest<TRequest, TResponse> request, string? jwtToken = null)
+    {
+        var requestUrl = GetRequestUrl(request);
+        var httpClient = CreateHttpClientWithToken(jwtToken);
+
+        HttpResponseMessage httpResponseMessage;
+        try
+        {
+            httpResponseMessage = await httpClient.PutAsJsonAsync(requestUrl, request.RequestData);
+        }
+        catch (HttpRequestException httpRequestException)
+        {
+            return ServerResponse.FromError<TResponse>(httpRequestException.StatusCode, httpRequestException.Message);
+        }
+
+        return await GetServerResponse<TResponse>(httpResponseMessage);
+    }
+
     public async Task<ServerResponse<TResponse>> GetAsync<TRequest, TResponse>(
         ClientGetRequest<TRequest, TResponse> getRequest, string? jwtToken = null)
     {

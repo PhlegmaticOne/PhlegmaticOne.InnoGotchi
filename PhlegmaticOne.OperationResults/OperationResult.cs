@@ -16,6 +16,12 @@ public class OperationResult
         ValidationResult = ValidationResult.Success
     };
 
+    public static OperationResult Success => new()
+    {
+        IsSuccess = true,
+        ValidationResult = ValidationResult.Success
+    };
+
     public static OperationResult<T> FromFail<T>(string? errorMessage = null) => new()
     {
         IsSuccess = false,
