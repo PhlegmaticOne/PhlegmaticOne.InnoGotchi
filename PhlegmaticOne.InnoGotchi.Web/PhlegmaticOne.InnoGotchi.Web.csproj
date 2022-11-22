@@ -25,4 +25,8 @@
     <ProjectReference Include="..\PhlegmaticOne.ServerRequesting\PhlegmaticOne.ServerRequesting.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\FarmStatistics\" />
+  </ItemGroup>
+
 </Project>

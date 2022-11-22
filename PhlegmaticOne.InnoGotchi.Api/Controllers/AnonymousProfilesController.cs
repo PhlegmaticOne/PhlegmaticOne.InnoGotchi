@@ -9,7 +9,7 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [ApiController]
 [Route("api/[controller]/[action]")]
 [AllowAnonymous]
-public class AnonymousProfilesController
+public class AnonymousProfilesController : ControllerBase
 {
     private readonly IProfileAnonymousActionsManager _profileActionsManager;
 

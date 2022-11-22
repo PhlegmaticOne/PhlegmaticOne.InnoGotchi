@@ -25,18 +25,12 @@ public class InnoGotchiesController : IdentityController
     }
 
     [HttpPost]
-    public Task<OperationResult<DetailedInnoGotchiDto>> Create([FromBody] CreateInnoGotchiDto createInnoGotchiDto)
-    {
-        var identityModel = IdentityModel(createInnoGotchiDto);
-        return _innoGotchiesManager.CreateAsync(identityModel);
-    }
+    public Task<OperationResult<DetailedInnoGotchiDto>> Create([FromBody] CreateInnoGotchiDto createInnoGotchiDto) => 
+        _innoGotchiesManager.CreateAsync(IdentityModel(createInnoGotchiDto));
 
     [HttpGet]
-    public Task<OperationResult<DetailedInnoGotchiDto>> Get(Guid petId)
-    {
-        var identityModel = IdentityModel(new IdDto { Id = petId });
-        return _innoGotchiesManager.GetDetailedAsync(identityModel);
-    }
+    public Task<OperationResult<DetailedInnoGotchiDto>> Get(Guid petId) => 
+        _innoGotchiesManager.GetDetailedAsync(IdentityModel(new IdDto { Id = petId }));
 
     [HttpPut]
     public async Task<OperationResult<DetailedInnoGotchiDto>> Drink([FromBody] IdDto idDto)

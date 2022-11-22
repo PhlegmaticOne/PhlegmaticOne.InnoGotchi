@@ -14,12 +14,15 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 public class ProfilesController : IdentityController
 {
     private readonly IProfileAuthorizedActionsManager _profileAuthorizedActionsManager;
+    private readonly ISearchProfilesManager _searchProfilesManager;
     private readonly IDefaultAvatarService _avatarConvertingService;
 
     public ProfilesController(IProfileAuthorizedActionsManager profileAuthorizedActionsManager, 
+        ISearchProfilesManager searchProfilesManager,
         IDefaultAvatarService avatarConvertingService)
     {
         _profileAuthorizedActionsManager = profileAuthorizedActionsManager;
+        _searchProfilesManager = searchProfilesManager;
         _avatarConvertingService = avatarConvertingService;
     }
 
@@ -40,4 +43,8 @@ public class ProfilesController : IdentityController
 
         return profileOperationResult;
     }
+
+    [HttpGet]
+    public Task<OperationResult<IList<SearchProfileDto>>> Search(string searchText) => 
+        _searchProfilesManager.SearchAsync(searchText);
 }

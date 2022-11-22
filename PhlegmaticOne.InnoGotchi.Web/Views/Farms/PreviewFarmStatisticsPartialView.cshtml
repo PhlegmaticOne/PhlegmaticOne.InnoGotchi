@@ -1,0 +1,18 @@
+﻿@model PreviewFarmStatisticsViewModel
+
+<div class="row d-flex justify-content-center align-items-center h-100 ">
+    <div class="col-lg-8 col-md-10 col-sm-12 mb-4 mb-lg-0 bg-dark text-white" style="border-radius: 1rem">
+        <h5 class="h5 p-3 text-center">Farm overview</h5>
+        <hr class="mt-0 mb-4 bg-white">
+        <div class="row pt-1 ps-3">
+            <div class="col-6 mb-3">
+                <h6 class="h6">Total InnoGotchies</h6>
+                <p class="text-white-50">@Model.PetsCount</p>
+            </div>
+            <div class="col-6 mb-3">
+                <h6 class="h6">Farm name</h6>
+                <p class="text-white-50">@Model.FarmName</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,7 +15,8 @@ public class AvatarsController : IdentityController
     private readonly IReadableAvatarProvider _readableAvatarProvider;
     private readonly IDefaultAvatarService _avatarConvertingService;
 
-    public AvatarsController(IReadableAvatarProvider readableAvatarProvider, IDefaultAvatarService avatarConvertingService)
+    public AvatarsController(IReadableAvatarProvider readableAvatarProvider,
+        IDefaultAvatarService avatarConvertingService)
     {
         _readableAvatarProvider = readableAvatarProvider;
         _avatarConvertingService = avatarConvertingService;

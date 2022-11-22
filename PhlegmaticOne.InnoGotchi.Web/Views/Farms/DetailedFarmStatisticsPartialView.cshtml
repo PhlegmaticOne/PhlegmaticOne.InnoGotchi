@@ -1,0 +1,61 @@
+﻿@model DetailedFarmStatisticsViewModel
+
+<div class="row d-flex justify-content-center align-items-center h-100 ">
+    <div class="col-lg-8 col-md-10 col-sm-12 mb-4 mb-lg-0 bg-dark text-white" style="border-radius: 1rem">
+        <h5 class="h5 p-3 text-center">Farm statistics</h5>
+        <hr class="mb-2 bg-white">
+
+        <div class="row pt-1 ps-2">
+            <div class="col-6">
+                <h6 class="h6">Alive pets count</h6>
+                <label class="text-white-50">@Model.AlivePetsCount</label>
+            </div>
+            <div class="col-6">
+                <h6 class="h6">Dead pets count</h6>
+                <label class="text-white-50">@Model.DeadPetsCount</label>
+            </div>
+        </div>
+
+        <hr class="mb-2 bg-white">
+
+        <div class="row pt-1 ps-2">
+            <p>Pie chart</p>
+        </div>
+
+        <hr class="mb-2 bg-white">
+
+        <div class="row pt-1 ps-2">
+            <div class="col-6">
+                <h6 class="h6">Average feeding period</h6>
+                <label class="text-white-50">@Model.AverageFeedingPeriod.ToString(@"dd\:hh\:mm\:ss")</label>
+            </div>
+            <div class="col-6">
+                <h6 class="h6">Average quenching period</h6>
+                <label class="text-white-50">@Model.AverageThirstQuenchingPeriod.ToString(@"dd\:hh\:mm\:ss")</label>
+            </div>
+        </div>
+
+        <hr class="mb-2 bg-white">
+
+        <div class="row pt-1 ps-2">
+            <div class="col-6">
+                <h6 class="h6">Average alive pets age</h6>
+                <label class="text-white-50">@Model.AverageAlivePetsAge.ToString("F1")</label>
+            </div>
+            <div class="col-6">
+                <h6 class="h6">Average dead pets age</h6>
+                <label class="text-white-50">@Model.AverageDeadPetsAge.ToString("F1")</label>
+            </div>
+        </div>
+
+        <hr class="bg-white">
+
+        <div class="row pt-1 text-center mb-3">
+            <div class="col-12">
+                <h6 class="h6">Average happiness days count</h6>
+                <label class="text-white-50">@Model.AverageHappinessDaysCount.ToString("F1")</label>
+            </div>
+        </div>
+    </div>
+</div>
+

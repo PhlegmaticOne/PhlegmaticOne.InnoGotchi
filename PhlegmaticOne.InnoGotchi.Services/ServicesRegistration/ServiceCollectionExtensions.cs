@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<AvatarToAvatarDataConverter>();
 
 
+        services.AddScoped<IWritableCollaborationsProvider, WritableCollaborationsProvider>();
         services.AddScoped<IWritableFarmProvider, WritableFarmProvider>();
         services.AddScoped<IWritableInnoGotchiesProvider, WritableInnoGotchiProvider>();
         services.AddScoped<IWritableProfilesProvider, WritableProfileProvider>();
@@ -33,17 +34,22 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IReadableAvatarProvider, ReadableAvatarProvider>();
         services.AddScoped<IReadableFarmProvider, ReadableFarmProvider>();
+        services.AddScoped<IReadableFarmStatisticsProvider, ReadableFarmStatisticsProvider>();
         services.AddScoped<IReadableInnoGotchiComponentsProvider, ReadableInnoGotchiComponentsProvider>();
         services.AddScoped<IReadableInnoGotchiProvider, ReadableInnoGotchiProvider>();
         services.AddScoped<IReadableProfileProvider, ReadableProfileProvider>();
 
+        services.AddScoped<ICollaborationManager, CollaborationsManager>();
         services.AddScoped<IFarmManager, FarmManager>();
+        services.AddScoped<IFarmStatisticsManager, FarmStatisticsManager>();
         services.AddScoped<IInnoGotchiActionsManager, InnoGotchiActionsManager>();
         services.AddScoped<IInnoGotchiComponentsManager, InnoGotchiComponentsManager>();
         services.AddScoped<IInnoGotchiManager, InnoGotchiManager>();
         services.AddScoped<IProfileAnonymousActionsManager, ProfileAnonymousActionsManager>();
         services.AddScoped<IProfileAuthorizedActionsManager, ProfileAuthorizedActionsManager>();
+        services.AddScoped<ISearchProfilesManager, SearchProfilesManager>();
 
+        services.AddScoped<ISearchProfilesService, SearchProfilesService>();
         services.AddScoped<IJwtTokenGenerationService, JwtTokenGenerationService>();
         services.AddScoped<ITimeService, TimeService>();
         services.AddScoped<IInnoGotchiSignsUpdateService>(x =>

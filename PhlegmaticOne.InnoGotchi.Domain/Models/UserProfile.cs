@@ -12,6 +12,4 @@ public class UserProfile : EntityBase
     public User User { get; set; } = null!;
     public Farm Farm { get; set; } = null!;
     public IList<Collaboration> Collaborations { get; set; } = new List<Collaboration>();
-    public IList<Invitation> SentInvitations { get; set; } = new List<Invitation>();
-    public IList<Invitation> ReceivedInvitations { get; set; } = new List<Invitation>();
 }

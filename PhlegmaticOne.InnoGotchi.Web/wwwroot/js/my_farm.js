@@ -24,9 +24,7 @@ $(() => {
 
         const response = await window.fetch(url, {
             method: "POST",
-            headers: {
-                'Content-type': "application/json"
-            },
+            headers: { 'Content-type': "application/json" },
             body: JSON.stringify(idModel)
         });
 

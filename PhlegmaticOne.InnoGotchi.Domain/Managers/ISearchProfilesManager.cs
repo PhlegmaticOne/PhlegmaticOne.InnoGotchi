@@ -1,0 +1,9 @@
+﻿using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.OperationResults;
+
+namespace PhlegmaticOne.InnoGotchi.Domain.Managers;
+
+public interface ISearchProfilesManager
+{
+    Task<OperationResult<IList<SearchProfileDto>>> SearchAsync(string searchText);
+}

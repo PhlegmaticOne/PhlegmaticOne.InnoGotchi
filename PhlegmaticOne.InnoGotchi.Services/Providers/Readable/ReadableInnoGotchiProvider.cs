@@ -39,6 +39,13 @@ public class ReadableInnoGotchiProvider : IReadableInnoGotchiProvider
         return OperationResult.FromSuccess(pets);
     }
 
+    public async Task<OperationResult<IList<InnoGotchiModel>>> GetAllAsync(Guid farmId)
+    {
+        var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
+        var pets = await repository.GetAllAsync(predicate: p => p.Farm.Id == farmId);
+        return OperationResult.FromSuccess(pets);
+    }
+
 
     private static Func<IQueryable<InnoGotchiModel>, IIncludableQueryable<InnoGotchiModel, object>> IncludeComponents() =>
         i => i.Include(x => x.Components).ThenInclude(x => x.InnoGotchiComponent);

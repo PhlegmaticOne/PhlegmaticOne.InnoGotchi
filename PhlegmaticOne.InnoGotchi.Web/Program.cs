@@ -40,6 +40,10 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<GetFarmRequest>("Farms/Get");
     a.ConfigureRequest<CreateFarmRequest>("Farms/Create");
 
+    a.ConfigureRequest<GetPreviewFarmStatisticsGetRequest>("FarmStatistics/Get");
+    a.ConfigureRequest<GetDetailedFarmStatisticsGetRequest>("FarmStatistics/GetDetailed");
+    a.ConfigureRequest<GetCollaboratorsFarmStatisticsGetRequest>("FarmStatistics/GetForAllCollaboratedFarms");
+
     a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 
     a.ConfigureRequest<GetInnoGotchiGetRequest>("InnoGotchies/Get");
