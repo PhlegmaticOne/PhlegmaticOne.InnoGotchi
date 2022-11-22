@@ -1,4 +1,33 @@
-﻿@page
-@model PhlegmaticOne.InnoGotchi.Web.Views.Farm.ViewModel
-@{
+﻿@model DetailedFarmViewModel
+
+<div class="row text-center mt-3">
+    <h2 class="h2 text-white">Farm - @Model.Name</h2>
+    <h4 class="h4 text-white-50">Owner - @(Model.FirstName) @(Model.LastName)</h4>
+    <h4 class="h4 text-white-50">Owner - @Model.Email</h4>
+</div>
+
+@if (Model.InnoGotchies.Count == 0)
+{
+    <h4 class="text-white mt-3 text-center">Looks like this profile doesn't have any InnoGotchies</h4>
+}
+else
+{
+    <div class="card-group vgr-cards mt-2 justify-content-around">
+        @foreach (var innoGotchi in Model.InnoGotchies)
+        {
+            <div>
+                @await Html.PartialAsync("MyInnoGotchiCardPartialView", innoGotchi)
+            </div>
+        }
+    </div>
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/my_farm.js" asp-append-version="true"></script>
 }

@@ -20,6 +20,14 @@ public class ReadableFarmProvider : IReadableFarmProvider
         return OperationResult.FromSuccess(farm)!;
     }
 
+    public async Task<OperationResult<Farm>> GetFarmWithProfileAsync(Guid profileId)
+    {
+        var repository = _unitOfWork.GetDataRepository<Farm>();
+        var farm = await repository.GetFirstOrDefaultAsync(x => x.Owner.Id == profileId,
+            include: i => i.Include(x => x.Owner).ThenInclude(x => x.User));
+        return OperationResult.FromSuccess(farm)!;
+    }
+
     public async Task<OperationResult<int>> GetPetsCountInFarmAsync(Guid farmId)
     {
         var repository = _unitOfWork.GetDataRepository<Farm>();

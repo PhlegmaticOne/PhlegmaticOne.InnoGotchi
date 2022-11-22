@@ -38,7 +38,10 @@ public interface IRepository<TEntity> where TEntity : EntityBase
 
     Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
-
+    Task<TResult?> GetFirstOrDefaultAsync<TResult>(
+        Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>> predicate,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
     Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>>? predicate = null);
     Task<bool> AllAsync(Expression<Func<TEntity, bool>> predicate);

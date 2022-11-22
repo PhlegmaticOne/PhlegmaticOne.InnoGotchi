@@ -86,15 +86,14 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
     private async Task<OperationResult> ProcessPetUpdating(IdentityModel<IdDto> petIdModel, Action<InnoGotchiModel> updateAction)
     {
         var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
-        var pet = await repository.GetByIdOrDefaultAsync(petIdModel.Entity.Id,
-            predicate: WhereProfileIdIs(petIdModel.ProfileId));
+        var pet = await repository.GetByIdOrDefaultAsync(petIdModel.Entity.Id);
 
-        if (pet is null)
-        {
-            return OperationResult.FromFail($"User hasn't pet with id {petIdModel}");
-        }
+        //if (pet is null)
+        //{
+        //    return OperationResult.FromFail($"User hasn't pet with id {petIdModel}");
+        //}
 
-        if (_innoGotchiSignsUpdateService.IsDeadNow(pet.HungerLevel, pet.ThirstyLevel, pet.Age))
+        if (_innoGotchiSignsUpdateService.IsDeadNow(pet!.HungerLevel, pet.ThirstyLevel, pet.Age))
         {
             return OperationResult.FromFail($"You can't update pet with id {petIdModel}, because it is dead");
         }

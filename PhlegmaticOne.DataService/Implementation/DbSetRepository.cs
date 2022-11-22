@@ -193,6 +193,21 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
         return query.FirstOrDefaultAsync(predicate);
     }
 
+    public async Task<TResult?> GetFirstOrDefaultAsync<TResult>(
+        Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>> predicate,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> query = _set;
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+
+        return await query.Where(predicate).Select(selector).FirstOrDefaultAsync();
+    }
+
     public Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null) =>
         predicate is null ? _set.CountAsync() : _set.CountAsync(predicate);
 

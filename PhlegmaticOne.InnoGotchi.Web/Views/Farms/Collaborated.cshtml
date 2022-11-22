@@ -1,23 +1,22 @@
-﻿@model IList<PreviewFarmStatisticsViewModel>
-@{
-    Layout = "_Column_Layout";
-}
+﻿@model IList<PreviewFarmViewModel>
 
-<h3 class="text-white mt-3 text-center">Collaborated farms overview</h3>
+<h3 class="text-white text-center pt-3">Collaborated farms</h3>
+@foreach (var farmModel in Model)
+{
+    <div class="card bg-dark mt-4 text-center" style="width: 18rem;">
+        <div class="card-header">
+            <img class="rounded-circle"
+                 width="100"
+                 src="@($"data:image/png;base64,{Convert.ToBase64String(farmModel.OwnerAvatarData)}")"
+                 alt="No avatar"/>
+        </div>
 
-@if (Model.Count == 0)
-{
-    <h5 class="text-white mt-3 text-center">You haven't collaborated farms</h5>
-}
-else
-{
-    @foreach (var statistics in Model)
-    {
-        @(await Html.PartialAsync("PreviewFarmStatisticsPartialView", statistics))
-    }
-}
-
-@section ColumnContent
-{
-    @await Html.PartialAsync("FarmsNavigationPartialView")
+        <div class="card-body text-white">
+            <h5 class="card-title">@farmModel.Name</h5>
+            <h6 class="card-text">@(farmModel.FirstName) @(farmModel.LastName)</h6>
+            <h6 class="card-text">@(farmModel.Email)</h6>
+            <a asp-controller="Farms" asp-action="View" asp-route-profileId="@farmModel.ProfileId"
+               class="btn btn-outline-info mt-2">Go to farm</a>
+        </div>
+    </div>
 }

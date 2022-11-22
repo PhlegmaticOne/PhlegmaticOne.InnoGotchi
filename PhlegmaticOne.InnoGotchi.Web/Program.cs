@@ -38,8 +38,10 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 
     a.ConfigureRequest<GetAvatarGetRequest>("Avatars/Get");
 
-    a.ConfigureRequest<GetFarmRequest>("Farms/Get");
+    a.ConfigureRequest<GetFarmRequest>("Farms/GetForAuthorized");
+    a.ConfigureRequest<GetProfileFarmGetRequest>("Farms/Get");
     a.ConfigureRequest<CreateFarmRequest>("Farms/Create");
+    a.ConfigureRequest<GetCollaboratorsFarmPreviewsGetRequest>("Farms/GetCollaboratedFarms");
 
     a.ConfigureRequest<GetPreviewFarmStatisticsGetRequest>("FarmStatistics/Get");
     a.ConfigureRequest<GetDetailedFarmStatisticsGetRequest>("FarmStatistics/GetDetailed");

@@ -16,10 +16,29 @@ public class ReadableCollaborationsProvider : IReadableCollaborationsProvider
     {
         var repository = _unitOfWork.GetDataRepository<Farm>();
         var result = await repository.GetFirstOrDefaultAsync(
+            selector: s => s.Collaborations.Select(x => x.Collaborator),
             predicate: p => p.OwnerId == profileId,
-            include: i => i.Include(x => x.Collaborations).ThenInclude(x => x.Collaborator));
+            include: i => i
+                .Include(x => x.Collaborations)
+                .ThenInclude(x => x.Collaborator)
+                .ThenInclude(x => x.Farm));
 
-        IList<UserProfile> collaborators = result!.Collaborations.Select(x => x.Collaborator).ToList();
-        return OperationResult.FromSuccess(collaborators);
+        IList<UserProfile> resultList = result!.ToList();
+        return OperationResult.FromSuccess(resultList);
+    }
+
+    public async Task<OperationResult<IList<Farm>>> GetCollaboratedFarmsWithUsersAsync(Guid profileId)
+    {
+        var repository = _unitOfWork.GetDataRepository<UserProfile>();
+
+        var result = await repository.GetByIdOrDefaultAsync(profileId,
+            include: i => i
+                .Include(x => x.Collaborations)
+                .ThenInclude(x => x.Farm)
+                .ThenInclude(x => x.Owner)
+                .ThenInclude(x => x.User));
+
+        IList<Farm> resultList = result!.Collaborations.Select(x => x.Farm).ToList();
+        return OperationResult.FromSuccess(resultList);
     }
 }

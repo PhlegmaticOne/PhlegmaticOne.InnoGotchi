@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "_Column_Layout";
+}
+
+<h3 class="text-white text-center mt-3">Farm overview</h3>
+<div class="mt-3" id="preview_statistics"></div>
+<div class="mt-3" id="detailed_statistics"></div>
+
+@section ColumnContent
+{
+    @await Html.PartialAsync("FarmsNavigationPartialView")
+}
+
+@section Scripts
+{
+    <script src="~/js/overview.js" asp-append-version="true"></script>
+}

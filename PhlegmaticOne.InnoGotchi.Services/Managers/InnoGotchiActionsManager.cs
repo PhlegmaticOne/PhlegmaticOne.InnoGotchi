@@ -38,6 +38,8 @@ public class InnoGotchiActionsManager : IInnoGotchiActionsManager
             return OperationResult.FromFail(farmStatisticsResult.ErrorMessage);
         }
 
+        await _unitOfWork.SaveChangesAsync();
+
         return OperationResult.Success;
     }
 

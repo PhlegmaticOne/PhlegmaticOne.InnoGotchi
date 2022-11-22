@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Api.Services;
+﻿namespace PhlegmaticOne.InnoGotchi.Domain.Services;
 
 public interface IDefaultAvatarService
 {

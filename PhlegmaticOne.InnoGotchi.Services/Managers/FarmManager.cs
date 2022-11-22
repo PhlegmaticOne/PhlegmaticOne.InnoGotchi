@@ -17,6 +17,8 @@ public class FarmManager : IFarmManager
     private readonly IWritableInnoGotchiesProvider _writableInnoGotchiesProvider;
     private readonly IReadableFarmProvider _readableFarmProvider;
     private readonly IWritableFarmProvider _farmProvider;
+    private readonly IReadableCollaborationsProvider _readableCollaborationsProvider;
+    private readonly IReadableAvatarProvider _readableAvatarProvider;
     private readonly IMapper _mapper;
     private readonly IValidator<IdentityModel<CreateFarmDto>> _createValidator;
 
@@ -25,6 +27,8 @@ public class FarmManager : IFarmManager
         IWritableInnoGotchiesProvider writableInnoGotchiesProvider,
         IReadableFarmProvider readableFarmProvider,
         IWritableFarmProvider farmProvider,
+        IReadableCollaborationsProvider readableCollaborationsProvider,
+        IReadableAvatarProvider readableAvatarProvider,
         IValidator<IdentityModel<CreateFarmDto>> createValidator,
         IMapper mapper)
     {
@@ -33,13 +37,15 @@ public class FarmManager : IFarmManager
         _writableInnoGotchiesProvider = writableInnoGotchiesProvider;
         _readableFarmProvider = readableFarmProvider;
         _farmProvider = farmProvider;
+        _readableCollaborationsProvider = readableCollaborationsProvider;
+        _readableAvatarProvider = readableAvatarProvider;
         _mapper = mapper;
         _createValidator = createValidator;
     }
 
     public async Task<OperationResult<DetailedFarmDto>> GetWithPetsAsync(Guid profileId)
     {
-        var farmResult = await _readableFarmProvider.GetFarmAsync(profileId);
+        var farmResult = await _readableFarmProvider.GetFarmWithProfileAsync(profileId);
         var farm = farmResult.Result!;
 
         await _writableInnoGotchiesProvider.SynchronizeSignsAsync(farm.Id);
@@ -51,6 +57,29 @@ public class FarmManager : IFarmManager
         var mapped = _mapper.Map<DetailedFarmDto>(farm);
         return OperationResult.FromSuccess(mapped);
     }
+
+    public async Task<OperationResult<IList<PreviewFarmDto>>> GetCollaboratedAsync(Guid profileId)
+    {
+        var collaboratedFarms = await _readableCollaborationsProvider.GetCollaboratedFarmsWithUsersAsync(profileId);
+
+        IList<PreviewFarmDto> result = new List<PreviewFarmDto>();
+        foreach (var collaboratedFarm in collaboratedFarms.Result!)
+        {
+            var avatar = await _readableAvatarProvider.GetAvatarAsync(collaboratedFarm.OwnerId);
+            result.Add(new PreviewFarmDto
+            {
+                Email = collaboratedFarm.Owner.User.Email,
+                FirstName = collaboratedFarm.Owner.FirstName,
+                LastName = collaboratedFarm.Owner.LastName,
+                ProfileId = collaboratedFarm.OwnerId,
+                Name = collaboratedFarm.Name,
+                OwnerAvatarData = avatar.Result!.AvatarData
+            });
+        }
+
+        return OperationResult.FromSuccess(result);
+    }
+
 
     public async Task<OperationResult<DetailedFarmDto>> CreateAsync(IdentityModel<CreateFarmDto> createFarmIdentityModel)
     {

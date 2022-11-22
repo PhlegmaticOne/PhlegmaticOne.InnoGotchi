@@ -53,6 +53,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISearchProfilesService, SearchProfilesService>();
         services.AddScoped<IJwtTokenGenerationService, JwtTokenGenerationService>();
         services.AddScoped<ITimeService, TimeService>();
+        services.AddScoped<IDefaultAvatarService, DefaultAvatarService>();
         services.AddScoped<IInnoGotchiSignsUpdateService>(x =>
         {
             var timeService = x.GetRequiredService<ITimeService>();

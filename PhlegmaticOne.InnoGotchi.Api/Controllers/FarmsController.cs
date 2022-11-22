@@ -16,8 +16,16 @@ public class FarmsController : IdentityController
     public FarmsController(IFarmManager farmManager) => _farmManager = farmManager;
 
     [HttpGet]
-    public Task<OperationResult<DetailedFarmDto>> Get() => 
+    public Task<OperationResult<DetailedFarmDto>> GetForAuthorized() => 
         _farmManager.GetWithPetsAsync(ProfileId());
+
+    [HttpGet]
+    public Task<OperationResult<DetailedFarmDto>> Get(Guid profileId) =>
+        _farmManager.GetWithPetsAsync(profileId);
+
+    [HttpGet]
+    public Task<OperationResult<IList<PreviewFarmDto>>> GetCollaboratedFarms() => 
+        _farmManager.GetCollaboratedAsync(ProfileId());
 
     [HttpPost]
     public Task<OperationResult<DetailedFarmDto>> Create([FromBody] CreateFarmDto createFarmDto) => 

@@ -11,5 +11,6 @@ public class FarmMapperConfiguration : Profile
         CreateMap<DetailedFarmDto, DetailedFarmViewModel>()
             .ForMember(x => x.InnoGotchies, o => o.MapFrom(x => x.InnoGotchies));
         CreateMap<CreateFarmViewModel, CreateFarmDto>();
+        CreateMap<PreviewFarmDto, PreviewFarmViewModel>();
     }
 }

@@ -56,7 +56,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 
-builder.Services.AddTransient<IDefaultAvatarService, DefaultAvatarService>();
 builder.Services.AddSingleton<IServerAddressProvider>(_ => new ServerAddressProvider("https://localhost:7142"));
 
 builder.Services.AddPasswordHasher();

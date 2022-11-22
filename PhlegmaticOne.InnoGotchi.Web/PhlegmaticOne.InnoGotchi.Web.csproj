@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Include="Views\Constructor\Create.cshtml" />
-    <None Include="Views\Invitations\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

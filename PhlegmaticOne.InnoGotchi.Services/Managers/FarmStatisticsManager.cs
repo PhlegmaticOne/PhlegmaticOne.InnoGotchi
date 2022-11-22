@@ -9,20 +9,17 @@ namespace PhlegmaticOne.InnoGotchi.Services.Managers;
 public class FarmStatisticsManager : IFarmStatisticsManager
 {
     private readonly IReadableCollaborationsProvider _readableCollaborationsProvider;
-    private readonly IReadableProfileProvider _readableProfileProvider;
     private readonly IReadableFarmProvider _readableFarmProvider;
     private readonly IReadableFarmStatisticsProvider _readableFarmStatisticsProvider;
     private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
 
     public FarmStatisticsManager(
         IReadableCollaborationsProvider readableCollaborationsProvider,
-        IReadableProfileProvider readableProfileProvider,
         IReadableFarmProvider readableFarmProvider,
         IReadableFarmStatisticsProvider readableFarmStatisticsProvider,
         IReadableInnoGotchiProvider readableInnoGotchiProvider)
     {
         _readableCollaborationsProvider = readableCollaborationsProvider;
-        _readableProfileProvider = readableProfileProvider;
         _readableFarmProvider = readableFarmProvider;
         _readableFarmStatisticsProvider = readableFarmStatisticsProvider;
         _readableInnoGotchiProvider = readableInnoGotchiProvider;
@@ -30,23 +27,10 @@ public class FarmStatisticsManager : IFarmStatisticsManager
 
     public async Task<OperationResult<PreviewFarmStatisticsDto>> BuildForProfileAsync(Guid profileId)
     {
-        var farmResult = await _readableFarmProvider.GetFarmAsync(profileId);
+        var farmResult = await _readableFarmProvider.GetFarmWithProfileAsync(profileId);
         var farm = farmResult.Result!;
-
-        var profileResult = await _readableProfileProvider.GetExistingOrDefaultAsync(profileId);
-        var profile = profileResult.Result!;
-
-        var petsCount = await _readableFarmProvider.GetPetsCountInFarmAsync(farm.Id);
-
-        return OperationResult.FromSuccess(new PreviewFarmStatisticsDto
-        {
-            FarmName = farm.Name,
-            FarmId = farm.Id,
-            PetsCount = petsCount.Result,
-            ProfileEmail = profile.User.Email,
-            ProfileFirstName = profile.FirstName,
-            ProfileLastName = profile.LastName
-        });
+        var result = await Build(farm);
+        return OperationResult.FromSuccess(result);
     }
 
     public async Task<OperationResult<DetailedFarmStatisticsDto>> BuildDetailedForProfileAsync(Guid profileId)
@@ -80,15 +64,15 @@ public class FarmStatisticsManager : IFarmStatisticsManager
 
     public async Task<OperationResult<IList<PreviewFarmStatisticsDto>>> BuildForCollaboratedProfilesAsync(Guid profileId)
     {
-        var collaborationsResult = await _readableCollaborationsProvider.GetCollaboratedUsersAsync(profileId);
-        var collaboratedUsers = collaborationsResult.Result!;
+        var collaborationsResult = await _readableCollaborationsProvider.GetCollaboratedFarmsWithUsersAsync(profileId);
+        var collaboratedFarms = collaborationsResult.Result!;
 
         IList<PreviewFarmStatisticsDto> result = new List<PreviewFarmStatisticsDto>();
 
-        foreach (var collaboratedUser in collaboratedUsers)
+        foreach (var collaboratedFarm in collaboratedFarms)
         {
-            var statisticsResult = await BuildForProfileAsync(collaboratedUser.Id);
-            result.Add(statisticsResult.Result!);
+            var statisticsResult = await Build(collaboratedFarm);
+            result.Add(statisticsResult);
         }
 
         return OperationResult.FromSuccess(result);
@@ -102,4 +86,18 @@ public class FarmStatisticsManager : IFarmStatisticsManager
         innoGotchies.Where(x => x.DeadSince == DateTime.MinValue);
     private static IEnumerable<InnoGotchiModel> GetDeadPets(IList<InnoGotchiModel> innoGotchies) =>
         innoGotchies.Where(x => x.DeadSince != DateTime.MinValue);
+
+    private async Task<PreviewFarmStatisticsDto> Build(Farm farm)
+    {
+        var petsCount = await _readableFarmProvider.GetPetsCountInFarmAsync(farm.Id);
+        return new PreviewFarmStatisticsDto
+        {
+            FarmName = farm.Name,
+            FarmId = farm.Id,
+            PetsCount = petsCount.Result,
+            ProfileEmail = farm.Owner.User.Email,
+            ProfileFirstName = farm.Owner.FirstName,
+            ProfileLastName = farm.Owner.LastName
+        };
+    }
 }

@@ -7,5 +7,6 @@ namespace PhlegmaticOne.InnoGotchi.Domain.Managers;
 public interface IFarmManager
 {
     Task<OperationResult<DetailedFarmDto>> GetWithPetsAsync(Guid profileId);
+    Task<OperationResult<IList<PreviewFarmDto>>> GetCollaboratedAsync(Guid profileId);
     Task<OperationResult<DetailedFarmDto>> CreateAsync(IdentityModel<CreateFarmDto> createFarmIdentityModel);
 }

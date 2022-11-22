@@ -18,15 +18,9 @@ public class ReadableInnoGotchiProvider : IReadableInnoGotchiProvider
     {
         var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
         var pet = await repository.GetByIdOrDefaultAsync(petId,
-            include: IncludeComponents(),
-            predicate: WhereProfileIdIs(profileId));
+            include: IncludeComponents());
 
-        if (pet is null)
-        {
-            return OperationResult.FromFail<InnoGotchiModel>($"Profile {profileId} doesn't have InnoGotchi with id {petId}");
-        }
-
-        return OperationResult.FromSuccess(pet);
+        return OperationResult.FromSuccess(pet)!;
     }
 
     public async Task<OperationResult<IList<InnoGotchiModel>>> GetAllDetailedAsync(Guid farmId)

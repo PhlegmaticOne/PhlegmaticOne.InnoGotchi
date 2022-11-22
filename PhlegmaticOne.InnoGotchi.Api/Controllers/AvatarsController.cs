@@ -13,28 +13,14 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 public class AvatarsController : IdentityController
 {
     private readonly IReadableAvatarProvider _readableAvatarProvider;
-    private readonly IDefaultAvatarService _avatarConvertingService;
 
-    public AvatarsController(IReadableAvatarProvider readableAvatarProvider,
-        IDefaultAvatarService avatarConvertingService)
-    {
+    public AvatarsController(IReadableAvatarProvider readableAvatarProvider) => 
         _readableAvatarProvider = readableAvatarProvider;
-        _avatarConvertingService = avatarConvertingService;
-    }
 
     [HttpGet]
     public async Task<OperationResult<byte[]>> Get()
     {
         var avatar = await _readableAvatarProvider.GetAvatarAsync(ProfileId());
-
-        var result = avatar.Result;
-
-        if (result?.AvatarData.Any() == false)
-        {
-            var defaultAvatar = await _avatarConvertingService.GetDefaultAvatarDataAsync();
-            return OperationResult.FromSuccess(defaultAvatar);
-        }
-
-        return OperationResult.FromSuccess(result!.AvatarData);
+        return OperationResult.FromSuccess(avatar.Result!.AvatarData);
     }
 }

@@ -1,12 +1,21 @@
 ﻿@model SearchProfileViewModel
 
-<div class="row mt-3 bg-dark justify-content-center profile_search_result" style="border-radius: 0.5rem">
+<div class="row mt-3 bg-dark justify-content-center text-center profile_search_result" style="border-radius: 0.5rem">
     <label class="pt-1">@(Model.FirstName) @(Model.LastName)</label><br/>
     <label class="pt-1">@Model.Email</label><br/>
+    @if (Model.IsAlreadyCollaborated)
+    {
+        <label class="pt-1 text-danger">@(Model.Email) already invited</label><br />
+    }
     <input hidden asp-for="Id" class="profile_id"/>
     <div class="col-9 mt-2 mb-2">
         <div class="row">
-            <button class="btn btn-info invite_button">Invite</button>
+            <button class="btn btn-info invite_button @(TryDisableInviteButton())">Invite</button>
         </div>
     </div>
 </div>
+
+@functions
+{
+    string TryDisableInviteButton() => Model.IsAlreadyCollaborated ? "disabled" : "";
+}
