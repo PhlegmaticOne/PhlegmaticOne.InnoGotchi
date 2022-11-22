@@ -1,0 +1,12 @@
+﻿@model SearchProfileViewModel
+
+<div class="row mt-3 bg-dark justify-content-center profile_search_result" style="border-radius: 0.5rem">
+    <label class="pt-1">@(Model.FirstName) @(Model.LastName)</label><br/>
+    <label class="pt-1">@Model.Email</label><br/>
+    <input hidden asp-for="Id" class="profile_id"/>
+    <div class="col-9 mt-2 mb-2">
+        <div class="row">
+            <button class="btn btn-info invite_button">Invite</button>
+        </div>
+    </div>
+</div>

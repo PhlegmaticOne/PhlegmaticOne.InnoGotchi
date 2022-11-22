@@ -12,10 +12,10 @@ public class WritableCollaborationsProvider : IWritableCollaborationsProvider
 
     public WritableCollaborationsProvider(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public async Task<OperationResult<Collaboration>> AddCollaboration(Guid farmId, Guid profileId)
+    public async Task<OperationResult<Collaboration>> AddCollaboration(Guid fromProfileId, Guid toProfileId)
     {
-        var farm = await GetFarm(farmId);
-        var collaboration = await CreateCollaboration(profileId, farm);
+        var farm = await GetFarm(fromProfileId);
+        var collaboration = await CreateCollaboration(toProfileId, farm);
         farm.Collaborations.Add(collaboration);
 
         return OperationResult.FromSuccess(collaboration);
@@ -30,8 +30,9 @@ public class WritableCollaborationsProvider : IWritableCollaborationsProvider
         };
     }
 
-    private Task<Farm> GetFarm(Guid farmId) =>
-        _unitOfWork.GetDataRepository<Farm>().GetByIdOrDefaultAsync(farmId,
+    private Task<Farm> GetFarm(Guid profileId) =>
+        _unitOfWork.GetDataRepository<Farm>().GetFirstOrDefaultAsync(
+            predicate: p => p.OwnerId == profileId,
             include: i => i.Include(x => x.Collaborations))!;
     private Task<UserProfile> GetProfile(Guid profileId) =>
         _unitOfWork.GetDataRepository<UserProfile>().GetByIdOrDefaultAsync(profileId)!;

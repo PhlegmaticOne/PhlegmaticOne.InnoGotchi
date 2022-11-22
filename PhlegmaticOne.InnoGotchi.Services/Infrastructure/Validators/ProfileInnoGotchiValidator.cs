@@ -19,7 +19,7 @@ public class ProfileInnoGotchiValidator : AbstractValidator<IdentityModel<Create
 
         RuleFor(x => x.Entity.Name)
             .MustAsync((model, name, _) =>
-                petsRepository.AllAsync(x => x.Farm.OwnerId != model.ProfileId && x.Name != name))
+                petsRepository.AllAsync(x => /*x.Farm.OwnerId != model.ProfileId &&*/ x.Name != name))
             .WithMessage(x => $"You have InnoGotchi with name {x.Entity.Name}");
     }
 }

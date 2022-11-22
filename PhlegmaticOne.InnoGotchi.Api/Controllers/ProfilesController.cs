@@ -46,5 +46,5 @@ public class ProfilesController : IdentityController
 
     [HttpGet]
     public Task<OperationResult<IList<SearchProfileDto>>> Search(string searchText) => 
-        _searchProfilesManager.SearchAsync(searchText);
+        _searchProfilesManager.SearchAsync(ProfileId(), searchText);
 }

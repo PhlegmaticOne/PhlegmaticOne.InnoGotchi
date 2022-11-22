@@ -1,4 +1,5 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
@@ -14,6 +15,7 @@ public class SearchProfilesService : ISearchProfilesService
     {
         var repository = _unitOfWork.GetDataRepository<UserProfile>();
         return repository.GetAllAsync(
+            include: i => i.Include(x => x.User),
             predicate: p => p.User.Email.Contains(searchText));
     }
 }

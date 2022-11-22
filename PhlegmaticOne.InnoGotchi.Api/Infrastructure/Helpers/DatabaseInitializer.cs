@@ -31,7 +31,7 @@ public static class DatabaseInitializer
 
         if (userProfilesSet.Any() == false)
         {
-            await userProfilesSet.AddAsync(SeedUserProfile(passwordHasher, timeService));
+            await userProfilesSet.AddRangeAsync(SeedUserProfile(passwordHasher, timeService));
         }
 
         await dbContext.SaveChangesAsync();
@@ -66,7 +66,8 @@ public static class DatabaseInitializer
         }
     }
 
-    private static UserProfile SeedUserProfile(IPasswordHasher passwordHasher, ITimeService timeService) =>
+    private static List<UserProfile> SeedUserProfile(IPasswordHasher passwordHasher, ITimeService timeService) => new()
+    {
         new()
         {
             User = new User
@@ -85,7 +86,30 @@ public static class DatabaseInitializer
                     LastDrinkTime = timeService.Now(),
                     LastFeedTime = timeService.Now()
                 },
-                Name = "my farm"
+                Name = "My Farm"
             }
-        };
+        },
+
+        new()
+        {
+            User = new User
+            {
+                Email = "new@gmail.com",
+                Password = passwordHasher.Hash("Qwerty_12345")
+            },
+            Avatar = new Avatar(),
+            FirstName = "Name",
+            LastName = "Lastname",
+            JoinDate = timeService.Now(),
+            Farm = new Farm
+            {
+                FarmStatistics = new FarmStatistics
+                {
+                    LastDrinkTime = timeService.Now(),
+                    LastFeedTime = timeService.Now()
+                },
+                Name = "New farm"
+            }
+        },
+    };
 }

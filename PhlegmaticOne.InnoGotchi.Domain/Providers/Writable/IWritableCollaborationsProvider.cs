@@ -5,5 +5,5 @@ namespace PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 
 public interface IWritableCollaborationsProvider
 {
-    Task<OperationResult<Collaboration>> AddCollaboration(Guid farmId, Guid profileId);
+    Task<OperationResult<Collaboration>> AddCollaboration(Guid fromProfileId, Guid toProfileId);
 }

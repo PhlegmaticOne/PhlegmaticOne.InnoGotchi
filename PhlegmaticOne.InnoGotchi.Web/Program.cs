@@ -34,6 +34,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 
     a.ConfigureRequest<DetailedProfileGetRequest>("Profiles/GetDetailed");
     a.ConfigureRequest<UpdateAccountRequest>("Profiles/Update");
+    a.ConfigureRequest<SearchProfilesRequest>("Profiles/Search");
 
     a.ConfigureRequest<GetAvatarGetRequest>("Avatars/Get");
 
@@ -45,6 +46,8 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<GetCollaboratorsFarmStatisticsGetRequest>("FarmStatistics/GetForAllCollaboratedFarms");
 
     a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
+
+    a.ConfigureRequest<CreateCollaborationRequest>("Collaborations/Create");
 
     a.ConfigureRequest<GetInnoGotchiGetRequest>("InnoGotchies/Get");
     a.ConfigureRequest<CreateInnoGotchiRequest>("InnoGotchies/Create");

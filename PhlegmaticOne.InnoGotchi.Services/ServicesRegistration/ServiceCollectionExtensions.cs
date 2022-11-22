@@ -38,6 +38,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IReadableInnoGotchiComponentsProvider, ReadableInnoGotchiComponentsProvider>();
         services.AddScoped<IReadableInnoGotchiProvider, ReadableInnoGotchiProvider>();
         services.AddScoped<IReadableProfileProvider, ReadableProfileProvider>();
+        services.AddScoped<IReadableCollaborationsProvider, ReadableCollaborationsProvider>();
 
         services.AddScoped<ICollaborationManager, CollaborationsManager>();
         services.AddScoped<IFarmManager, FarmManager>();

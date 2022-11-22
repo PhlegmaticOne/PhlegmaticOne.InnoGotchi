@@ -25,6 +25,17 @@ public class FarmsController : ClientRequestsController
     public IActionResult My() => View();
 
     [HttpGet]
+    public Task<IActionResult> Collaborated()
+    {
+        return FromAuthorizedGet(new GetCollaboratorsFarmStatisticsGetRequest(), statistics =>
+        {
+            var mapped = _mapper.Map<IList<PreviewFarmStatisticsViewModel>>(statistics);
+            IActionResult view = View(mapped);
+            return Task.FromResult(view);
+        });
+    }
+
+    [HttpGet]
     public Task<IActionResult> MyPreviewPartial()
     {
         return FromAuthorizedGet(new GetPreviewFarmStatisticsGetRequest(), statistics =>

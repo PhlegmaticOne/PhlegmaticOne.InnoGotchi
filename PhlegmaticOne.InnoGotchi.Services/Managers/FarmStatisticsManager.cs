@@ -1,24 +1,28 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Managers;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
-using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Shared.FarmStatistics;
 using PhlegmaticOne.OperationResults;
-using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Managers;
 
 public class FarmStatisticsManager : IFarmStatisticsManager
 {
+    private readonly IReadableCollaborationsProvider _readableCollaborationsProvider;
+    private readonly IReadableProfileProvider _readableProfileProvider;
     private readonly IReadableFarmProvider _readableFarmProvider;
     private readonly IReadableFarmStatisticsProvider _readableFarmStatisticsProvider;
     private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
 
     public FarmStatisticsManager(
+        IReadableCollaborationsProvider readableCollaborationsProvider,
+        IReadableProfileProvider readableProfileProvider,
         IReadableFarmProvider readableFarmProvider,
         IReadableFarmStatisticsProvider readableFarmStatisticsProvider,
         IReadableInnoGotchiProvider readableInnoGotchiProvider)
     {
+        _readableCollaborationsProvider = readableCollaborationsProvider;
+        _readableProfileProvider = readableProfileProvider;
         _readableFarmProvider = readableFarmProvider;
         _readableFarmStatisticsProvider = readableFarmStatisticsProvider;
         _readableInnoGotchiProvider = readableInnoGotchiProvider;
@@ -26,15 +30,22 @@ public class FarmStatisticsManager : IFarmStatisticsManager
 
     public async Task<OperationResult<PreviewFarmStatisticsDto>> BuildForProfileAsync(Guid profileId)
     {
-        var result = await _readableFarmProvider.GetFarmAsync(profileId);
-        var farm = result.Result!;
+        var farmResult = await _readableFarmProvider.GetFarmAsync(profileId);
+        var farm = farmResult.Result!;
+
+        var profileResult = await _readableProfileProvider.GetExistingOrDefaultAsync(profileId);
+        var profile = profileResult.Result!;
+
         var petsCount = await _readableFarmProvider.GetPetsCountInFarmAsync(farm.Id);
 
         return OperationResult.FromSuccess(new PreviewFarmStatisticsDto
         {
             FarmName = farm.Name,
             FarmId = farm.Id,
-            PetsCount = petsCount.Result
+            PetsCount = petsCount.Result,
+            ProfileEmail = profile.User.Email,
+            ProfileFirstName = profile.FirstName,
+            ProfileLastName = profile.LastName
         });
     }
 
@@ -67,9 +78,20 @@ public class FarmStatisticsManager : IFarmStatisticsManager
         });
     }
 
-    public Task<OperationResult<IList<PreviewFarmStatisticsDto>>> BuildForCollaboratedProfilesAsync(Guid profileId)
+    public async Task<OperationResult<IList<PreviewFarmStatisticsDto>>> BuildForCollaboratedProfilesAsync(Guid profileId)
     {
-        throw new NotImplementedException();
+        var collaborationsResult = await _readableCollaborationsProvider.GetCollaboratedUsersAsync(profileId);
+        var collaboratedUsers = collaborationsResult.Result!;
+
+        IList<PreviewFarmStatisticsDto> result = new List<PreviewFarmStatisticsDto>();
+
+        foreach (var collaboratedUser in collaboratedUsers)
+        {
+            var statisticsResult = await BuildForProfileAsync(collaboratedUser.Id);
+            result.Add(statisticsResult.Result!);
+        }
+
+        return OperationResult.FromSuccess(result);
     }
 
     private static double GetAverageHappinessDaysCount(IList<InnoGotchiModel> innoGotchies) => 
