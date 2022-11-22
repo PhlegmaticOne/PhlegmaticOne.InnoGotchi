@@ -1,6 +1,6 @@
-﻿using PhlegmaticOne.PagedList.Base;
+﻿using PhlegmaticOne.PagedLists.Base;
 
-namespace PhlegmaticOne.PagedList;
+namespace PhlegmaticOne.PagedLists;
 
 public class PagedList<T> : IPagedList<T>
 {
@@ -19,4 +19,28 @@ public class PagedList<T> : IPagedList<T>
     public bool HasPreviousPage => PageIndex - IndexFrom > 0;
 
     public bool HasNextPage => PageIndex - IndexFrom + 1 < TotalPages;
+
+    public static PagedList<TResult> From<TSource, TResult>(IPagedList<TSource> source, 
+        Func<IEnumerable<TSource>, IEnumerable<TResult>> converter)
+    {
+        var items = new List<TResult>(converter(source.Items));
+        return new PagedList<TResult>
+        {
+            IndexFrom = source.IndexFrom,
+            Items = items,
+            TotalCount = source.TotalCount,
+            TotalPages = source.TotalPages,
+            PageIndex = source.PageIndex,
+            PageSize = source.PageSize
+        };
+    }
+
+    public static PagedList<TResult> Empty<TResult>()
+    {
+        var items = new List<TResult>();
+        return new PagedList<TResult>
+        {
+            Items = items,
+        };
+    }
 }

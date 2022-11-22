@@ -5,6 +5,8 @@ using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using System.Linq.Expressions;
+using PhlegmaticOne.PagedLists;
+using PhlegmaticOne.PagedLists.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Readable;
 
@@ -38,6 +40,20 @@ public class ReadableInnoGotchiProvider : IReadableInnoGotchiProvider
         var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
         var pets = await repository.GetAllAsync(predicate: p => p.Farm.Id == farmId);
         return OperationResult.FromSuccess(pets);
+    }
+
+    public async Task<OperationResult<PagedList<InnoGotchiModel>>> GetPagedAsync(Guid profileId, int pageIndex)
+    {
+        var result = await _unitOfWork
+            .GetDataRepository<InnoGotchiModel>()
+            .GetPagedListAsync(
+                pageSize:3,
+                pageIndex: pageIndex,
+                orderBy: i => i.OrderBy(x => x.HappinessDaysCount),
+                predicate: p => p.Farm.OwnerId != profileId,
+                include: IncludeComponents());
+
+        return OperationResult.FromSuccess(result);
     }
 
 

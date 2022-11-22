@@ -2,6 +2,8 @@
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
+using PhlegmaticOne.PagedLists;
+using PhlegmaticOne.PagedLists.Base;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Infrastructure.MapperConfigurations;
 
@@ -24,6 +26,8 @@ public class InnoGotchiesMappingConfiguration : Profile
 
         CreateMap<InnoGotchiModel, DetailedInnoGotchiDto>()
             .IncludeBase<InnoGotchiModel, InnoGotchiDtoBase>();
+
+        CreateMap<PagedList<InnoGotchiModel>, PagedList<PreviewInnoGotchiDto>>();
     }
 
     private static bool DeathDateNotMin(DateTime deathDate) => deathDate != DateTime.MinValue;

@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.LocalStorage"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.UnitOfWork", "PhlegmaticOne.DataService\PhlegmaticOne.UnitOfWork.csproj", "{7A3D0149-19BB-4F46-917C-CB66857B788C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.PagedList", "PhlegmaticOne.PagedList\PhlegmaticOne.PagedList.csproj", "{C002AAA9-8E8C-4003-9C40-9C2C6D0C267A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.PagedLists", "PhlegmaticOne.PagedList\PhlegmaticOne.PagedLists.csproj", "{C002AAA9-8E8C-4003-9C40-9C2C6D0C267A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Domain", "PhlegmaticOne.InnoGotchi.Domain\PhlegmaticOne.InnoGotchi.Domain.csproj", "{91C198B9-8EB0-41ED-9528-3B787CC03507}"
 EndProject

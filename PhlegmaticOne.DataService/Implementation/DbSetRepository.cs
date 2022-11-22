@@ -1,8 +1,9 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using PhlegmaticOne.PagedList.Base;
-using PhlegmaticOne.PagedList.Extensions;
+using PhlegmaticOne.PagedLists;
+using PhlegmaticOne.PagedLists.Base;
+using PhlegmaticOne.PagedLists.Extensions;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
 
@@ -154,7 +155,7 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
         return await query.ToListAsync();
     }
 
-    public Task<IPagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>>? predicate = null,
+    public Task<PagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         int pageIndex = 0,

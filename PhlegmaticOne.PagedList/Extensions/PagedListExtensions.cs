@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PhlegmaticOne.PagedList.Base;
+using PhlegmaticOne.PagedLists.Base;
 
-namespace PhlegmaticOne.PagedList.Extensions;
+namespace PhlegmaticOne.PagedLists.Extensions;
 
 public static class PagedListExtensions
 {
-    public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex,
+    public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex,
         int pageSize, int indexFrom = 0, CancellationToken cancellationToken = default)
     {
         if (indexFrom > pageIndex)

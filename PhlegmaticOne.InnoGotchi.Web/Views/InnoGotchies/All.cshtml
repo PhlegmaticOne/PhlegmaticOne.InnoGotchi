@@ -1,0 +1,20 @@
+﻿@model PhlegmaticOne.PagedLists.PagedList<PreviewInnoGotchiViewModel>
+
+<div class="row">
+    @foreach (var model in Model.Items)
+    {
+        @(await Html.PartialAsync("MyInnoGotchiCardPartialView", model))
+    }
+
+    <pager asp-controller="InnoGotchies"
+           asp-paged-list-page-index="@Model.PageIndex"
+           asp-paged-list-page-size="@Model.PageSize"
+           asp-paged-list-total-count="@Model.TotalCount"
+           asp-paged-list-url="All"
+           asp-route-parameter="pageIndex"></pager>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true" />
+}

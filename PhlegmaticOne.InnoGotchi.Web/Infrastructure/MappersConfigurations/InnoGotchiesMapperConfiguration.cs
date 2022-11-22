@@ -4,6 +4,7 @@ using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Components;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
+using PhlegmaticOne.PagedLists;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.MappersConfigurations;
 
@@ -17,5 +18,7 @@ public class InnoGotchiesMapperConfiguration : Profile
         CreateMap<DetailedInnoGotchiDto, PreviewInnoGotchiViewModel>();
         CreateMap<InnoGotchiActionViewModel, IdDto>()
             .ForMember(x => x.Id, o => o.MapFrom(x => x.InnoGotchiId));
+
+        CreateMap<PagedList<PreviewInnoGotchiDto>, PagedList<PreviewInnoGotchiViewModel>>();
     }
 }

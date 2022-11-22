@@ -6,6 +6,7 @@ using PhlegmaticOne.InnoGotchi.Shared;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.OperationResults;
+using PhlegmaticOne.PagedLists;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 
@@ -31,6 +32,12 @@ public class InnoGotchiesController : IdentityController
     [HttpGet]
     public Task<OperationResult<DetailedInnoGotchiDto>> Get(Guid petId) => 
         _innoGotchiesManager.GetDetailedAsync(IdentityModel(new IdDto { Id = petId }));
+
+    [HttpGet]
+    public Task<OperationResult<PagedList<PreviewInnoGotchiDto>>> GetPaged(int pageIndex)
+    {
+        return _innoGotchiesManager.GetPagedAsync(ProfileId(), pageIndex);
+    }
 
     [HttpPut]
     public async Task<OperationResult<DetailedInnoGotchiDto>> Drink([FromBody] IdDto idDto)

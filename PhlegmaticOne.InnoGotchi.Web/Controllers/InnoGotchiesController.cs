@@ -7,6 +7,7 @@ using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
 using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.PagedLists;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
@@ -20,6 +21,17 @@ public class InnoGotchiesController : ClientRequestsController
         ILocalStorageService localStorageService,
         IMapper mapper) :
         base(clientRequestsService, localStorageService) => _mapper = mapper;
+
+    [HttpGet]
+    public Task<IActionResult> All(int? pageIndex)
+    {
+        return FromAuthorizedGet(new GetPagedListRequest(pageIndex is null ? 0 : pageIndex.Value - 1), list =>
+        {
+            var mapped = _mapper.Map<PagedList<PreviewInnoGotchiViewModel>>(list);
+            IActionResult view = View(mapped);
+            return Task.FromResult(view);
+        });
+    }
 
     [HttpGet]
     public Task<IActionResult> Pet(Guid petId) => 

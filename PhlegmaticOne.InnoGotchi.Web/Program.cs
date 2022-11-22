@@ -55,6 +55,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<CreateInnoGotchiRequest>("InnoGotchies/Create");
     a.ConfigureRequest<DrinkInnoGotchiRequest>("InnoGotchies/Drink");
     a.ConfigureRequest<FeedInnoGotchiRequest>("InnoGotchies/Feed");
+    a.ConfigureRequest<GetPagedListRequest>("InnoGotchies/GetPaged");
 });
 
 builder.Services.AddLocalStorage(startConf =>

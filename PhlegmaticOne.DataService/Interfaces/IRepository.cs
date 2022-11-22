@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
-using PhlegmaticOne.PagedList.Base;
+using PhlegmaticOne.PagedLists;
+using PhlegmaticOne.PagedLists.Base;
 using PhlegmaticOne.UnitOfWork.Models;
 
 namespace PhlegmaticOne.UnitOfWork.Interfaces;
@@ -29,7 +30,7 @@ public interface IRepository<TEntity> where TEntity : EntityBase
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
 
-    Task<IPagedList<TEntity>> GetPagedListAsync(
+    Task<PagedList<TEntity>> GetPagedListAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
