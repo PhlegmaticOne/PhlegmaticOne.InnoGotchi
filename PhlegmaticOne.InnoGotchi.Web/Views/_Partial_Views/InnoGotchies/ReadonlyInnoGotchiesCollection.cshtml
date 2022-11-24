@@ -1,0 +1,6 @@
+﻿@model IList<ReadonlyInnoGotchiPreviewViewModel>
+
+@foreach (var model in Model)
+{
+    @await Html.PartialAsync("~/Views/_Partial_Views/InnoGotchies/ReadOnlyInnoGotchi.cshtml", model)
+}

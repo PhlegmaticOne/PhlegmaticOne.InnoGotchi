@@ -8,10 +8,10 @@
                     <div class="row g-0">
                         <div class="col-md-4 gradient-custom text-center text-white"
                              style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                            <img class="rounded-circle mt-5"
-                                 width="80"
-                                 src="@($"data:image/png;base64,{Convert.ToBase64String(Model.AvatarData)}")"
-                                 alt="No avatar" />
+
+                            <div class="mt-5">
+                                <vc:data-image width="80" image-data="@Model.AvatarData"/>
+                            </div>
 
                             <h5 class="h5 my-3">@(Model.FirstName) @(Model.LastName)</h5>
                         </div>

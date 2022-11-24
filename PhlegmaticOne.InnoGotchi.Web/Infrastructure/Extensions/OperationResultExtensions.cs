@@ -5,8 +5,7 @@ namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 
 public static class OperationResultExtensions
 {
-    public static void AddErrorsToModelState(this OperationResult operationResult,
-        ModelStateDictionary modelStateDictionary)
+    public static void AddErrorsToModelState(this OperationResult operationResult, ModelStateDictionary modelStateDictionary)
     {
         var validationResult = operationResult.ValidationResult;
         if (validationResult?.IsValid == false)

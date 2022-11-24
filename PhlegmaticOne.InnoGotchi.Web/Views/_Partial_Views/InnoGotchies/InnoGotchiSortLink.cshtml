@@ -1,0 +1,11 @@
+﻿@model InnoGotchiLinkViewModel
+
+<a class="btn btn-dark btn-outline-light" 
+   asp-controller="InnoGotchies" 
+   asp-action="All"
+   asp-route-pageIndex="1" 
+   asp-route-pageSize="@Model.PageSize"
+   asp-route-sortType="@Model.LinkSortType"
+   asp-route-isAscending="@(Model.CurrentSortType == Model.LinkSortType && Model.IsAscending == false)">
+    @Model.Description
+</a>

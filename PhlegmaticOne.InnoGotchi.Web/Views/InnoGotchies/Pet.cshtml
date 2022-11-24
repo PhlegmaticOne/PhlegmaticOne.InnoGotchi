@@ -1,10 +1,11 @@
 ﻿@model DetailedInnoGotchiViewModel
 
 <div class="container">
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", Model.Name);
     <h1 class="my-4 text-white text-center">@Model.Name</h1>
     <div class="row" style="justify-content: center">
         <div class="col-lg-3 col-md-6">
-            @await Html.PartialAsync("ComponentsImagePartialView", Model.Components)
+            @await Html.PartialAsync("~/Views/_Partial_Views/Shared/ImageFromComponents.cshtml", Model.Components)
         </div>
 
         <div class="col-lg-9 bg-dark pet-info text-white">
@@ -23,7 +24,7 @@
                     <h4 class="h4 text-center">@(Model.Name) is alive</h4>
                 }
             </div>
-            
+
             <div class="row">
                 <div class="col-md-6">
                     <h3 class="my-3 h3">Vital signs</h3>
@@ -43,10 +44,10 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row my-4">
                 <div class="col-6 text-center">
-                    @await Html.PartialAsync("InnoGotchiActionButton", new InnoGotchiActionViewModel
+                    @await Html.PartialAsync("~/Views/_Partial_Views/InnoGotchies/InnoGotchiActionButton.cshtml", new InnoGotchiActionViewModel
                     {
                         ActionText = "Feed me",
                         ActionName = "Feed",
@@ -54,9 +55,9 @@
                         InnoGotchiId = Model.Id
                     })
                 </div>
-                
+
                 <div class="col-6 text-center">
-                    @await Html.PartialAsync("InnoGotchiActionButton", new InnoGotchiActionViewModel
+                    @await Html.PartialAsync("~/Views/_Partial_Views/InnoGotchies/InnoGotchiActionButton.cshtml", new InnoGotchiActionViewModel
                     {
                         ActionText = "Give a drink",
                         ActionName = "Drink",
@@ -67,7 +68,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row text-center my-4" style="justify-content: center">
         <div class="col-6">
             <a asp-controller="Farms" asp-action="My" class="btn btn-outline-secondary btn-dark">Back to farm</a>

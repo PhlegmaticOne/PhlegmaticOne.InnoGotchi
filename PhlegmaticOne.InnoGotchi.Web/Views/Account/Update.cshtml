@@ -15,10 +15,9 @@
                             <div class="account-settings">
                                 <div class="user-profile">
                                     <div class="user-avatar">
-                                        <img class="rounded-circle mt-5" 
-                                             width="96"
-                                             src="@($"data:image/png;base64,{Model.CurrentAvatar}")" 
-                                             alt="No avatar" />
+                                        <div class="mt-5">
+                                            <vc:base-string-image width="96" image-data="@Model.CurrentAvatar"/>
+                                        </div>
                                     </div>
                                     <h5 class="user-name">@Model.OldFirstName @Model.OldLastName</h5>
                                     <h6 class="user-email">@User.Identity!.Name</h6>

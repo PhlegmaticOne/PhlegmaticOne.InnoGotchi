@@ -3,21 +3,20 @@
     Layout = "_Column_Layout";
 }
 
-<h3 class="text-white mt-3 text-center">Collaborated farms overview</h3>
-
 @if (Model.Count == 0)
 {
-    <h5 class="text-white mt-3 text-center">You haven't collaborated farms</h5>
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "You haven't collaborated farms")
 }
 else
 {
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Collaborated farms overview")
     @foreach (var statistics in Model)
     {
-        @(await Html.PartialAsync("PreviewFarmStatisticsPartialView", statistics))
+        @(await Html.PartialAsync("~/Views/_Partial_Views/Overview/PreviewFarmStatistics.cshtml", statistics))
     }
 }
 
 @section ColumnContent
 {
-    @await Html.PartialAsync("FarmsNavigationPartialView")
+    @await Html.PartialAsync("~/Views/_Partial_Views/Overview/FarmStatisticsNavigation.cshtml")
 }

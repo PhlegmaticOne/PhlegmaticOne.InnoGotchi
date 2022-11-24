@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Web.Requests.Overviews;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.FarmStatistics;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
@@ -12,14 +12,9 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [Authorize]
 public class OverviewController : ClientRequestsController
 {
-    private readonly IMapper _mapper;
-
     public OverviewController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService)
-    {
-        _mapper = mapper;
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
     public IActionResult My() => View();
@@ -27,9 +22,9 @@ public class OverviewController : ClientRequestsController
     [HttpGet]
     public Task<IActionResult> Collaborated()
     {
-        return FromAuthorizedGet(new GetCollaboratorsFarmStatisticsGetRequest(), statistics =>
+        return FromAuthorizedGet(new GetCollaboratedFarmStatisticsRequest(), statistics =>
         {
-            var mapped = _mapper.Map<IList<PreviewFarmStatisticsViewModel>>(statistics);
+            var mapped = Mapper.Map<IList<PreviewFarmStatisticsViewModel>>(statistics);
             IActionResult view = View(mapped);
             return Task.FromResult(view);
         });
@@ -38,10 +33,10 @@ public class OverviewController : ClientRequestsController
     [HttpGet]
     public Task<IActionResult> MyPreviewPartial()
     {
-        return FromAuthorizedGet(new GetPreviewFarmStatisticsGetRequest(), statistics =>
+        return FromAuthorizedGet(new GetPreviewFarmStatisticsRequest(), statistics =>
         {
-            var viewModel = _mapper.Map<PreviewFarmStatisticsViewModel>(statistics);
-            IActionResult view = PartialView("PreviewFarmStatisticsPartialView", viewModel);
+            var viewModel = Mapper.Map<PreviewFarmStatisticsViewModel>(statistics);
+            IActionResult view = PartialView("~/Views/_Partial_Views/Overview/PreviewFarmStatistics.cshtml", viewModel);
             return Task.FromResult(view);
         });
     }
@@ -49,10 +44,10 @@ public class OverviewController : ClientRequestsController
     [HttpGet]
     public Task<IActionResult> MyDetailedPartial()
     {
-        return FromAuthorizedGet(new GetDetailedFarmStatisticsGetRequest(), statistics =>
+        return FromAuthorizedGet(new GetDetailedFarmStatisticsRequest(), statistics =>
         {
-            var viewModel = _mapper.Map<DetailedFarmStatisticsViewModel>(statistics);
-            IActionResult view = PartialView("DetailedFarmStatisticsPartialView", viewModel);
+            var viewModel = Mapper.Map<DetailedFarmStatisticsViewModel>(statistics);
+            IActionResult view = PartialView("~/Views/_Partial_Views/Overview/DetailedFarmStatistics.cshtml", viewModel);
             return Task.FromResult(view);
         });
     }

@@ -39,8 +39,10 @@ $(() => {
 
     function getIdModel(card) {
         const id = card.querySelector(".pet_id").value;
+        const canSeeDetails = document.getElementById("can-see-details").value === "true";
         return {
-            id: id
+            id: id,
+            canSeeDetails: canSeeDetails
         }
     }
 });

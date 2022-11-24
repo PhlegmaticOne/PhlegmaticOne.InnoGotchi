@@ -158,11 +158,10 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                     b.Property<int>("HappinessDaysCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("HungerLevel")
-                        .IsRequired()
+                    b.Property<int>("HungerLevel")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Normal");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<DateTime>("LastDrinkTime")
                         .HasColumnType("datetime2");
@@ -178,11 +177,10 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ThirstyLevel")
-                        .IsRequired()
+                    b.Property<int>("ThirstyLevel")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Normal");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 

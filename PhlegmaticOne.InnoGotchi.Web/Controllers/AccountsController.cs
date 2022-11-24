@@ -1,8 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Web.Requests.Profiles;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Accounts;
@@ -12,22 +12,17 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [Authorize]
 public class AccountsController : ClientRequestsController
 {
-    private readonly IMapper _mapper;
-
     public AccountsController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService)
-    {
-        _mapper = mapper;
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
     public Task<IActionResult> SearchPartial(string searchText)
     {
         return FromAuthorizedGet(new SearchProfilesRequest(searchText), profiles =>
         {
-            var viewModels = _mapper.Map<IList<SearchProfileViewModel>>(profiles);
-            IActionResult view = PartialView("ProfilesSearchResultPartialView", viewModels);
+            var viewModels = Mapper.Map<IList<SearchProfileViewModel>>(profiles);
+            IActionResult view = PartialView("~/Views/_Partial_Views/Profiles/ProfileSearchResultsList.cshtml", viewModels);
             return Task.FromResult(view);
         });
     }

@@ -52,7 +52,7 @@ public class SearchProfilesManager : ISearchProfilesManager
         foreach (var userProfile in alreadyCollaborated)
         {
             var profile = found.FirstOrDefault(x => x.Id == userProfile.Id);
-            found.Remove(profile);
+            found.Remove(profile!);
         }
     }
 

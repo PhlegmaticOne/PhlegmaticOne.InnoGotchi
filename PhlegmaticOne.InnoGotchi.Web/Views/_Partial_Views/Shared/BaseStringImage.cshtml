@@ -1,0 +1,10 @@
+﻿@model string
+
+@{
+    var width = (int)ViewData["Width"]!;
+}
+
+<img class="rounded-circle"
+     width="@width"
+     src="@($"data:image/png;base64,{Model}")"
+     alt="No avatar"/>

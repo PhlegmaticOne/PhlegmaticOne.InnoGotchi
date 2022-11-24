@@ -1,0 +1,22 @@
+﻿@model List<string>
+@{
+    var isAscending = (bool)ViewData["IsAscending"]!;
+    var sortType = (int)ViewData["SortType"]!;
+    var pageSize = (int)ViewData["PageSize"]!;
+}
+
+<h3 class="text-white text-center">InnoGotchies sort menu</h3>
+
+<div class="btn-group mt-2" role="group">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        @await Html.PartialAsync("~/Views/_Partial_Views/InnoGotchies/InnoGotchiSortLink.cshtml", new InnoGotchiLinkViewModel
+        {
+            IsAscending = isAscending,
+            LinkSortType = i,
+            PageSize = pageSize,
+            CurrentSortType = sortType,
+            Description = Model[i]
+        });
+    }
+</div>

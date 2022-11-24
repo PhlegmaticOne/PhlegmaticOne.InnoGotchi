@@ -76,7 +76,7 @@ public static class ServiceCollectionExtensions
             return new InnoGotchiSignsUpdateService(timeService,
                 timeToIncreaseHungerLevel: TimeSpan.FromDays(1),
                 timeToIncreaseThirstLevel: TimeSpan.FromDays(1),
-                timeToIncreaseAge: TimeSpan.FromMinutes(20));
+                timeToIncreaseAge: TimeSpan.FromDays(7));
         });
 
         return services;

@@ -6,6 +6,7 @@ using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Services;
 using System.Security.Claims;
+using AutoMapper;
 using FluentValidation.Results;
 using FluentValidation.AspNetCore;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
@@ -16,11 +17,15 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 
 public class ClientRequestsController : Controller
 {
+    protected readonly IMapper Mapper;
     protected readonly ILocalStorageService LocalStorageService;
     protected readonly IClientRequestsService ClientRequestsService;
 
-    public ClientRequestsController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService)
+    public ClientRequestsController(IClientRequestsService clientRequestsService,
+        ILocalStorageService localStorageService,
+        IMapper mapper)
     {
+        Mapper = mapper;
         LocalStorageService = localStorageService;
         ClientRequestsService = clientRequestsService;
     }

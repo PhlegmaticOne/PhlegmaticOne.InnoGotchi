@@ -1,0 +1,11 @@
+﻿@model IEnumerable<PreviewInnoGotchiViewModel>
+
+<div class="card-group vgr-cards mt-2 justify-content-around">
+    <input hidden value="@(ViewData["CanSeeDetails"]!.ToString()!.ToLower())" id="can-see-details"/>
+    @foreach (var innoGotchi in Model)
+    {
+        <div>
+            @await Html.PartialAsync("~/Views/_Partial_Views/InnoGotchies/InnoGotchiCard.cshtml", innoGotchi, ViewData)
+        </div>
+    }
+</div>

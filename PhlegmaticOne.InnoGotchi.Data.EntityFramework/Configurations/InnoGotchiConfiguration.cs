@@ -15,11 +15,11 @@ public class InnoGotchiConfiguration : IEntityTypeConfiguration<InnoGotchiModel>
 
         builder.Property(x => x.HungerLevel)
             .HasDefaultValue(HungerLevel.Normal)
-            .HasConversion<string>();
+            .HasConversion<int>();
 
         builder.Property(x => x.ThirstyLevel)
             .HasDefaultValue(ThirstyLevel.Normal)
-            .HasConversion<string>();
+            .HasConversion<int>();
 
         builder.Property(x => x.LastDrinkTime);
         builder.Property(x => x.LastFeedTime);

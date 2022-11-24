@@ -1,0 +1,6 @@
+﻿@model IEnumerable<PreviewFarmViewModel>
+
+@foreach (var farmModel in Model)
+{
+    @await Html.PartialAsync("~/Views/_Partial_Views/Farms/FarmPreview.cshtml", farmModel)
+}

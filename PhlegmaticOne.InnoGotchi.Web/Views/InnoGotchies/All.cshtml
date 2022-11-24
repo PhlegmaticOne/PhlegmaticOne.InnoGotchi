@@ -1,68 +1,36 @@
 ﻿@model PhlegmaticOne.PagedLists.PagedList<ReadonlyInnoGotchiPreviewViewModel>
 
 @{
+    ViewData["Title"] = "All";
     var isAscending = (bool)ViewData["IsAscending"]!;
     var sortType = (int)ViewData["SortType"]!;
+    var pageSize = (int)ViewData["PageSize"]!;
+    var sortDescriptions = new List<string>
+    {
+        "By happiness days count",
+        "By age",
+        "By hunger level",
+        "By thirsty level",
+        "By name",
+        "By owner farm name"
+    };
 }
 
 @if (Model.Items.Count == 0)
 {
-    <h2 class="text-white mt-4">Seems that nobody has even one InnoGotchi</h2>
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Seems that nobody has even one InnoGotchi")
 }
 else
 {
-    <div class="container mb-4">
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "All InnoGotchies")
+
+    <div class="container mb-4 mt-4">
         <div class="row justify-content-center">
-            <div class="btn-group" role="group">
-                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
-                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
-               asp-route-sortType="0" asp-route-isAscending="@(sortType == 0 && isAscending == false)">
-                    By happiness days count
-                </a>
-                
-                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
-                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
-               asp-route-sortType="1" asp-route-isAscending="@(sortType == 1 && isAscending == false)">
-                    By age
-                </a>
-                
-                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
-                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
-               asp-route-sortType="2" asp-route-isAscending="@(sortType == 2 && isAscending == false)">
-                    By hunger level
-                </a>
-                
-                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
-                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
-               asp-route-sortType="3" asp-route-isAscending="@(sortType == 3 && isAscending == false)">
-                    By thirsty level
-                </a>
-
-                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
-                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
-               asp-route-sortType="4" asp-route-isAscending="@(sortType == 4 && isAscending == false)">
-                    By name
-                </a>
-                
-                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
-                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
-               asp-route-sortType="5" asp-route-isAscending="@(sortType == 5 && isAscending == false)">
-                    By owner farm name
-                </a>
-            </div>
+            @await Html.PartialAsync("~/Views/_Partial_Views/InnoGotchies/InnoGotchiesSortMenu.cshtml", sortDescriptions, ViewData);
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <h5 class="text-white text-center" id="current_sort_type"></h5>
-        </div>
-    </div>
-
-    @foreach (var model in Model.Items)
-    {
-        @await Html.PartialAsync("ReadonlyInnoGotchiPartialView", model)
-    }
+    @await Html.PartialAsync("~/Views/_Partial_Views/InnoGotchies/ReadonlyInnoGotchiesCollection.cshtml", Model.Items)
 
     <div class="container mt-4">
         <div class="row">
@@ -74,7 +42,7 @@ else
                        asp-paged-list-url="All"
                        asp-route-data="@(new { 
                                            sortType = sortType,
-                                           pageSize = ViewData["PageSize"],
+                                           pageSize = pageSize,
                                            isAscending = isAscending
                                        })"
                        asp-route-parameter="pageIndex"></pager>
@@ -87,6 +55,7 @@ else
 @section Styles
 {
     <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pagination.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css"/>
 }
 

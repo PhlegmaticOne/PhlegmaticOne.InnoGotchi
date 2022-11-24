@@ -1,0 +1,13 @@
+﻿@model IList<SearchProfileViewModel>
+
+@if (Model.Count == 0)
+{
+    <h5 class="text-white text-center mt-3">No one was found</h5>
+}
+else
+{
+    @foreach (var result in Model)
+    {
+        @await Html.PartialAsync("~/Views/_Partial_Views/Profiles/ProfileSearchResult.cshtml", result)
+    }
+}

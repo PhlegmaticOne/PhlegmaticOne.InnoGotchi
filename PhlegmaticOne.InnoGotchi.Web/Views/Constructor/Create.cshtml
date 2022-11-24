@@ -40,7 +40,8 @@
                     </div>
                     <div class="row justify-content-center mb-3">
                         <div id="create_form">
-                            @await Html.PartialAsync("CreateInnoGotchiPartialView", new CreateInnoGotchiViewModel())
+                            @await Html.PartialAsync("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml",
+                                new CreateInnoGotchiViewModel())
                         </div>
                         <div class="col-6 text-center mt-2">
                             <input type="submit" class="btn-lg btn-info" id="createNew" value="Create new"/>

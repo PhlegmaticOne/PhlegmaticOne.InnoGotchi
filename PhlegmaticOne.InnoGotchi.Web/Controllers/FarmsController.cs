@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Farms;
-using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Farms;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
@@ -13,10 +13,9 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [Authorize]
 public class FarmsController : ClientRequestsController
 {
-    private readonly IMapper _mapper;
-    public FarmsController(IClientRequestsService clientRequestsService, ILocalStorageService localStorageService,
-        IMapper mapper) : base(clientRequestsService, localStorageService) =>
-        _mapper = mapper;
+    public FarmsController(IClientRequestsService clientRequestsService,
+        ILocalStorageService localStorageService, IMapper mapper) : 
+        base(clientRequestsService, localStorageService, mapper) { }
 
 
     [HttpGet]
@@ -25,9 +24,11 @@ public class FarmsController : ClientRequestsController
     [HttpGet]
     public Task<IActionResult> My()
     {
-        return FromAuthorizedGet(new GetFarmRequest(), farm =>
+        return FromAuthorizedGet(new GetDetailedFarmRequest(), farm =>
         {
-            var farmViewModel = _mapper.Map<DetailedFarmViewModel>(farm);
+            var farmViewModel = Mapper.Map<DetailedFarmViewModel>(farm);
+
+            ViewData["CanSeeDetails"] = true;
             IActionResult view = View(farmViewModel);
             return Task.FromResult(view);
         }, onOperationFailed: _ => RedirectToAction(nameof(Create)));
@@ -36,9 +37,9 @@ public class FarmsController : ClientRequestsController
     [HttpGet]
     public Task<IActionResult> Collaborated()
     {
-        return FromAuthorizedGet(new GetCollaboratorsFarmPreviewsGetRequest(), dtos =>
+        return FromAuthorizedGet(new GetCollaboratedFarmsRequest(), dtos =>
         {
-            var viewModels = _mapper.Map<IList<PreviewFarmViewModel>>(dtos);
+            var viewModels = Mapper.Map<IList<PreviewFarmViewModel>>(dtos);
             IActionResult view = View(viewModels);
             return Task.FromResult(view);
         });
@@ -47,9 +48,11 @@ public class FarmsController : ClientRequestsController
     [HttpGet]
     public Task<IActionResult> View(Guid profileId)
     {
-        return FromAuthorizedGet(new GetProfileFarmGetRequest(profileId), dto =>
+        return FromAuthorizedGet(new GetProfileFarmRequest(profileId), dto =>
         {
-            var mapped = _mapper.Map<DetailedFarmViewModel>(dto);
+            var mapped = Mapper.Map<DetailedFarmViewModel>(dto);
+
+            ViewData["CanSeeDetails"] = false;
             IActionResult view = View(mapped);
             return Task.FromResult(view);
         });
@@ -58,7 +61,7 @@ public class FarmsController : ClientRequestsController
     [HttpPost]
     public Task<IActionResult> Create(CreateFarmViewModel createFarmViewModel)
     {
-        var createFarmDto = _mapper.Map<CreateFarmDto>(createFarmViewModel);
+        var createFarmDto = Mapper.Map<CreateFarmDto>(createFarmViewModel);
 
         return FromAuthorizedPost(new CreateFarmRequest(createFarmDto), _ =>
         {

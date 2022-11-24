@@ -21,12 +21,12 @@ public static class DatabaseInitializer
 
         await CreateOrMigrate(dbContext);
 
-        var innoGotchiesSet = dbContext.Set<InnoGotchiComponent>();
+        var innoGotchiComponentsSet = dbContext.Set<InnoGotchiComponent>();
         var userProfilesSet = dbContext.Set<UserProfile>();
 
-        if (innoGotchiesSet.Any() == false)
+        if (innoGotchiComponentsSet.Any() == false)
         {
-            await innoGotchiesSet.AddRangeAsync(SeedComponents(webHostEnvironment, serverAddressProvider));
+            await innoGotchiComponentsSet.AddRangeAsync(SeedComponents(webHostEnvironment, serverAddressProvider));
         }
 
         if (userProfilesSet.Any() == false)

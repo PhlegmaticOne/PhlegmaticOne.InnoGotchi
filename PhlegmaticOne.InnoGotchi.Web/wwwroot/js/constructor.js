@@ -63,6 +63,7 @@ async function createNew() {
     if (response.ok) {
         const partial = document.getElementById("create_form");
         partial.innerHTML = await response.text();
+        document.querySelector(constructorElementClassName).innerHTML = "";
     }
 }
 

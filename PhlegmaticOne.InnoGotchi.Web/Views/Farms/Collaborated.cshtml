@@ -1,30 +1,12 @@
 ﻿@model IList<PreviewFarmViewModel>
 
-<h3 class="text-white text-center pt-3">Collaborated farms</h3>
 
 @if (Model.Count == 0)
 {
-    <h2 class="text-white mt-4">You haven't collaborated farms</h2>
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "You haven't collaborated farms")
 }
 else
 {
-    @foreach (var farmModel in Model)
-    {
-        <div class="card bg-dark mt-4 text-center" style="width: 18rem;">
-            <div class="card-header">
-                <img class="rounded-circle"
-                     width="100"
-                     src="@($"data:image/png;base64,{Convert.ToBase64String(farmModel.OwnerAvatarData)}")"
-                     alt="No avatar"/>
-            </div>
-
-            <div class="card-body text-white">
-                <h5 class="card-title">@farmModel.Name</h5>
-                <h6 class="card-text">@(farmModel.FirstName) @(farmModel.LastName)</h6>
-                <h6 class="card-text">@(farmModel.Email)</h6>
-                <a asp-controller="Farms" asp-action="View" asp-route-profileId="@farmModel.ProfileId"
-                   class="btn btn-outline-info mt-2">Go to farm</a>
-            </div>
-        </div>
-    }
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Collaborated farms")
+    @await Html.PartialAsync("~/Views/_Partial_Views/Farms/FarmPreviewsList.cshtml", Model)
 }

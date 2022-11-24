@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Shared.PagedList;
-using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Web.Requests.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.PagedLists;
@@ -16,12 +16,9 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [Authorize]
 public class InnoGotchiesController : ClientRequestsController
 {
-    private readonly IMapper _mapper;
-    private const string CurrentSortOrderKey = "CurrentSortOrder";
     public InnoGotchiesController(IClientRequestsService clientRequestsService,
-        ILocalStorageService localStorageService,
-        IMapper mapper) :
-        base(clientRequestsService, localStorageService) => _mapper = mapper;
+        ILocalStorageService localStorageService, IMapper mapper) :
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
     public Task<IActionResult> All(int? pageIndex, int? pageSize, int? sortType, bool? isAscending)
@@ -29,18 +26,18 @@ public class InnoGotchiesController : ClientRequestsController
         var pagedListData = new PagedListData
         {
             PageIndex = pageIndex is null ? 0 : pageIndex.Value - 1,
-            PageSize = pageSize ?? 3,
+            PageSize = pageSize ?? 15,
             SortType = sortType ?? 0,
             IsAscending = isAscending ?? false
         };
 
-        return FromAuthorizedGet(new GetPagedListRequest(pagedListData), list =>
+        return FromAuthorizedGet(new GetInnoGotchiesPagedListRequest(pagedListData), list =>
         {
             ViewData["PageSize"] = pagedListData.PageSize;
             ViewData["SortType"] = pagedListData.SortType;
             ViewData["IsAscending"] = pagedListData.IsAscending;
 
-            var mapped = _mapper.Map<PagedList<ReadonlyInnoGotchiPreviewViewModel>>(list);
+            var mapped = Mapper.Map<PagedList<ReadonlyInnoGotchiPreviewViewModel>>(list);
             IActionResult view = View(mapped);
             return Task.FromResult(view);
         });
@@ -48,41 +45,44 @@ public class InnoGotchiesController : ClientRequestsController
 
     [HttpGet]
     public Task<IActionResult> Pet(Guid petId) => 
-        FromAuthorizedGet(new GetInnoGotchiGetRequest(petId), InnoGotchiView);
+        FromAuthorizedGet(new GetInnoGotchiRequest(petId), InnoGotchiView);
 
     [HttpPost]
     public Task<IActionResult> Feed(InnoGotchiActionViewModel innoGotchiActionViewModel)
     {
-        var identityDto = _mapper.Map<IdDto>(innoGotchiActionViewModel);
+        var identityDto = Mapper.Map<IdDto>(innoGotchiActionViewModel);
         return FromAuthorizedPut(new FeedInnoGotchiRequest(identityDto), InnoGotchiView);
     }
 
     [HttpPost]
     public Task<IActionResult> Drink(InnoGotchiActionViewModel innoGotchiActionViewModel)
     {
-        var identityDto = _mapper.Map<IdDto>(innoGotchiActionViewModel);
+        var identityDto = Mapper.Map<IdDto>(innoGotchiActionViewModel);
         return FromAuthorizedPut(new DrinkInnoGotchiRequest(identityDto), InnoGotchiView);
     }
 
     [HttpPost]
-    public Task<IActionResult> FeedPartial([FromBody] IdDto innoGotchiIdDto) => 
-        FromAuthorizedPut(new FeedInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
+    public Task<IActionResult> FeedPartial([FromBody] InnoGotchiRequestViewModel request) => 
+        FromAuthorizedPut(new FeedInnoGotchiRequest(new IdDto(request.Id)),
+            result => InnoGotchiCardPartialView(result, request.CanSeeDetails));
 
     [HttpPost]
-    public Task<IActionResult> DrinkPartial([FromBody] IdDto innoGotchiIdDto) => 
-        FromAuthorizedPut(new DrinkInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
+    public Task<IActionResult> DrinkPartial([FromBody] InnoGotchiRequestViewModel request) => 
+        FromAuthorizedPut(new DrinkInnoGotchiRequest(new IdDto(request.Id)),
+            result => InnoGotchiCardPartialView(result, request.CanSeeDetails));
 
     private Task<IActionResult> InnoGotchiView(DetailedInnoGotchiDto innoGotchi)
     {
-        var result = _mapper.Map<DetailedInnoGotchiViewModel>(innoGotchi);
+        var result = Mapper.Map<DetailedInnoGotchiViewModel>(innoGotchi);
         IActionResult view = View(nameof(Pet), result);
         return Task.FromResult(view);
     }
 
-    private Task<IActionResult> InnoGotchiCardPartialView(DetailedInnoGotchiDto innoGotchi)
+    private Task<IActionResult> InnoGotchiCardPartialView(DetailedInnoGotchiDto innoGotchi, bool canSeeDetails)
     {
-        var result = _mapper.Map<PreviewInnoGotchiViewModel>(innoGotchi);
-        IActionResult view = PartialView("MyInnoGotchiCardPartialView", result);
+        ViewData["CanSeeDetails"] = canSeeDetails;
+        var result = Mapper.Map<PreviewInnoGotchiViewModel>(innoGotchi);
+        IActionResult view = PartialView("~/Views/_Partial_Views/InnoGotchies/InnoGotchiCard.cshtml", result);
         return Task.FromResult(view);
     }
 }

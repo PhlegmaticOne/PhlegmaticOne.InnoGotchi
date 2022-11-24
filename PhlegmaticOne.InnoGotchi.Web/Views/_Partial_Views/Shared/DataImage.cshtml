@@ -1,0 +1,10 @@
+﻿@model byte[]
+
+@{
+    var width = (int)ViewData["Width"]!;
+}
+
+<img class="rounded-circle"
+     width="@width"
+     src="@($"data:image/png;base64,{Convert.ToBase64String(Model)}")"
+     alt="No data" />
