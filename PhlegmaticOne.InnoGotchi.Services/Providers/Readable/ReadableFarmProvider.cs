@@ -30,9 +30,8 @@ public class ReadableFarmProvider : IReadableFarmProvider
 
     public async Task<OperationResult<int>> GetPetsCountInFarmAsync(Guid farmId)
     {
-        var repository = _unitOfWork.GetDataRepository<Farm>();
-        var result = await repository.GetByIdOrDefaultAsync(farmId,
-            selector: s => s.InnoGotchies.Count);
-        return OperationResult.FromSuccess(result);
+        var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
+        var count = await repository.CountAsync(x => x.Farm.Id == farmId);
+        return OperationResult.FromSuccess(count);
     }
 }

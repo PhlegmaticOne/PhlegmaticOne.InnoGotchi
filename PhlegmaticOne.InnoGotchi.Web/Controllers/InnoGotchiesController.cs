@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
+using PhlegmaticOne.InnoGotchi.Shared.PagedList;
 using PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
@@ -16,18 +17,30 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 public class InnoGotchiesController : ClientRequestsController
 {
     private readonly IMapper _mapper;
-
+    private const string CurrentSortOrderKey = "CurrentSortOrder";
     public InnoGotchiesController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService,
         IMapper mapper) :
         base(clientRequestsService, localStorageService) => _mapper = mapper;
 
     [HttpGet]
-    public Task<IActionResult> All(int? pageIndex)
+    public Task<IActionResult> All(int? pageIndex, int? pageSize, int? sortType, bool? isAscending)
     {
-        return FromAuthorizedGet(new GetPagedListRequest(pageIndex is null ? 0 : pageIndex.Value - 1), list =>
+        var pagedListData = new PagedListData
         {
-            var mapped = _mapper.Map<PagedList<PreviewInnoGotchiViewModel>>(list);
+            PageIndex = pageIndex is null ? 0 : pageIndex.Value - 1,
+            PageSize = pageSize ?? 3,
+            SortType = sortType ?? 0,
+            IsAscending = isAscending ?? false
+        };
+
+        return FromAuthorizedGet(new GetPagedListRequest(pagedListData), list =>
+        {
+            ViewData["PageSize"] = pagedListData.PageSize;
+            ViewData["SortType"] = pagedListData.SortType;
+            ViewData["IsAscending"] = pagedListData.IsAscending;
+
+            var mapped = _mapper.Map<PagedList<ReadonlyInnoGotchiPreviewViewModel>>(list);
             IActionResult view = View(mapped);
             return Task.FromResult(view);
         });
@@ -52,16 +65,12 @@ public class InnoGotchiesController : ClientRequestsController
     }
 
     [HttpPost]
-    public Task<IActionResult> FeedPartial([FromBody] IdDto innoGotchiIdDto)
-    {
-        return FromAuthorizedPut(new FeedInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
-    }
+    public Task<IActionResult> FeedPartial([FromBody] IdDto innoGotchiIdDto) => 
+        FromAuthorizedPut(new FeedInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
 
     [HttpPost]
-    public Task<IActionResult> DrinkPartial([FromBody] IdDto innoGotchiIdDto)
-    {
-        return FromAuthorizedPut(new DrinkInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
-    }
+    public Task<IActionResult> DrinkPartial([FromBody] IdDto innoGotchiIdDto) => 
+        FromAuthorizedPut(new DrinkInnoGotchiRequest(innoGotchiIdDto), InnoGotchiCardPartialView);
 
     private Task<IActionResult> InnoGotchiView(DetailedInnoGotchiDto innoGotchi)
     {

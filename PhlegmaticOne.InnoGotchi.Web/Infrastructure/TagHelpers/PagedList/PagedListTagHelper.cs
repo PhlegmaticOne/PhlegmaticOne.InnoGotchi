@@ -70,7 +70,7 @@ public class PagedListTagHelper : TagHelper
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        if (PagedListTotalCount <= 1)
+        if (PagedListTotalCount < 1)
         {
             return;
         }
@@ -106,7 +106,10 @@ public class PagedListTagHelper : TagHelper
 
     private TagBuilder GenerateLink(string linkText, string routeValue)
     {
-        var routeValues = new RouteValueDictionary(_routeValues) { { RouteParameter, routeValue } };
+        var routeValues = new RouteValueDictionary(_routeValues)
+        {
+            { RouteParameter, routeValue },
+        };
 
         if (RouteParameters is not null)
         {

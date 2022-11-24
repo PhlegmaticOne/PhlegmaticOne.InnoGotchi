@@ -1,20 +1,112 @@
-﻿@model PhlegmaticOne.PagedLists.PagedList<PreviewInnoGotchiViewModel>
+﻿@model PhlegmaticOne.PagedLists.PagedList<ReadonlyInnoGotchiPreviewViewModel>
 
-<div class="row">
+@{
+    var isAscending = (bool)ViewData["IsAscending"]!;
+    var sortType = (int)ViewData["SortType"]!;
+}
+
+@if (Model.Items.Count == 0)
+{
+    <h2 class="text-white mt-4">Seems that nobody has even one InnoGotchi</h2>
+}
+else
+{
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+            <div class="btn-group" role="group">
+                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
+                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
+               asp-route-sortType="0" asp-route-isAscending="@(sortType == 0 && isAscending == false)">
+                    By happiness days count
+                </a>
+                
+                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
+                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
+               asp-route-sortType="1" asp-route-isAscending="@(sortType == 1 && isAscending == false)">
+                    By age
+                </a>
+                
+                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
+                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
+               asp-route-sortType="2" asp-route-isAscending="@(sortType == 2 && isAscending == false)">
+                    By hunger level
+                </a>
+                
+                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
+                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
+               asp-route-sortType="3" asp-route-isAscending="@(sortType == 3 && isAscending == false)">
+                    By thirsty level
+                </a>
+
+                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
+                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
+               asp-route-sortType="4" asp-route-isAscending="@(sortType == 4 && isAscending == false)">
+                    By name
+                </a>
+                
+                <a class="btn btn-secondary" asp-controller="InnoGotchies" asp-action="All"
+                   asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
+               asp-route-sortType="5" asp-route-isAscending="@(sortType == 5 && isAscending == false)">
+                    By owner farm name
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <h5 class="text-white text-center" id="current_sort_type"></h5>
+        </div>
+    </div>
+
     @foreach (var model in Model.Items)
     {
-        @(await Html.PartialAsync("MyInnoGotchiCardPartialView", model))
+        @await Html.PartialAsync("ReadonlyInnoGotchiPartialView", model)
     }
 
-    <pager asp-controller="InnoGotchies"
-           asp-paged-list-page-index="@Model.PageIndex"
-           asp-paged-list-page-size="@Model.PageSize"
-           asp-paged-list-total-count="@Model.TotalCount"
-           asp-paged-list-url="All"
-           asp-route-parameter="pageIndex"></pager>
-</div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <pager asp-controller="InnoGotchies"
+                       asp-paged-list-page-index="@Model.PageIndex"
+                       asp-paged-list-page-size="@Model.PageSize"
+                       asp-paged-list-total-count="@Model.TotalCount"
+                       asp-paged-list-url="All"
+                       asp-route-data="@(new { 
+                                           sortType = sortType,
+                                           pageSize = ViewData["PageSize"],
+                                           isAscending = isAscending
+                                       })"
+                       asp-route-parameter="pageIndex"></pager>
+            </div>
+        </div>
+    </div>
+}
+
 
 @section Styles
 {
     <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css"/>
+}
+
+@section Scripts
+{
+    <script>
+        $(() => {
+            var currentSortType = @sortType;
+            var isAscending = @(isAscending.ToString().ToLower());
+
+            const sortingLinks = document.querySelector('.btn-group').querySelectorAll('a');
+            const search = `sortType=${currentSortType}`;
+
+            const activeSortLink = Array.from(sortingLinks).filter(x => x.href.includes(search))[0];
+
+            if (isAscending === false) {
+                activeSortLink.innerHTML += `<i class="fa-solid fa-caret-down ms-1"></i>`;
+            } else {
+                activeSortLink.innerHTML += `<i class="fa-solid fa-caret-up ms-1"></i>`;
+            }
+        })
+    </script>
 }

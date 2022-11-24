@@ -7,9 +7,9 @@ using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Shared;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
+using PhlegmaticOne.InnoGotchi.Shared.PagedList;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.PagedLists;
-using PhlegmaticOne.PagedLists.Base;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Managers;
@@ -73,10 +73,10 @@ public class InnoGotchiManager : IInnoGotchiManager
         return OperationResult.FromSuccess(mapped);
     }
 
-    public async Task<OperationResult<PagedList<PreviewInnoGotchiDto>>> GetPagedAsync(Guid profileId, int pageIndex)
+    public async Task<OperationResult<PagedList<ReadonlyInnoGotchiPreviewDto>>> GetPagedAsync(Guid profileId, PagedListData pagedListData)
     {
-        var pagedListResult = await _readableInnoGotchiProvider.GetPagedAsync(profileId, pageIndex);
-        var mapped = _mapper.Map<PagedList<PreviewInnoGotchiDto>>(pagedListResult.Result!);
+        var pagedListResult = await _readableInnoGotchiProvider.GetPagedAsync(profileId, pagedListData);
+        var mapped = _mapper.Map<PagedList<ReadonlyInnoGotchiPreviewDto>>(pagedListResult.Result!);
         return OperationResult.FromSuccess(mapped);
     }
 }

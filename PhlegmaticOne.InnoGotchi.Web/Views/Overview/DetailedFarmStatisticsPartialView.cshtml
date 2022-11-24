@@ -8,18 +8,20 @@
         <div class="row pt-1 ps-2">
             <div class="col-6">
                 <h6 class="h6">Alive pets count</h6>
-                <label class="text-white-50">@Model.AlivePetsCount</label>
+                <label class="text-white-50" id="alive-pets-count">@Model.AlivePetsCount</label>
             </div>
             <div class="col-6">
                 <h6 class="h6">Dead pets count</h6>
-                <label class="text-white-50">@Model.DeadPetsCount</label>
+                <label class="text-white-50" id="dead-pets-count">@Model.DeadPetsCount</label>
             </div>
         </div>
 
         <hr class="mb-2 bg-white">
 
-        <div class="row pt-1 ps-2">
-            <p>Pie chart</p>
+        <div class="row pt-1 ps-2 justify-content-center">
+            <div class="col-md-8">
+                <div id="donut-chart"></div>
+            </div>
         </div>
 
         <hr class="mb-2 bg-white">
@@ -58,4 +60,3 @@
         </div>
     </div>
 </div>
-

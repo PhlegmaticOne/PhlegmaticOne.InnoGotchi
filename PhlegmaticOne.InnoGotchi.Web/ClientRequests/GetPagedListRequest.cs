@@ -1,12 +1,18 @@
 ﻿using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
+using PhlegmaticOne.InnoGotchi.Shared.PagedList;
 using PhlegmaticOne.PagedLists;
 using PhlegmaticOne.ServerRequesting.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ClientRequests;
 
-public class GetPagedListRequest : ClientGetRequest<int, PagedList<PreviewInnoGotchiDto>>
+public class GetPagedListRequest : ClientGetRequest<PagedListData, PagedList<ReadonlyInnoGotchiPreviewDto>>
 {
-    public GetPagedListRequest(int requestData) : base(requestData) { }
+    public GetPagedListRequest(PagedListData requestData) : base(requestData) { }
 
-    public override string BuildQueryString() => WithOneQueryParameter(new("pageIndex", RequestData));
+    public override string BuildQueryString() =>
+        WithManyQueryParameters(
+            new("pageIndex", RequestData.PageIndex),
+            new("pageSize", RequestData.PageSize),
+            new("sortType", RequestData.SortType),
+            new("isAscending", RequestData.IsAscending));
 }
