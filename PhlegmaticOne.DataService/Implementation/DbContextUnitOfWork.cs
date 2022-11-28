@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
 
@@ -15,7 +16,7 @@ public class DbContextUnitOfWork : IUnitOfWork
         _dbContext = dbContext;
     }
 
-    public IRepository<TEntity> GetDataRepository<TEntity>() where TEntity : EntityBase
+    public IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
     {
         var type = typeof(TEntity);
 
@@ -28,7 +29,43 @@ public class DbContextUnitOfWork : IUnitOfWork
         return (IRepository<TEntity>)_repositories[type];
     }
 
-    public Task<IDbContextTransaction> BeginTransactionAsync()
+    public Task<int> SaveChangesAsync() => _dbContext.SaveChangesAsync();
+
+    public async Task<OperationResult<T>> ResultFromExecutionInTransaction<T>(Func<Task<T>> operation)
+    {
+        await using var transaction = await BeginTransactionAsync();
+
+        try
+        {
+            var result = await operation();
+            await transaction.CommitAsync();
+            return OperationResult.FromSuccess(result);
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            return OperationResult.FromFail<T>(e.Message);
+        }
+    }
+
+    public async Task<OperationResult> ResultFromExecutionInTransaction(Func<Task> operation)
+    {
+        await using var transaction = await BeginTransactionAsync();
+
+        try
+        {
+            await operation();
+            await transaction.CommitAsync();
+            return OperationResult.Success;
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            return OperationResult.FromFail(e.Message);
+        }
+    }
+
+    private Task<IDbContextTransaction> BeginTransactionAsync()
     {
         if (_dbContext.Database.CurrentTransaction is not null)
         {
@@ -36,6 +73,4 @@ public class DbContextUnitOfWork : IUnitOfWork
         }
         return _dbContext.Database.BeginTransactionAsync();
     }
-
-    public Task<int> SaveChangesAsync() => _dbContext.SaveChangesAsync();
 }

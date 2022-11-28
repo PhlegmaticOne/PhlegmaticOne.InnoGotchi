@@ -18,11 +18,11 @@ public class FarmStatisticsController : IdentityController
         _farmStatisticsManager = farmStatisticsManager;
 
     [HttpGet]
-    public Task<OperationResult<PreviewFarmStatisticsDto>> Get() => 
+    public Task<OperationResult<PreviewFarmStatisticsDto>> GetForAuthorized() => 
         _farmStatisticsManager.BuildForProfileAsync(ProfileId());
 
     [HttpGet]
-    public Task<OperationResult<IList<PreviewFarmStatisticsDto>>> GetForAllCollaboratedFarms() => 
+    public Task<OperationResult<IList<PreviewFarmStatisticsDto>>> GetCollaborated() => 
         _farmStatisticsManager.BuildForCollaboratedProfilesAsync(ProfileId());
 
     [HttpGet]

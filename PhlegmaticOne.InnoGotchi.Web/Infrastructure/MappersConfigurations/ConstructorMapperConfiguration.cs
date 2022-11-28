@@ -12,8 +12,8 @@ public class ConstructorMapperConfiguration : Profile
     {
         CreateMap<CreateInnoGotchiComponentViewModel, InnoGotchiModelComponentDto>();
         CreateMap<CreateInnoGotchiViewModel, CreateInnoGotchiDto>();
-        CreateMap<InnoGotchiComponentCollectionDto, ConstructorViewModel>()
+        CreateMap<IList<InnoGotchiComponentDto>, ConstructorViewModel>()
             .ForMember(x => x.ComponentCategories,
-                o => o.ConvertUsing(new ComponentCategoriesValueConverter(), y => y.Components));
+                o => o.ConvertUsing(new ComponentCategoriesValueConverter(), y => y));
     }
 }

@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using PhlegmaticOne.InnoGotchi.Domain.Identity;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
@@ -17,7 +18,7 @@ public class ProfileAuthorizedActionsManager : IProfileAuthorizedActionsManager
     private readonly IReadableProfileProvider _readableProfileProvider;
     private readonly IWritableProfilesProvider _profilesProvider;
     private readonly IJwtTokenGenerationService _jwtTokenGenerationService;
-    private readonly IValidator<UpdateProfileDto> _updateValidator;
+    private readonly IValidator<IdentityModel<UpdateProfileDto>> _updateValidator;
     private readonly IMapper _mapper;
 
     public ProfileAuthorizedActionsManager(IUnitOfWork unitOfWork, 
@@ -25,7 +26,7 @@ public class ProfileAuthorizedActionsManager : IProfileAuthorizedActionsManager
         IReadableProfileProvider readableProfileProvider,
         IWritableProfilesProvider profilesProvider,
         IJwtTokenGenerationService jwtTokenGenerationService,
-        IValidator<UpdateProfileDto> updateValidator,
+        IValidator<IdentityModel<UpdateProfileDto>> updateValidator,
         IMapper mapper)
     {
         _unitOfWork = unitOfWork;
@@ -37,7 +38,7 @@ public class ProfileAuthorizedActionsManager : IProfileAuthorizedActionsManager
         _mapper = mapper;
     }
 
-    public async Task<OperationResult<AuthorizedProfileDto>> UpdateAsync(UpdateProfileDto updateProfileDto)
+    public async Task<OperationResult<AuthorizedProfileDto>> UpdateAsync(IdentityModel<UpdateProfileDto> updateProfileDto)
     {
         var validationResult = await _updateValidator.ValidateAsync(updateProfileDto);
 
@@ -46,25 +47,24 @@ public class ProfileAuthorizedActionsManager : IProfileAuthorizedActionsManager
             return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToDictionary());
         }
 
-        var updatedOperationResult = await _profilesProvider.UpdateAsync(updateProfileDto);
+        return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
+        {
+            var updated = await _profilesProvider.UpdateAsync(updateProfileDto);
 
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
-        var updated = updatedOperationResult.Result!;
+            var mapped = _mapper.Map<AuthorizedProfileDto>(updated);
+            mapped.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(updated);
 
-        var mapped = _mapper.Map<AuthorizedProfileDto>(updated);
-        mapped.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(updated);
-
-        return OperationResult.FromSuccess(mapped);
+            return mapped;
+        });
     }
 
     public async Task<OperationResult<DetailedProfileDto>> GetDetailedAsync(Guid profileId)
     {
-        var detailedOperationResult = await _readableProfileProvider.GetExistingOrDefaultAsync(profileId);
+        var detailed = await _readableProfileProvider.GetExistingOrDefaultAsync(profileId);
         var avatar = await _readableAvatarProvider.GetAvatarAsync(profileId);
-
-        var detailed = detailedOperationResult.Result!;
-        detailed.Avatar = avatar.Result;
+        detailed!.Avatar = avatar;
 
         var mapped = _mapper.Map<DetailedProfileDto>(detailed);
         return OperationResult.FromSuccess(mapped);

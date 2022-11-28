@@ -4,7 +4,6 @@ using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Farms;
-using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
@@ -20,17 +19,16 @@ public class WritableFarmProvider : IWritableFarmProvider
         _timeService = timeService;
     }
 
-    public async Task<OperationResult<Farm>> CreateAsync(IdentityModel<CreateFarmDto> createFarmDto)
+    public async Task<Farm> CreateAsync(IdentityModel<CreateFarmDto> createFarmDto)
     {
         var farm = await CreateFarm(createFarmDto);
-        var repository = _unitOfWork.GetDataRepository<Farm>();
-        var createdFarm = await repository.CreateAsync(farm);
-        return OperationResult.FromSuccess(createdFarm);
+        var repository = _unitOfWork.GetRepository<Farm>();
+        return await repository.CreateAsync(farm);
     }
 
     private async Task<Farm> CreateFarm(IdentityModel<CreateFarmDto> createFarmDto)
     {
-        var userProfilesRepository = _unitOfWork.GetDataRepository<UserProfile>();
+        var userProfilesRepository = _unitOfWork.GetRepository<UserProfile>();
         var userProfile = await userProfilesRepository.GetByIdOrDefaultAsync(createFarmDto.ProfileId,
             include: i => i.Include(x => x.User));
 

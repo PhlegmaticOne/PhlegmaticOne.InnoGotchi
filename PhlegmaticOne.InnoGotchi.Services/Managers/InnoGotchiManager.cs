@@ -35,7 +35,8 @@ public class InnoGotchiManager : IInnoGotchiManager
         _mapper = mapper;
     }
 
-    public async Task<OperationResult<DetailedInnoGotchiDto>> CreateAsync(IdentityModel<CreateInnoGotchiDto> createInnoGotchiDto)
+    public async Task<OperationResult<DetailedInnoGotchiDto>> CreateAsync(
+        IdentityModel<CreateInnoGotchiDto> createInnoGotchiDto)
     {
         var validationResult = await _createValidator.ValidateAsync(createInnoGotchiDto);
 
@@ -44,17 +45,14 @@ public class InnoGotchiManager : IInnoGotchiManager
             return OperationResult.FromFail<DetailedInnoGotchiDto>(validationResult.ToDictionary());
         }
 
-        var created = await _innoGotchiesProvider.CreateAsync(createInnoGotchiDto);
-
-        if (created.IsSuccess == false)
+        return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
-            return OperationResult.FromFail<DetailedInnoGotchiDto>(created.ErrorMessage);
-        }
+            var created = await _innoGotchiesProvider.CreateAsync(createInnoGotchiDto);
 
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
-        var mapped = _mapper.Map<DetailedInnoGotchiDto>(created.Result);
-        return OperationResult.FromSuccess(mapped);
+            return _mapper.Map<DetailedInnoGotchiDto>(created);
+        });
     }
 
     public async Task<OperationResult<DetailedInnoGotchiDto>> GetDetailedAsync(IdentityModel<IdDto> petIdModel)
@@ -62,21 +60,18 @@ public class InnoGotchiManager : IInnoGotchiManager
         await _innoGotchiesProvider.SynchronizeSignsAsync(petIdModel);
         await _unitOfWork.SaveChangesAsync();
 
-        var petResult = await _readableInnoGotchiProvider.GetDetailedAsync(petIdModel.Entity.Id, petIdModel.ProfileId);
+        var petResult = await _readableInnoGotchiProvider
+            .GetDetailedAsync(petIdModel.Entity.Id, petIdModel.ProfileId);
 
-        if (petResult.IsSuccess == false)
-        {
-            return OperationResult.FromFail<DetailedInnoGotchiDto>(petResult.ErrorMessage);
-        }
-
-        var mapped = _mapper.Map<DetailedInnoGotchiDto>(petResult.Result);
+        var mapped = _mapper.Map<DetailedInnoGotchiDto>(petResult);
         return OperationResult.FromSuccess(mapped);
     }
 
-    public async Task<OperationResult<PagedList<ReadonlyInnoGotchiPreviewDto>>> GetPagedAsync(Guid profileId, PagedListData pagedListData)
+    public async Task<OperationResult<PagedList<ReadonlyInnoGotchiPreviewDto>>> GetPagedAsync(
+        Guid profileId, PagedListData pagedListData)
     {
         var pagedListResult = await _readableInnoGotchiProvider.GetPagedAsync(profileId, pagedListData);
-        var mapped = _mapper.Map<PagedList<ReadonlyInnoGotchiPreviewDto>>(pagedListResult.Result!);
+        var mapped = _mapper.Map<PagedList<ReadonlyInnoGotchiPreviewDto>>(pagedListResult);
         return OperationResult.FromSuccess(mapped);
     }
 }

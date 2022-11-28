@@ -1,6 +1,6 @@
 ﻿using PhlegmaticOne.InnoGotchi.Shared.JwtToken;
 
-namespace PhlegmaticOne.InnoGotchi.Shared.Users;
+namespace PhlegmaticOne.InnoGotchi.Shared.Profiles;
 
 public class AuthorizedProfileDto
 {

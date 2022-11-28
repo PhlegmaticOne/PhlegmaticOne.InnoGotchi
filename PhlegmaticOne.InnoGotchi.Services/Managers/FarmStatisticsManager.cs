@@ -1,6 +1,8 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Managers;
+﻿using FluentValidation;
+using PhlegmaticOne.InnoGotchi.Domain.Managers;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
+using PhlegmaticOne.InnoGotchi.Services.Infrastructure.HelpModels;
 using PhlegmaticOne.InnoGotchi.Shared.FarmStatistics;
 using PhlegmaticOne.OperationResults;
 
@@ -12,37 +14,52 @@ public class FarmStatisticsManager : IFarmStatisticsManager
     private readonly IReadableFarmProvider _readableFarmProvider;
     private readonly IReadableFarmStatisticsProvider _readableFarmStatisticsProvider;
     private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
+    private readonly IValidator<GetFarmModel> _getFarmValidator;
 
     public FarmStatisticsManager(
         IReadableCollaborationsProvider readableCollaborationsProvider,
         IReadableFarmProvider readableFarmProvider,
         IReadableFarmStatisticsProvider readableFarmStatisticsProvider,
-        IReadableInnoGotchiProvider readableInnoGotchiProvider)
+        IReadableInnoGotchiProvider readableInnoGotchiProvider,
+        IValidator<GetFarmModel> getFarmValidator)
     {
         _readableCollaborationsProvider = readableCollaborationsProvider;
         _readableFarmProvider = readableFarmProvider;
         _readableFarmStatisticsProvider = readableFarmStatisticsProvider;
         _readableInnoGotchiProvider = readableInnoGotchiProvider;
+        _getFarmValidator = getFarmValidator;
     }
 
-    public async Task<OperationResult<PreviewFarmStatisticsDto>> BuildForProfileAsync(Guid profileId)
+    public async Task<OperationResult<PreviewFarmStatisticsDto>> BuildForProfileAsync(
+        Guid profileId)
     {
-        var farmResult = await _readableFarmProvider.GetFarmWithProfileAsync(profileId);
-        var farm = farmResult.Result!;
+        var model = new GetFarmModel(profileId);
+        var validationResult = await _getFarmValidator.ValidateAsync(model);
+
+        if (validationResult.IsValid == false)
+        {
+            return OperationResult.FromFail<PreviewFarmStatisticsDto>(validationResult.ToString());
+        }
+
+        var farm = await _readableFarmProvider.GetFarmWithProfileAsync(profileId);
         var result = await Build(farm);
         return OperationResult.FromSuccess(result);
     }
 
-    public async Task<OperationResult<DetailedFarmStatisticsDto>> BuildDetailedForProfileAsync(Guid profileId)
+    public async Task<OperationResult<DetailedFarmStatisticsDto>> BuildDetailedForProfileAsync(
+        Guid profileId)
     {
-        var result = await _readableFarmProvider.GetFarmAsync(profileId);
-        var farm = result.Result!;
+        var model = new GetFarmModel(profileId);
+        var validationResult = await _getFarmValidator.ValidateAsync(model);
 
-        var farmStatisticsResult = await _readableFarmStatisticsProvider.GetForFarmAsync(farm.Id);
-        var farmStatistics = farmStatisticsResult.Result!;
+        if (validationResult.IsValid == false)
+        {
+            return OperationResult.FromFail<DetailedFarmStatisticsDto>(validationResult.ToString());
+        }
 
-        var innoGotchiesResult = await _readableInnoGotchiProvider.GetAllAsync(farm.Id);
-        var innoGotchies = innoGotchiesResult.Result!;
+        var farm = await _readableFarmProvider.GetFarmAsync(profileId);
+        var farmStatistics = await _readableFarmStatisticsProvider.GetForFarmAsync(farm.Id);
+        var innoGotchies = await _readableInnoGotchiProvider.GetAllAsync(farm.Id);
 
         var alivePets = GetAlivePets(innoGotchies).ToList();
         var deadPets = GetDeadPets(innoGotchies).ToList();
@@ -62,10 +79,11 @@ public class FarmStatisticsManager : IFarmStatisticsManager
         });
     }
 
-    public async Task<OperationResult<IList<PreviewFarmStatisticsDto>>> BuildForCollaboratedProfilesAsync(Guid profileId)
+    public async Task<OperationResult<IList<PreviewFarmStatisticsDto>>> BuildForCollaboratedProfilesAsync(
+        Guid profileId)
     {
-        var collaborationsResult = await _readableCollaborationsProvider.GetCollaboratedFarmsWithUsersAsync(profileId);
-        var collaboratedFarms = collaborationsResult.Result!;
+        var collaboratedFarms = await _readableCollaborationsProvider
+            .GetCollaboratedFarmsWithUsersAsync(profileId);
 
         IList<PreviewFarmStatisticsDto> result = new List<PreviewFarmStatisticsDto>();
 
@@ -94,7 +112,7 @@ public class FarmStatisticsManager : IFarmStatisticsManager
         {
             FarmName = farm.Name,
             FarmId = farm.Id,
-            PetsCount = petsCount.Result,
+            PetsCount = petsCount,
             ProfileEmail = farm.Owner.User.Email,
             ProfileFirstName = farm.Owner.FirstName,
             ProfileLastName = farm.Owner.LastName

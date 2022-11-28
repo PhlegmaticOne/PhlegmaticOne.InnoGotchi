@@ -32,7 +32,7 @@ public class InnoGotchiesController : IdentityController
 
     [HttpGet]
     public Task<OperationResult<DetailedInnoGotchiDto>> Get(Guid petId) => 
-        _innoGotchiesManager.GetDetailedAsync(IdentityModel(new IdDto { Id = petId }));
+        _innoGotchiesManager.GetDetailedAsync(IdentityModel(new IdDto(petId)));
 
     [HttpGet]
     public Task<OperationResult<PagedList<ReadonlyInnoGotchiPreviewDto>>> GetPaged([FromQuery] PagedListData pagedListData) => 

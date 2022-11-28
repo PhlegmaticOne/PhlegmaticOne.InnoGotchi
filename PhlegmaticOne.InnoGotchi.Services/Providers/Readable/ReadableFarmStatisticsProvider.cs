@@ -11,11 +11,11 @@ public class ReadableFarmStatisticsProvider : IReadableFarmStatisticsProvider
 
     public ReadableFarmStatisticsProvider(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public async Task<OperationResult<FarmStatistics>> GetForFarmAsync(Guid farmId)
+    public async Task<FarmStatistics> GetForFarmAsync(Guid farmId)
     {
-        var repository = _unitOfWork.GetDataRepository<FarmStatistics>();
+        var repository = _unitOfWork.GetRepository<FarmStatistics>();
         var statistics = await repository.GetFirstOrDefaultAsync(
             predicate: p => p.FarmId == farmId);
-        return OperationResult.FromSuccess(statistics!);
+        return statistics!;
     }
 }

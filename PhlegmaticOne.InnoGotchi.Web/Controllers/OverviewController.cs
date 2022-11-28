@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
+using PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Overviews;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.FarmStatistics;
 using PhlegmaticOne.LocalStorage.Base;
@@ -17,7 +18,14 @@ public class OverviewController : ClientRequestsController
         base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
-    public IActionResult My() => View();
+    public Task<IActionResult> My()
+    {
+        return FromAuthorizedGet(new GetIsFarmExistsRequest(), exists =>
+        {
+            IActionResult result = exists ? View() : RedirectToAction("Create", "Farms");
+            return Task.FromResult(result);
+        });
+    }
 
     [HttpGet]
     public Task<IActionResult> Collaborated()

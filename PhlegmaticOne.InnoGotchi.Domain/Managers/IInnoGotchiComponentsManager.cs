@@ -5,5 +5,5 @@ namespace PhlegmaticOne.InnoGotchi.Domain.Managers;
 
 public interface IInnoGotchiComponentsManager
 {
-    Task<OperationResult<InnoGotchiComponentCollectionDto>> GetAllComponentsAsync();
+    Task<OperationResult<IList<InnoGotchiComponentDto>>> GetAllComponentsAsync();
 }

@@ -7,7 +7,6 @@ using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.MapperConfigurations;
-using PhlegmaticOne.InnoGotchi.Services.Infrastructure.MapperConverters;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
 using PhlegmaticOne.InnoGotchi.Services.Managers;
 using PhlegmaticOne.InnoGotchi.Services.Providers.Readable;
@@ -25,8 +24,6 @@ public static class ServiceCollectionExtensions
         {
             builder.AddMaps(typeof(FarmMapperConfiguration).Assembly);
         });
-        services.AddTransient<AvatarToAvatarDataConverter>();
-
 
         services.AddScoped<IWritableCollaborationsProvider, WritableCollaborationsProvider>();
         services.AddScoped<IWritableFarmProvider, WritableFarmProvider>();

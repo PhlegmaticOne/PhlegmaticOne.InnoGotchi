@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
@@ -24,7 +24,7 @@ public class ProfilesController : IdentityController
 
     [HttpPost]
     public Task<OperationResult<AuthorizedProfileDto>> Update([FromBody] UpdateProfileDto updateProfileDto) => 
-        _profileAuthorizedActionsManager.UpdateAsync(updateProfileDto);
+        _profileAuthorizedActionsManager.UpdateAsync(IdentityModel(updateProfileDto));
 
     [HttpGet]
     public Task<OperationResult<DetailedProfileDto>> GetDetailed() => 

@@ -17,6 +17,6 @@ public class InnoGotchiComponentsController : ControllerBase
         _innoGotchiComponentsManager = innoGotchiComponentsManager;
 
     [HttpGet]
-    public Task<OperationResult<InnoGotchiComponentCollectionDto>> GetAll() => 
+    public Task<OperationResult<IList<InnoGotchiComponentDto>>> GetAll() => 
         _innoGotchiComponentsManager.GetAllComponentsAsync();
 }

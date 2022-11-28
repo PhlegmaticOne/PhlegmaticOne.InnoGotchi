@@ -17,10 +17,10 @@ public class InnoGotchiComponentsManager : IInnoGotchiComponentsManager
         _mapper = mapper;
     }
 
-    public async Task<OperationResult<InnoGotchiComponentCollectionDto>> GetAllComponentsAsync()
+    public async Task<OperationResult<IList<InnoGotchiComponentDto>>> GetAllComponentsAsync()
     {
         var all = await _readableInnoGotchiComponentsProvider.GetAllComponentsAsync();
-        var mapped = _mapper.Map<InnoGotchiComponentCollectionDto>(all.Result);
+        var mapped = _mapper.Map<IList<InnoGotchiComponentDto>>(all);
         return OperationResult.FromSuccess(mapped);
     }
 }

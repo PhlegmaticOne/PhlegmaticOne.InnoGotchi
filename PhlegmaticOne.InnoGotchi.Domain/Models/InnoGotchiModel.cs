@@ -15,6 +15,7 @@ public class InnoGotchiModel : EntityBase
     public int Age { get; set; }
     public int HappinessDaysCount { get; set; }
     public string Name { get; set; } = null!;
+    public Guid FarmId { get; set; }
     public Farm Farm { get; set; } = null!;
     public IList<InnoGotchiModelComponent> Components { get; set; } = new List<InnoGotchiModelComponent>();
 }

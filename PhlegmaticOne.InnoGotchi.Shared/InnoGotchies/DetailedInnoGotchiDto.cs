@@ -1,4 +1,6 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
+﻿using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies.Base;
+
+namespace PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 
 public class DetailedInnoGotchiDto : InnoGotchiDtoBase
 {

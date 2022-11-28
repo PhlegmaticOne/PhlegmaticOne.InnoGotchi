@@ -2,7 +2,7 @@
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Managers;
@@ -23,8 +23,7 @@ public class SearchProfilesManager : ISearchProfilesManager
     {
         var found = await _searchProfilesService.SearchProfilesAsync(searchText);
 
-        var collaboratorsResult = await _readableCollaborationsProvider.GetCollaboratedUsersAsync(profileId);
-        var collaborators = collaboratorsResult.Result!;
+        var collaborators = await _readableCollaborationsProvider.GetCollaboratedUsersAsync(profileId);
 
         var alreadyCollaboratedProfiles = GetAlreadyCollaborated(found, collaborators).ToList();
         RemoveAlreadyCollaboratedFromFound(found, alreadyCollaboratedProfiles);
@@ -34,7 +33,7 @@ public class SearchProfilesManager : ISearchProfilesManager
 
         IList<SearchProfileDto> result = alreadyCollaborated
             .Concat(other)
-            .Take(20)
+            .Take(1)
             .ToList();
 
         return OperationResult.FromSuccess(result);

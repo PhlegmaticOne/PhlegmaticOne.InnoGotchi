@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;

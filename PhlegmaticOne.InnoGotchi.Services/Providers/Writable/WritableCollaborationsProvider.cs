@@ -12,13 +12,12 @@ public class WritableCollaborationsProvider : IWritableCollaborationsProvider
 
     public WritableCollaborationsProvider(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public async Task<OperationResult<Collaboration>> AddCollaboration(Guid fromProfileId, Guid toProfileId)
+    public async Task<Collaboration> AddCollaboration(Guid fromProfileId, Guid toProfileId)
     {
         var farm = await GetFarm(fromProfileId);
         var collaboration = await CreateCollaboration(toProfileId, farm);
         farm.Collaborations.Add(collaboration);
-
-        return OperationResult.FromSuccess(collaboration);
+        return collaboration;
     }
 
     private async Task<Collaboration> CreateCollaboration(Guid profileId, Farm farm)
@@ -31,9 +30,10 @@ public class WritableCollaborationsProvider : IWritableCollaborationsProvider
     }
 
     private Task<Farm> GetFarm(Guid profileId) =>
-        _unitOfWork.GetDataRepository<Farm>().GetFirstOrDefaultAsync(
-            predicate: p => p.OwnerId == profileId,
-            include: i => i.Include(x => x.Collaborations))!;
+        _unitOfWork.GetRepository<Farm>().GetFirstOrDefaultAsync(
+            predicate: p => p.Owner.Id == profileId
+            /*include: i => i.Include(x => x.Collaborations)*/)!;
     private Task<UserProfile> GetProfile(Guid profileId) =>
-        _unitOfWork.GetDataRepository<UserProfile>().GetByIdOrDefaultAsync(profileId)!;
+        _unitOfWork.GetRepository<UserProfile>()
+            .GetByIdOrDefaultAsync(profileId, include: i => i.Include(x => x.User))!;
 }

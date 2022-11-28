@@ -3,6 +3,4 @@ using PhlegmaticOne.ServerRequesting.Models;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.Constructor;
 
-public class GetAllInnoGotchiComponentsRequest : EmptyClientGetRequest<InnoGotchiComponentCollectionDto>
-{
-}
+public class GetAllInnoGotchiComponentsRequest : EmptyClientGetRequest<IList<InnoGotchiComponentDto>> { }

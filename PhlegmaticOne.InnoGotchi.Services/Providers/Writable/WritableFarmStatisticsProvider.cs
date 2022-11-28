@@ -17,10 +17,10 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
         _timeService = timeService;
     }
 
-    public async Task<OperationResult<FarmStatistics>> ProcessFeedingAsync(Guid profileId)
+    public async Task<FarmStatistics> ProcessFeedingAsync(Guid profileId)
     {
-        var repository = _unitOfWork.GetDataRepository<FarmStatistics>();
-        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId);
+        var repository = _unitOfWork.GetRepository<FarmStatistics>();
+        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.Owner.Id == profileId);
         var now = _timeService.Now();
 
         var updated = await repository.UpdateAsync(farmStatistics!, statistics =>
@@ -31,13 +31,13 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
             statistics.LastFeedTime = now;
         });
 
-        return OperationResult.FromSuccess(updated);
+        return updated;
     }
 
-    public async Task<OperationResult<FarmStatistics>> ProcessDrinkingAsync(Guid profileId)
+    public async Task<FarmStatistics> ProcessDrinkingAsync(Guid profileId)
     {
-        var repository = _unitOfWork.GetDataRepository<FarmStatistics>();
-        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId);
+        var repository = _unitOfWork.GetRepository<FarmStatistics>();
+        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.Owner.Id == profileId);
         var now = _timeService.Now();
 
         var updated = await repository.UpdateAsync(farmStatistics!, statistics =>
@@ -48,7 +48,7 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
             statistics.LastDrinkTime = now;
         });
 
-        return OperationResult.FromSuccess(updated);
+        return updated;
     }
 
     private static TimeSpan CalculateNewAverage(TimeSpan currentAverage, DateTime lastActionTime, DateTime now, int currentActionsCount)

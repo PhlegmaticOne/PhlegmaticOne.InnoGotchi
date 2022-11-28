@@ -3,8 +3,23 @@
 }
 
 @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Farm overview")
-<div class="mt-3" id="preview_statistics"></div>
-<div class="mt-3" id="detailed_statistics"></div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-sm-12 col-12">
+            <div class="mt-3" id="preview_statistics"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-sm-12 col-12">
+            <div class="mt-3" id="detailed_statistics"></div>
+        </div>
+    </div>
+</div>
+
 
 @section ColumnContent
 {

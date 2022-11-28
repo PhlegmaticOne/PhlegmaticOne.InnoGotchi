@@ -1,4 +1,4 @@
-﻿using PhlegmaticOne.InnoGotchi.Shared.Users;
+﻿using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Domain.Managers;

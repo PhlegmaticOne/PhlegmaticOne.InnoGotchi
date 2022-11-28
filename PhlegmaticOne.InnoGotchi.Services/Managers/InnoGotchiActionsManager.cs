@@ -22,45 +22,27 @@ public class InnoGotchiActionsManager : IInnoGotchiActionsManager
         _farmStatisticsProvider = farmStatisticsProvider;
     }
 
-    public async Task<OperationResult> DrinkAsync(IdentityModel<IdDto> petIdModel)
+    public Task<OperationResult> DrinkAsync(IdentityModel<IdDto> petIdModel)
     {
-        var drinkResult = await _innoGotchiesProvider.DrinkAsync(petIdModel);
-
-        if (drinkResult.IsSuccess == false)
+        return _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
-            return OperationResult.FromFail(drinkResult.ErrorMessage);
-        }
+            await _innoGotchiesProvider.DrinkAsync(petIdModel);
 
-        var farmStatisticsResult = await _farmStatisticsProvider.ProcessDrinkingAsync(petIdModel.ProfileId);
+            await _farmStatisticsProvider.ProcessDrinkingAsync(petIdModel.ProfileId);
 
-        if (farmStatisticsResult.IsSuccess == false)
-        {
-            return OperationResult.FromFail(farmStatisticsResult.ErrorMessage);
-        }
-
-        await _unitOfWork.SaveChangesAsync();
-
-        return OperationResult.Success;
+            await _unitOfWork.SaveChangesAsync();
+        });
     }
 
-    public async Task<OperationResult> FeedAsync(IdentityModel<IdDto> petIdModel)
+    public Task<OperationResult> FeedAsync(IdentityModel<IdDto> petIdModel)
     {
-        var drinkResult = await _innoGotchiesProvider.FeedAsync(petIdModel);
-
-        if (drinkResult.IsSuccess == false)
+        return _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
-            return OperationResult.FromFail(drinkResult.ErrorMessage);
-        }
+            await _innoGotchiesProvider.FeedAsync(petIdModel);
 
-        var farmStatisticsResult = await _farmStatisticsProvider.ProcessFeedingAsync(petIdModel.ProfileId);
+            await _farmStatisticsProvider.ProcessFeedingAsync(petIdModel.ProfileId);
 
-        if (farmStatisticsResult.IsSuccess == false)
-        {
-            return OperationResult.FromFail(farmStatisticsResult.ErrorMessage);
-        }
-
-        await _unitOfWork.SaveChangesAsync();
-
-        return OperationResult.Success;
+            await _unitOfWork.SaveChangesAsync();
+        });
     }
 }

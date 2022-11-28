@@ -6,7 +6,7 @@ using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 using FluentValidation;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
 

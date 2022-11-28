@@ -42,16 +42,17 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<UpdateProfileRequest>("Profiles/Update");
     a.ConfigureRequest<SearchProfilesRequest>("Profiles/Search");
 
-    a.ConfigureRequest<GetAvatarRequest>("Avatars/Get");
+    a.ConfigureRequest<GetAvatarRequest>("Avatars/GetAuthorized");
 
-    a.ConfigureRequest<GetDetailedFarmRequest>("Farms/GetForAuthorized");
+    a.ConfigureRequest<GetDetailedFarmRequest>("Farms/GetAuthorized");
     a.ConfigureRequest<GetProfileFarmRequest>("Farms/Get");
+    a.ConfigureRequest<GetIsFarmExistsRequest>("Farms/Exists");
     a.ConfigureRequest<CreateFarmRequest>("Farms/Create");
-    a.ConfigureRequest<GetCollaboratedFarmsRequest>("Farms/GetCollaboratedFarms");
+    a.ConfigureRequest<GetCollaboratedFarmsRequest>("Farms/GetCollaborated");
 
-    a.ConfigureRequest<GetPreviewFarmStatisticsRequest>("FarmStatistics/Get");
+    a.ConfigureRequest<GetPreviewFarmStatisticsRequest>("FarmStatistics/GetForAuthorized");
     a.ConfigureRequest<GetDetailedFarmStatisticsRequest>("FarmStatistics/GetDetailed");
-    a.ConfigureRequest<GetCollaboratedFarmStatisticsRequest>("FarmStatistics/GetForAllCollaboratedFarms");
+    a.ConfigureRequest<GetCollaboratedFarmStatisticsRequest>("FarmStatistics/GetCollaborated");
 
     a.ConfigureRequest<GetAllInnoGotchiComponentsRequest>("InnoGotchiComponents/GetAll");
 

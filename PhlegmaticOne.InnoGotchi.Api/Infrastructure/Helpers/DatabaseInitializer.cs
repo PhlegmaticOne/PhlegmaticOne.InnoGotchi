@@ -79,15 +79,15 @@ public static class DatabaseInitializer
             FirstName = "Firstname",
             LastName = "Secondname",
             JoinDate = timeService.Now(),
-            Farm = new Farm
-            {
-                FarmStatistics = new FarmStatistics
-                {
-                    LastDrinkTime = timeService.Now(),
-                    LastFeedTime = timeService.Now()
-                },
-                Name = "My Farm"
-            }
+            //Farm = new Farm
+            //{
+            //    FarmStatistics = new FarmStatistics
+            //    {
+            //        LastDrinkTime = timeService.Now(),
+            //        LastFeedTime = timeService.Now()
+            //    },
+            //    Name = "My Farm"
+            //}
         },
 
         new()

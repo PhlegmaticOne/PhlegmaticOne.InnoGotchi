@@ -20,15 +20,10 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 
         builder.HasOne(x => x.Avatar)
             .WithOne(x => x.UserProfile)
-            .HasForeignKey<Avatar>(x => x.UserProfileId);
+            .HasForeignKey<UserProfile>(x => x.AvatarId);
 
         builder.HasOne(x => x.Farm)
             .WithOne(x => x.Owner)
             .HasForeignKey<Farm>(x => x.OwnerId);
-
-        builder.HasMany(x => x.Collaborations)
-            .WithOne(x => x.Collaborator)
-            .HasForeignKey(x => x.UserProfileId)
-            .OnDelete(DeleteBehavior.NoAction);
     }
 }

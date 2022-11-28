@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.ValueConverters;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 

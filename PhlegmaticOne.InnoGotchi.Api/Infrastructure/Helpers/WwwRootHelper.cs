@@ -20,12 +20,6 @@ internal static class WwwRootHelper
         return componentPaths;
     }
 
-    public static IEnumerable<FileInfo> GetAllFiles(IWebHostEnvironment webHostEnvironment, string directoryName)
-    {
-        var directory = GetDirectoryInfo(webHostEnvironment, directoryName);
-        return directory.EnumerateFiles();
-    }
-
     private static DirectoryInfo GetDirectoryInfo(IWebHostEnvironment webHostEnvironment, string directoryName)
     {
         var initialPath = Path.Combine(webHostEnvironment.WebRootPath, directoryName);

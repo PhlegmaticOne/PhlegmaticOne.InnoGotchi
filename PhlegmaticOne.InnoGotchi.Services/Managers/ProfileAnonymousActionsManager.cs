@@ -4,7 +4,7 @@ using PhlegmaticOne.InnoGotchi.Domain.Managers;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
@@ -40,41 +40,34 @@ public class ProfileAnonymousActionsManager : IProfileAnonymousActionsManager
 
         if (validationResult.IsValid == false)
         {
-            const string emailErrorMessage = "Email error";
-            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToDictionary(), emailErrorMessage);
+            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToString());
         }
 
-        var createdProfileOperationResult = await _profilesProvider.CreateAsync(registerProfileDto);
-
-        if (createdProfileOperationResult.IsSuccess == false)
+        return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
-            return OperationResult.FromFail<AuthorizedProfileDto>(createdProfileOperationResult.ErrorMessage);
-        }
+            var createdProfile = await _profilesProvider.CreateAsync(registerProfileDto);
 
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
-        var createdProfile = createdProfileOperationResult.Result!;
-
-        var result = _mapper.Map<AuthorizedProfileDto>(createdProfile);
-        result.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(createdProfile);
-
-        return OperationResult.FromSuccess(result);
+            var result = _mapper.Map<AuthorizedProfileDto>(createdProfile);
+            result.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(createdProfile);
+            return result;
+        });
     }
 
     public async Task<OperationResult<AuthorizedProfileDto>> LoginAsync(LoginDto loginDto)
     {
-        var existingOperationResult = await _readableProfileProvider.GetExistingOrDefaultAsync(loginDto.Email, loginDto.Password);
+        var existing = await _readableProfileProvider
+            .GetExistingOrDefaultAsync(loginDto.Email, loginDto.Password);
 
-        if (existingOperationResult.IsSuccess == false)
+        if (existing is null)
         {
-            return OperationResult.FromFail<AuthorizedProfileDto>(existingOperationResult.ErrorMessage);
+            var message = $"There is not user with email {loginDto.Email} or password is incorrect";
+            return OperationResult.FromFail<AuthorizedProfileDto>(message);
         }
-
-        var existing = existingOperationResult.Result!;
 
         var result = _mapper.Map<AuthorizedProfileDto>(existing);
         result.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(existing);
-
         return OperationResult.FromSuccess(result);
     }
 }

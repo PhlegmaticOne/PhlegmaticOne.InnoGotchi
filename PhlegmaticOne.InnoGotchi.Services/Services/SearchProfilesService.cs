@@ -13,7 +13,7 @@ public class SearchProfilesService : ISearchProfilesService
 
     public Task<IList<UserProfile>> SearchProfilesAsync(string searchText)
     {
-        var repository = _unitOfWork.GetDataRepository<UserProfile>();
+        var repository = _unitOfWork.GetRepository<UserProfile>();
         return repository.GetAllAsync(
             include: i => i.Include(x => x.User),
             predicate: p => p.User.Email.Contains(searchText));

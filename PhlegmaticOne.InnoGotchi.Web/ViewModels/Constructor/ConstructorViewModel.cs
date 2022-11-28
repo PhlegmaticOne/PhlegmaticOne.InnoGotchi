@@ -2,5 +2,5 @@
 
 public class ConstructorViewModel
 {
-    public List<ComponentCategoryViewModel> ComponentCategories { get; set; } = null!; 
+    public IList<ComponentCategoryViewModel> ComponentCategories { get; set; } = null!; 
 }

@@ -5,7 +5,6 @@ namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 
 public class UpdateAccountViewModel : ErrorHavingViewModel
 {
-    public Guid Id { get; set; }
     public string OldFirstName { get; set; } = null!;
     public string? FirstName { get; set; }
     public string OldLastName { get; set; } = null!;

@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Users;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.Profiles;
 
 public class DetailedProfileDto
 {

@@ -10,11 +10,11 @@ public class ProfileInnoGotchiValidator : AbstractValidator<IdentityModel<Create
 {
     public ProfileInnoGotchiValidator(IUnitOfWork dataService)
     {
-        var farmRepository = dataService.GetDataRepository<Farm>();
-        var petsRepository = dataService.GetDataRepository<InnoGotchiModel>();
+        var farmRepository = dataService.GetRepository<Farm>();
+        var petsRepository = dataService.GetRepository<InnoGotchiModel>();
 
         RuleFor(x => x.ProfileId)
-            .MustAsync((profileId, _) => farmRepository.ExistsAsync(f => f.OwnerId == profileId))
+            .MustAsync((profileId, _) => farmRepository.ExistsAsync(f => f.Owner.Id == profileId))
             .WithMessage("You need to create farm for storing InnoGotchies");
 
         RuleFor(x => x.Entity.Name)

@@ -19,9 +19,6 @@ public class FarmConfiguration : IEntityTypeConfiguration<Farm>
         builder.HasIndex(x => x.Name).IsUnique();
 
         builder.HasMany(x => x.InnoGotchies)
-            .WithOne(x => x.Farm);
-
-        builder.HasMany(x => x.Collaborations)
             .WithOne(x => x.Farm)
             .HasForeignKey(x => x.FarmId);
 

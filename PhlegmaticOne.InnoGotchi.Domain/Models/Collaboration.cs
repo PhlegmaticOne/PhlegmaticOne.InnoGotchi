@@ -1,6 +1,8 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Domain.Models;
+﻿using PhlegmaticOne.UnitOfWork.Models;
 
-public class Collaboration
+namespace PhlegmaticOne.InnoGotchi.Domain.Models;
+
+public class Collaboration : EntityBase
 {
     public Guid UserProfileId { get; set; }
     public UserProfile Collaborator { get; set; } = null!;

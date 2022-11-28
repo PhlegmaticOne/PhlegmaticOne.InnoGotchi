@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Domain.Managers;
-using PhlegmaticOne.InnoGotchi.Shared;
 using PhlegmaticOne.InnoGotchi.Shared.Collaborations;
 using PhlegmaticOne.OperationResults;
 
@@ -19,6 +18,6 @@ public class CollaborationsController : IdentityController
         _collaborationManager = collaborationManager;
 
     [HttpPost]
-    public Task<OperationResult<CollaborationDto>> Create([FromBody] IdDto profileIdDto) => 
-        _collaborationManager.AddCollaboratorAsync(IdentityModel(profileIdDto));
+    public Task<OperationResult<CollaborationDto>> Create([FromBody] CreateCollaborationDto createCollaborationDto) => 
+        _collaborationManager.AddCollaboratorAsync(IdentityModel(createCollaborationDto));
 }

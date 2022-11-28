@@ -21,38 +21,38 @@ public class ReadableInnoGotchiProvider : IReadableInnoGotchiProvider
         _sortingService = sortingService;
     }
 
-    public async Task<OperationResult<InnoGotchiModel>> GetDetailedAsync(Guid petId, Guid profileId)
+    public async Task<InnoGotchiModel> GetDetailedAsync(Guid petId, Guid profileId)
     {
-        var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
+        var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
         var pet = await repository.GetByIdOrDefaultAsync(petId,
             include: IncludeComponents());
 
-        return OperationResult.FromSuccess(pet)!;
+        return pet!;
     }
 
-    public async Task<OperationResult<IList<InnoGotchiModel>>> GetAllDetailedAsync(Guid farmId)
+    public async Task<IList<InnoGotchiModel>> GetAllDetailedAsync(Guid farmId)
     {
-        var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
+        var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
         var pets = await repository.GetAllAsync(
             include: IncludeComponents(),
             predicate: p => p.Farm.Id == farmId);
 
-        return OperationResult.FromSuccess(pets);
+        return pets;
     }
 
-    public async Task<OperationResult<IList<InnoGotchiModel>>> GetAllAsync(Guid farmId)
+    public async Task<IList<InnoGotchiModel>> GetAllAsync(Guid farmId)
     {
-        var repository = _unitOfWork.GetDataRepository<InnoGotchiModel>();
+        var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
         var pets = await repository.GetAllAsync(predicate: p => p.Farm.Id == farmId);
-        return OperationResult.FromSuccess(pets);
+        return pets;
     }
 
-    public async Task<OperationResult<PagedList<InnoGotchiModel>>> GetPagedAsync(Guid profileId, PagedListData pagedListData)
+    public async Task<PagedList<InnoGotchiModel>> GetPagedAsync(Guid profileId, PagedListData pagedListData)
     {
         var sortingFunc = _sortingService.GetSortingFunc(pagedListData.SortType, pagedListData.IsAscending);
 
         var result = await _unitOfWork
-            .GetDataRepository<InnoGotchiModel>()
+            .GetRepository<InnoGotchiModel>()
             .GetPagedListAsync(
                 pageSize: pagedListData.PageSize,
                 pageIndex: pagedListData.PageIndex,
@@ -60,11 +60,11 @@ public class ReadableInnoGotchiProvider : IReadableInnoGotchiProvider
                 predicate: WherePetsNotInFarmWithOwner(profileId),
                 include: IncludeWithProfile());
 
-        return OperationResult.FromSuccess(result);
+        return result;
     }
 
     private static Expression<Func<InnoGotchiModel, bool>> WherePetsNotInFarmWithOwner(Guid ownerId) =>
-        p => p.Farm.OwnerId != ownerId;
+        p => p.Farm.Owner.Id != ownerId;
     private static Func<IQueryable<InnoGotchiModel>, IIncludableQueryable<InnoGotchiModel, object>> IncludeComponents() =>
         i => i.Include(x => x.Components).ThenInclude(x => x.InnoGotchiComponent);
 

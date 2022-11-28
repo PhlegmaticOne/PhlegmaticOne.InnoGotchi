@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 

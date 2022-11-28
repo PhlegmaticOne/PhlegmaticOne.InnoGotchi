@@ -32,28 +32,28 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<Guid>("UserProfileId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserProfileId")
-                        .IsUnique();
 
                     b.ToTable("Avatar");
                 });
 
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Domain.Models.Collaboration", b =>
                 {
-                    b.Property<Guid>("UserProfileId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FarmId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserProfileId", "FarmId");
+                    b.Property<Guid>("UserProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("FarmId");
+
+                    b.HasIndex("UserProfileId");
 
                     b.ToTable("Collaborations", (string)null);
                 });
@@ -224,13 +224,16 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users", (string)null);
                 });
@@ -239,6 +242,9 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AvatarId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FirstName")
@@ -257,21 +263,13 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AvatarId")
+                        .IsUnique();
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("UserProfiles", (string)null);
-                });
-
-            modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Domain.Models.Avatar", b =>
-                {
-                    b.HasOne("PhlegmaticOne.InnoGotchi.Domain.Models.UserProfile", "UserProfile")
-                        .WithOne("Avatar")
-                        .HasForeignKey("PhlegmaticOne.InnoGotchi.Domain.Models.Avatar", "UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Domain.Models.Collaboration", b =>
@@ -279,7 +277,7 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
                     b.HasOne("PhlegmaticOne.InnoGotchi.Domain.Models.Farm", "Farm")
                         .WithMany("Collaborations")
                         .HasForeignKey("FarmId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("PhlegmaticOne.InnoGotchi.Domain.Models.UserProfile", "Collaborator")
@@ -347,13 +345,27 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Domain.Models.UserProfile", b =>
                 {
+                    b.HasOne("PhlegmaticOne.InnoGotchi.Domain.Models.Avatar", "Avatar")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("PhlegmaticOne.InnoGotchi.Domain.Models.UserProfile", "AvatarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PhlegmaticOne.InnoGotchi.Domain.Models.User", "User")
                         .WithOne("Profile")
                         .HasForeignKey("PhlegmaticOne.InnoGotchi.Domain.Models.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Avatar");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Domain.Models.Avatar", b =>
+                {
+                    b.Navigation("UserProfile")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Domain.Models.Farm", b =>
@@ -384,8 +396,6 @@ namespace PhlegmaticOne.InnoGotchi.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("PhlegmaticOne.InnoGotchi.Domain.Models.UserProfile", b =>
                 {
-                    b.Navigation("Avatar");
-
                     b.Navigation("Collaborations");
 
                     b.Navigation("Farm")

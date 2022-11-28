@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.InnoGotchi.Shared;
+using PhlegmaticOne.InnoGotchi.Shared.Collaborations;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Collaborations;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels;
 using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 
@@ -17,11 +18,11 @@ public class CollaborationsController : ClientRequestsController
         base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpPost]
-    public Task<IActionResult> Collaborate([FromBody] IdDto idDto)
+    public Task<IActionResult> Collaborate([FromBody] IdViewModel idViewModel)
     {
-        return FromAuthorizedPost(new CreateCollaborationRequest(idDto), dto =>
+        return FromAuthorizedPost(new CreateCollaborationRequest(new CreateCollaborationDto(idViewModel.Id)), dto =>
         {
-            IActionResult ok = Ok();
+            IActionResult ok = Json(dto);
             return Task.FromResult(ok);
         });
     }

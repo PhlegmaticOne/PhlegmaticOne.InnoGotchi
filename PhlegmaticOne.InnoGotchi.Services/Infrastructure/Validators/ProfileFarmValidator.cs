@@ -10,14 +10,14 @@ public class ProfileFarmValidator : AbstractValidator<IdentityModel<CreateFarmDt
 {
     public ProfileFarmValidator(IUnitOfWork dataService)
     {
-        var farmRepository = dataService.GetDataRepository<Farm>();
+        var farmRepository = dataService.GetRepository<Farm>();
         
         RuleFor(x => x.Entity.Name)
             .MustAsync((x, _) => farmRepository.AllAsync(f => f.Name != x))
             .WithMessage(x => $"Farm name {x.Entity.Name} already reserved");
 
         RuleFor(x => x.ProfileId)
-            .MustAsync((x, _) => farmRepository.AllAsync(f => f.OwnerId != x))
+            .MustAsync((x, _) => farmRepository.AllAsync(f => f.Owner.Id != x))
             .WithMessage("You already have a farm");
     }
 }

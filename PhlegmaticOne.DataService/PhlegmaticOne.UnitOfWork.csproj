@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PhlegmaticOne.OperationResults\PhlegmaticOne.OperationResults.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.PagedList\PhlegmaticOne.PagedLists.csproj" />
   </ItemGroup>
 

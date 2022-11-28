@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
-using PhlegmaticOne.InnoGotchi.Api.Services;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.OperationResults;
 
@@ -18,9 +17,9 @@ public class AvatarsController : IdentityController
         _readableAvatarProvider = readableAvatarProvider;
 
     [HttpGet]
-    public async Task<OperationResult<byte[]>> Get()
+    public async Task<OperationResult<byte[]>> GetAuthorized()
     {
         var avatar = await _readableAvatarProvider.GetAvatarAsync(ProfileId());
-        return OperationResult.FromSuccess(avatar.Result!.AvatarData);
+        return OperationResult.FromSuccess(avatar.AvatarData);
     }
 }

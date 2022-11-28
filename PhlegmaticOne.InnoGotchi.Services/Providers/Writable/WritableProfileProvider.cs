@@ -1,8 +1,8 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
+﻿using PhlegmaticOne.InnoGotchi.Domain.Identity;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
-using PhlegmaticOne.InnoGotchi.Shared.Users;
-using PhlegmaticOne.OperationResults;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.PasswordHasher.Base;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
@@ -20,19 +20,20 @@ public class WritableProfileProvider : IWritableProfilesProvider
         _passwordHasher = passwordHasher;
         _timeService = timeService;
     }
-    public async Task<OperationResult<UserProfile>> CreateAsync(RegisterProfileDto registerProfileDto)
+    public async Task<UserProfile> CreateAsync(RegisterProfileDto registerProfileDto)
     {
         var prepared = PrepareProfile(registerProfileDto);
-        var repository = _unitOfWork.GetDataRepository<UserProfile>();
+        var repository = _unitOfWork.GetRepository<UserProfile>();
         var createdProfile = await repository.CreateAsync(prepared);
-        return OperationResult.FromSuccess(createdProfile);
+        return createdProfile;
     }
 
 
-    public async Task<OperationResult<UserProfile>> UpdateAsync(UpdateProfileDto updateProfileDto)
+    public async Task<UserProfile> UpdateAsync(IdentityModel<UpdateProfileDto> identityUpdateModel)
     {
-        var repository = _unitOfWork.GetDataRepository<UserProfile>();
-        var updatedProfile = (await repository.UpdateAsync(updateProfileDto.Id, profile =>
+        var updateProfileDto = identityUpdateModel.Entity;
+        var repository = _unitOfWork.GetRepository<UserProfile>();
+        var updatedProfile = (await repository.UpdateAsync(identityUpdateModel.ProfileId, profile =>
         {
             profile.FirstName = GetNewValueOrExisting(updateProfileDto.FirstName, profile.FirstName);
             profile.LastName = GetNewValueOrExisting(updateProfileDto.LastName, profile.LastName);
@@ -40,7 +41,7 @@ public class WritableProfileProvider : IWritableProfilesProvider
             profile.Avatar = ProcessAvatar(updateProfileDto.AvatarData, profile.Avatar);
         }))!;
 
-        return OperationResult.FromSuccess(updatedProfile);
+        return updatedProfile;
     }
 
 
