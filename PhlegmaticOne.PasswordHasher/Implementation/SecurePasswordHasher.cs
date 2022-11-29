@@ -1,8 +1,7 @@
-﻿using PhlegmaticOne.PasswordHasher.Base;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace PhlegmaticOne.PasswordHasher;
+namespace PhlegmaticOne.PasswordHasher.Implementation;
 
 public class SecurePasswordHasher : IPasswordHasher
 {

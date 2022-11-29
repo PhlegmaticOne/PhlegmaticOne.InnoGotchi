@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Profiles;
-using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Accounts;
+using PhlegmaticOne.LocalStorage;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 

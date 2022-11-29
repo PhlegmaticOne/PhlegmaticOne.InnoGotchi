@@ -109,22 +109,18 @@ public class FarmManager : IFarmManager
         return OperationResult.FromSuccess(result);
     }
 
-    public async Task<OperationResult<DetailedFarmDto>> CreateAsync(IdentityModel<CreateFarmDto> createFarmIdentityModel)
+    public async Task<OperationResult> CreateAsync(IdentityModel<CreateFarmDto> createFarmIdentityModel)
     {
         var validationResult = await _createValidator.ValidateAsync(createFarmIdentityModel);
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<DetailedFarmDto>(validationResult.ToDictionary());
+            return OperationResult.FromFail(validationResult.ToString());
         }
 
         return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
-            var created = await _farmProvider.CreateAsync(createFarmIdentityModel);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return _mapper.Map<DetailedFarmDto>(created);
+            await _farmProvider.CreateAsync(createFarmIdentityModel);
         });
     }
 
@@ -132,8 +128,13 @@ public class FarmManager : IFarmManager
     {
         var farm = await _readableFarmProvider.GetFarmWithProfileAsync(profileId);
 
-        await _writableInnoGotchiesProvider.SynchronizeSignsAsync(farm.Id);
-        await _unitOfWork.SaveChangesAsync();
+        var synchronizationResult = await _unitOfWork.ResultFromExecutionInTransaction(() =>
+            _writableInnoGotchiesProvider.SynchronizeSignsForAllInFarmAsync(farm.Id));
+
+        if (synchronizationResult.IsSuccess == false)
+        {
+            return OperationResult.FromFail<DetailedFarmDto>(synchronizationResult.ErrorMessage);
+        }
 
         var allPets = await _readableInnoGotchiesProvider.GetAllDetailedAsync(farm.Id);
         farm.InnoGotchies = allPets;

@@ -4,7 +4,7 @@ using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Components;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.InnoGotchies;
-using PhlegmaticOne.PagedLists;
+using PhlegmaticOne.PagedLists.Implementation;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.MappersConfigurations;
 

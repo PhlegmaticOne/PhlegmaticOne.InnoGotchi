@@ -5,7 +5,7 @@ using PhlegmaticOne.InnoGotchi.Shared.Collaborations;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Collaborations;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels;
-using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
@@ -22,7 +22,7 @@ public class CollaborationsController : ClientRequestsController
     {
         return FromAuthorizedPost(new CreateCollaborationRequest(new CreateCollaborationDto(idViewModel.Id)), dto =>
         {
-            IActionResult ok = Json(dto);
+            IActionResult ok = Ok();
             return Task.FromResult(ok);
         });
     }

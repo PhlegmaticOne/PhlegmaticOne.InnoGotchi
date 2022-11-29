@@ -3,12 +3,9 @@ using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
 using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
-using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
-using System.Linq.Expressions;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
-using PhlegmaticOne.InnoGotchi.Shared;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 
@@ -35,24 +32,24 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         return createdInnoGotchi;
     }
 
-    public Task DrinkAsync(IdentityModel<IdDto> petIdModel) =>
-        ProcessPetUpdating(petIdModel, pet =>
+    public Task DrinkAsync(Guid petId) =>
+        ProcessPetUpdating(petId, pet =>
         {
             pet.ThirstyLevel = ThirstyLevel.Full;
             pet.LastDrinkTime = _timeService.Now();
         });
 
-    public Task FeedAsync(IdentityModel<IdDto> petIdModel) =>
-        ProcessPetUpdating(petIdModel, pet =>
+    public Task FeedAsync(Guid petId) =>
+        ProcessPetUpdating(petId, pet =>
         {
             pet.HungerLevel = HungerLevel.Full;
             pet.LastFeedTime = _timeService.Now();
         });
 
-    public Task SynchronizeSignsAsync(IdentityModel<IdDto> petIdModel) =>
-        ProcessPetUpdating(petIdModel, SynchronizeAction);
+    public Task SynchronizeSignsAsync(Guid petId) =>
+        ProcessPetUpdating(petId, SynchronizeAction);
 
-    public async Task SynchronizeSignsAsync(Guid farmId)
+    public async Task SynchronizeSignsForAllInFarmAsync(Guid farmId)
     {
         var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
         var pets = await repository.GetAllAsync(predicate: p => p.Farm.Id == farmId);
@@ -82,11 +79,11 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
     }
 
 
-    private async Task ProcessPetUpdating(IdentityModel<IdDto> petIdModel, Action<InnoGotchiModel> updateAction)
+    private async Task ProcessPetUpdating(Guid petId, Action<InnoGotchiModel> updateAction)
     {
         var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
-        var pet = await repository.GetByIdOrDefaultAsync(petIdModel.Entity.Id);
-        var updated = await repository.UpdateAsync(pet, updateAction);
+        var pet = await repository.GetByIdOrDefaultAsync(petId);
+        await repository.UpdateAsync(pet!, updateAction);
     }
 
     private async Task<InnoGotchiModel> CreateInnoGotchi(IdentityModel<CreateInnoGotchiDto> from)

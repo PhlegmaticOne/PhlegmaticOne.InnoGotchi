@@ -6,5 +6,5 @@ namespace PhlegmaticOne.InnoGotchi.Domain.Managers;
 
 public interface ICollaborationManager
 {
-    Task<OperationResult<CollaborationDto>> AddCollaboratorAsync(IdentityModel<CreateCollaborationDto> profileIdentityModel);
+    Task<OperationResult> AddCollaboratorAsync(IdentityModel<CreateCollaborationDto> profileIdentityModel);
 }

@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using PhlegmaticOne.PagedLists;
-using PhlegmaticOne.PagedLists.Base;
 using PhlegmaticOne.PagedLists.Extensions;
+using PhlegmaticOne.PagedLists.Implementation;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
 

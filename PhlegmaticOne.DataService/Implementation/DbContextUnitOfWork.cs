@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
@@ -33,44 +32,29 @@ public class DbContextUnitOfWork : IUnitOfWork
 
     public async Task<OperationResult<T>> ResultFromExecutionInTransaction<T>(Func<Task<T>> operation)
     {
-        await using var transaction = await BeginTransactionAsync();
-
         try
         {
             var result = await operation();
-            await transaction.CommitAsync();
+            await SaveChangesAsync();
             return OperationResult.FromSuccess(result);
         }
         catch (Exception e)
         {
-            await transaction.RollbackAsync();
             return OperationResult.FromFail<T>(e.Message);
         }
     }
 
     public async Task<OperationResult> ResultFromExecutionInTransaction(Func<Task> operation)
     {
-        await using var transaction = await BeginTransactionAsync();
-
         try
         {
             await operation();
-            await transaction.CommitAsync();
+            await SaveChangesAsync();
             return OperationResult.Success;
         }
         catch (Exception e)
         {
-            await transaction.RollbackAsync();
             return OperationResult.FromFail(e.Message);
         }
-    }
-
-    private Task<IDbContextTransaction> BeginTransactionAsync()
-    {
-        if (_dbContext.Database.CurrentTransaction is not null)
-        {
-            return Task.FromResult(_dbContext.Database.CurrentTransaction);
-        }
-        return _dbContext.Database.BeginTransactionAsync();
     }
 }

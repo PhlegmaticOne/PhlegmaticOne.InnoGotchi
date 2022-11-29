@@ -1,7 +1,7 @@
 ﻿using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Shared.PagedList;
-using PhlegmaticOne.PagedLists;
-using PhlegmaticOne.ServerRequesting.Models;
+using PhlegmaticOne.PagedLists.Implementation;
+using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.InnoGotchies;
 

@@ -37,7 +37,7 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
     public async Task<FarmStatistics> ProcessDrinkingAsync(Guid profileId)
     {
         var repository = _unitOfWork.GetRepository<FarmStatistics>();
-        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.Owner.Id == profileId);
+        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId);
         var now = _timeService.Now();
 
         var updated = await repository.UpdateAsync(farmStatistics!, statistics =>

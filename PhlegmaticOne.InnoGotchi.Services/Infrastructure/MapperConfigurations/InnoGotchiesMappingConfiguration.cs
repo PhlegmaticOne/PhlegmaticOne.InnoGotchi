@@ -3,7 +3,7 @@ using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies.Base;
-using PhlegmaticOne.PagedLists;
+using PhlegmaticOne.PagedLists.Implementation;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Infrastructure.MapperConfigurations;
 

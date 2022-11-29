@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.PagedLists.Base;
+﻿namespace PhlegmaticOne.PagedLists;
 
 public interface IPagedList<T>
 {

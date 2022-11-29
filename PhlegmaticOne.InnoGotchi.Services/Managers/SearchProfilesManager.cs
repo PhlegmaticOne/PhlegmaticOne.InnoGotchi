@@ -1,4 +1,5 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Managers;
+﻿using PhlegmaticOne.InnoGotchi.Domain.Identity;
+using PhlegmaticOne.InnoGotchi.Domain.Managers;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
@@ -19,11 +20,17 @@ public class SearchProfilesManager : ISearchProfilesManager
         _readableCollaborationsProvider = readableCollaborationsProvider;
     }
 
-    public async Task<OperationResult<IList<SearchProfileDto>>> SearchAsync(Guid profileId, string searchText)
+    public async Task<OperationResult<IList<SearchProfileDto>>> SearchAsync(IdentityModel<string> searchTextIdentityModel)
     {
-        var found = await _searchProfilesService.SearchProfilesAsync(searchText);
+        var found = await _searchProfilesService.SearchProfilesAsync(searchTextIdentityModel.Entity);
 
-        var collaborators = await _readableCollaborationsProvider.GetCollaboratedUsersAsync(profileId);
+        if (found.Count == 0)
+        {
+            IList<SearchProfileDto> emptyResult = Enumerable.Empty<SearchProfileDto>().ToList();
+            return OperationResult.FromSuccess(emptyResult);
+        }
+
+        var collaborators = await _readableCollaborationsProvider.GetCollaboratedUsersAsync(searchTextIdentityModel.ProfileId);
 
         var alreadyCollaboratedProfiles = GetAlreadyCollaborated(found, collaborators).ToList();
         RemoveAlreadyCollaboratedFromFound(found, alreadyCollaboratedProfiles);

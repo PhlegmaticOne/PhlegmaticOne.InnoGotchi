@@ -2,12 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
-using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using System.Linq.Expressions;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
-using PhlegmaticOne.PagedLists;
 using PhlegmaticOne.InnoGotchi.Shared.PagedList;
+using PhlegmaticOne.PagedLists.Implementation;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Readable;
 
@@ -21,7 +20,7 @@ public class ReadableInnoGotchiProvider : IReadableInnoGotchiProvider
         _sortingService = sortingService;
     }
 
-    public async Task<InnoGotchiModel> GetDetailedAsync(Guid petId, Guid profileId)
+    public async Task<InnoGotchiModel> GetDetailedAsync(Guid petId)
     {
         var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
         var pet = await repository.GetByIdOrDefaultAsync(petId,

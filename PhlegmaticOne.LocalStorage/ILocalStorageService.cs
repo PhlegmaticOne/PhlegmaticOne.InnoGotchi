@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.LocalStorage.Base;
+﻿namespace PhlegmaticOne.LocalStorage;
 
 public interface ILocalStorageService
 {

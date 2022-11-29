@@ -44,13 +44,12 @@ public class ProfileAuthorizedActionsManager : IProfileAuthorizedActionsManager
 
         if (validationResult.IsValid == false)
         {
-            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToDictionary());
+            return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToString());
         }
 
         return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
             var updated = await _profilesProvider.UpdateAsync(updateProfileDto);
-
             await _unitOfWork.SaveChangesAsync();
 
             var mapped = _mapper.Map<AuthorizedProfileDto>(updated);

@@ -5,7 +5,7 @@ using PhlegmaticOne.JwtTokensGeneration.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace PhlegmaticOne.JwtTokensGeneration;
+namespace PhlegmaticOne.JwtTokensGeneration.Implementation;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {

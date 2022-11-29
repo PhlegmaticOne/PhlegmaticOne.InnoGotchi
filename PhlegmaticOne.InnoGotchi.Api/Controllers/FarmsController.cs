@@ -24,14 +24,14 @@ public class FarmsController : IdentityController
         _farmManager.GetCollaboratedFarmWithPetsAsync(IdentityModel(profileId));
 
     [HttpGet]
-    public Task<OperationResult<bool>> Exists() =>
-        _farmManager.IsExistsForProfileAsync(ProfileId());
-
-    [HttpGet]
     public Task<OperationResult<IList<PreviewFarmDto>>> GetCollaborated() => 
         _farmManager.GetCollaboratedAsync(ProfileId());
 
+    [HttpGet]
+    public Task<OperationResult<bool>> Exists() =>
+        _farmManager.IsExistsForProfileAsync(ProfileId());
+
     [HttpPost]
-    public Task<OperationResult<DetailedFarmDto>> Create([FromBody] CreateFarmDto createFarmDto) => 
+    public Task<OperationResult> Create([FromBody] CreateFarmDto createFarmDto) => 
         _farmManager.CreateAsync(IdentityModel(createFarmDto));
 }

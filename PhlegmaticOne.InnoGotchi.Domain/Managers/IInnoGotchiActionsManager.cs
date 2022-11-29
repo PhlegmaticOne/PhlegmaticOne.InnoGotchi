@@ -1,11 +1,10 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Identity;
-using PhlegmaticOne.InnoGotchi.Shared;
+using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Domain.Managers;
 
 public interface IInnoGotchiActionsManager
 {
-    Task<OperationResult> DrinkAsync(IdentityModel<IdDto> petIdModel);
-    Task<OperationResult> FeedAsync(IdentityModel<IdDto> petIdModel);
+    Task<OperationResult> UpdateAsync(IdentityModel<UpdateInnoGotchiDto> updatePetModel);
 }

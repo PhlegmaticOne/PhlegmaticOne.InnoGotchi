@@ -1,6 +1,4 @@
-﻿using PhlegmaticOne.LocalStorage.Base;
-
-namespace PhlegmaticOne.LocalStorage;
+﻿namespace PhlegmaticOne.LocalStorage.Implementation;
 
 public class InMemoryLocalStorageService : ILocalStorageService
 {

@@ -10,5 +10,5 @@ public interface IFarmManager
     Task<OperationResult<DetailedFarmDto>> GetCollaboratedFarmWithPetsAsync(IdentityModel<Guid> profileIdModel);
     Task<OperationResult<IList<PreviewFarmDto>>> GetCollaboratedAsync(Guid profileId);
     Task<OperationResult<bool>> IsExistsForProfileAsync(Guid profileId);
-    Task<OperationResult<DetailedFarmDto>> CreateAsync(IdentityModel<CreateFarmDto> createFarmIdentityModel);
+    Task<OperationResult> CreateAsync(IdentityModel<CreateFarmDto> createFarmIdentityModel);
 }

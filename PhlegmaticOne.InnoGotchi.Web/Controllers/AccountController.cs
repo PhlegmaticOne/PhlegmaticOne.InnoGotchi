@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
-using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.ServerRequesting.Services;
 using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
+using PhlegmaticOne.LocalStorage;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
@@ -112,7 +112,7 @@ public class AccountController : ClientRequestsController
 
         var updateDto = Mapper.Map<UpdateProfileDto>(updateAccountViewModel);
 
-        return await FromAuthorizedPost(new UpdateProfileRequest(updateDto), async profile =>
+        return await FromAuthorizedPut(new UpdateProfileRequest(updateDto), async profile =>
         {
             await SignOutAsync();
             await AuthenticateAsync(profile);

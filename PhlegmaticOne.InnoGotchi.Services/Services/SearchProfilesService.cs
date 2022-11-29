@@ -16,6 +16,6 @@ public class SearchProfilesService : ISearchProfilesService
         var repository = _unitOfWork.GetRepository<UserProfile>();
         return repository.GetAllAsync(
             include: i => i.Include(x => x.User),
-            predicate: p => p.User.Email.Contains(searchText));
+            predicate: p => p.User.Email.Contains(searchText) && p.Farm != null);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using PhlegmaticOne.LocalStorage.Base;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Services;
@@ -12,6 +11,8 @@ using FluentValidation.AspNetCore;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
+using PhlegmaticOne.LocalStorage;
+using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 
@@ -63,14 +64,13 @@ public class ClientRequestsController : Controller
     protected IActionResult LoginView() => 
         Redirect(LocalStorageService.GetLoginPath() ?? Constants.HomeUrl);
 
-    protected IActionResult ErrorView(string errorMessage) => 
+    protected IActionResult ErrorView(string errorMessage) =>
         RedirectToAction("Error", "Home", new { errorMessage = errorMessage });
 
     protected IActionResult HomeView() => Redirect(Constants.HomeUrl);
 
     protected IActionResult ViewWithErrorsFromOperationResult(OperationResult operationResult, string viewName, ErrorHavingViewModel viewModel)
     {
-        operationResult.AddErrorsToModelState(ModelState);
         viewModel.ErrorMessage = operationResult.ErrorMessage;
         return View(viewName, viewModel);
     }

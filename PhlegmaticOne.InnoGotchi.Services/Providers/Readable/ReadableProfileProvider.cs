@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.UnitOfWork.Interfaces;
-using PhlegmaticOne.PasswordHasher.Base;
+using PhlegmaticOne.PasswordHasher;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Readable;
 

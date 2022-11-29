@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PhlegmaticOne.PagedLists.Base;
+using PhlegmaticOne.PagedLists.Implementation;
 
 namespace PhlegmaticOne.PagedLists.Extensions;
 

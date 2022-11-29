@@ -2,7 +2,7 @@
 using PhlegmaticOne.InnoGotchi.Domain.Identity;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
-using PhlegmaticOne.PasswordHasher.Base;
+using PhlegmaticOne.PasswordHasher;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;

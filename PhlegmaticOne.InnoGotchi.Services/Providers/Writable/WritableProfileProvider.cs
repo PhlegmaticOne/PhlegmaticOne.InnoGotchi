@@ -1,9 +1,10 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Identity;
+﻿using Microsoft.EntityFrameworkCore;
+using PhlegmaticOne.InnoGotchi.Domain.Identity;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
-using PhlegmaticOne.PasswordHasher.Base;
+using PhlegmaticOne.PasswordHasher;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
@@ -33,12 +34,14 @@ public class WritableProfileProvider : IWritableProfilesProvider
     {
         var updateProfileDto = identityUpdateModel.Entity;
         var repository = _unitOfWork.GetRepository<UserProfile>();
-        var updatedProfile = (await repository.UpdateAsync(identityUpdateModel.ProfileId, profile =>
+        var profile = await repository.GetByIdOrDefaultAsync(identityUpdateModel.ProfileId,
+            include: i => i.Include(x => x.User));
+        var updatedProfile = (await repository.UpdateAsync(profile!, updating =>
         {
-            profile.FirstName = GetNewValueOrExisting(updateProfileDto.FirstName, profile.FirstName);
-            profile.LastName = GetNewValueOrExisting(updateProfileDto.LastName, profile.LastName);
-            profile.User.Password = ProcessPassword(profile.User.Password, updateProfileDto.NewPassword);
-            profile.Avatar = ProcessAvatar(updateProfileDto.AvatarData, profile.Avatar);
+            updating.FirstName = GetNewValueOrExisting(updateProfileDto.FirstName, profile!.FirstName);
+            updating.LastName = GetNewValueOrExisting(updateProfileDto.LastName, profile.LastName);
+            updating.User.Password = ProcessPassword(profile.User.Password, updateProfileDto.NewPassword);
+            updating.Avatar = ProcessAvatar(updateProfileDto.AvatarData, profile.Avatar);
         }))!;
 
         return updatedProfile;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PhlegmaticOne.PasswordHasher.Base;
+using PhlegmaticOne.PasswordHasher.Implementation;
 
 namespace PhlegmaticOne.PasswordHasher.Extensions;
 

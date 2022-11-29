@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.PasswordHasher.Base;
+﻿namespace PhlegmaticOne.PasswordHasher;
 
 public interface IPasswordHasher
 {

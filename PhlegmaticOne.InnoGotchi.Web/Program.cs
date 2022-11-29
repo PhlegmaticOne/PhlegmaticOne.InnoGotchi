@@ -38,7 +38,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<RegisterProfileRequest>("AnonymousProfiles/Register");
     a.ConfigureRequest<LoginProfileRequest>("AnonymousProfiles/Login");
 
-    a.ConfigureRequest<GetDetailedProfileRequest>("Profiles/GetDetailed");
+    a.ConfigureRequest<GetDetailedProfileRequest>("Profiles/GetAuthorized");
     a.ConfigureRequest<UpdateProfileRequest>("Profiles/Update");
     a.ConfigureRequest<SearchProfilesRequest>("Profiles/Search");
 
@@ -50,7 +50,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<CreateFarmRequest>("Farms/Create");
     a.ConfigureRequest<GetCollaboratedFarmsRequest>("Farms/GetCollaborated");
 
-    a.ConfigureRequest<GetPreviewFarmStatisticsRequest>("FarmStatistics/GetForAuthorized");
+    a.ConfigureRequest<GetPreviewFarmStatisticsRequest>("FarmStatistics/GetAuthorized");
     a.ConfigureRequest<GetDetailedFarmStatisticsRequest>("FarmStatistics/GetDetailed");
     a.ConfigureRequest<GetCollaboratedFarmStatisticsRequest>("FarmStatistics/GetCollaborated");
 
@@ -58,10 +58,10 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 
     a.ConfigureRequest<CreateCollaborationRequest>("Collaborations/Create");
 
-    a.ConfigureRequest<GetInnoGotchiRequest>("InnoGotchies/Get");
+    a.ConfigureRequest<GetDetailedInnoGotchiRequest>("InnoGotchies/GetDetailed");
+    a.ConfigureRequest<GetPreviewInnoGotchiRequest>("InnoGotchies/GetPreview");
     a.ConfigureRequest<CreateInnoGotchiRequest>("InnoGotchies/Create");
-    a.ConfigureRequest<DrinkInnoGotchiRequest>("InnoGotchies/Drink");
-    a.ConfigureRequest<FeedInnoGotchiRequest>("InnoGotchies/Feed");
+    a.ConfigureRequest<UpdateInnoGotchiRequest>("InnoGotchies/Update");
     a.ConfigureRequest<GetInnoGotchiesPagedListRequest>("InnoGotchies/GetPaged");
 });
 

@@ -5,7 +5,7 @@ using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Farms;
-using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
@@ -31,7 +31,8 @@ public class FarmsController : ClientRequestsController
             ViewData["CanSeeDetails"] = true;
             IActionResult view = View(farmViewModel);
             return Task.FromResult(view);
-        }, onOperationFailed: _ => RedirectToAction(nameof(Create)));
+        }, onOperationFailed: failedResult => 
+            ViewWithErrorsFromOperationResult(failedResult, nameof(Create), new CreateFarmViewModel()));
     }
 
     [HttpGet]

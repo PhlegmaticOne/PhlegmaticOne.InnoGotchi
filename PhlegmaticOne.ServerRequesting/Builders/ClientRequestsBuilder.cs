@@ -1,4 +1,4 @@
-﻿using PhlegmaticOne.ServerRequesting.Models;
+﻿using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.ServerRequesting.Builders;
 

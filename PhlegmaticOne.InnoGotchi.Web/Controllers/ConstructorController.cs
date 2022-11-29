@@ -8,7 +8,7 @@ using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Constructor;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Constructor;
-using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
@@ -57,7 +57,6 @@ public class ConstructorController : ClientRequestsController
             return Task.FromResult(result);
         }, result =>
         {
-            result.AddErrorsToModelState(ModelState);
             createInnoGotchiViewModel.ErrorMessage = result.ErrorMessage;
             return CreateInnoGotchiPartialView(createInnoGotchiViewModel);
         });

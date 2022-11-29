@@ -1,4 +1,4 @@
-﻿using PhlegmaticOne.LocalStorage.Base;
+﻿using PhlegmaticOne.LocalStorage;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 

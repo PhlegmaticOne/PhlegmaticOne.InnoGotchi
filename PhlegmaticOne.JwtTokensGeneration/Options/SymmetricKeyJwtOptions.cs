@@ -14,6 +14,7 @@ public class SymmetricKeyJwtOptions : IJwtOptions
         Audience = audience;
         ExpirationDurationInMinutes = expirationDurationInMinutes;
     }
+
     public string Issuer { get; }
     public string Audience { get; }
     public int ExpirationDurationInMinutes { get; }

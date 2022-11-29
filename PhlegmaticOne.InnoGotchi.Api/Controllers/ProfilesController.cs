@@ -22,15 +22,15 @@ public class ProfilesController : IdentityController
         _searchProfilesManager = searchProfilesManager;
     }
 
-    [HttpPost]
-    public Task<OperationResult<AuthorizedProfileDto>> Update([FromBody] UpdateProfileDto updateProfileDto) => 
-        _profileAuthorizedActionsManager.UpdateAsync(IdentityModel(updateProfileDto));
-
     [HttpGet]
-    public Task<OperationResult<DetailedProfileDto>> GetDetailed() => 
+    public Task<OperationResult<DetailedProfileDto>> GetAuthorized() =>
         _profileAuthorizedActionsManager.GetDetailedAsync(ProfileId());
 
     [HttpGet]
-    public Task<OperationResult<IList<SearchProfileDto>>> Search(string searchText) => 
-        _searchProfilesManager.SearchAsync(ProfileId(), searchText);
+    public Task<OperationResult<IList<SearchProfileDto>>> Search(string searchText) =>
+        _searchProfilesManager.SearchAsync(IdentityModel(searchText));
+
+    [HttpPut]
+    public Task<OperationResult<AuthorizedProfileDto>> Update([FromBody] UpdateProfileDto updateProfileDto) => 
+        _profileAuthorizedActionsManager.UpdateAsync(IdentityModel(updateProfileDto));
 }

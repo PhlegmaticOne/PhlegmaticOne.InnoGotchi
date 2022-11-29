@@ -1,5 +1,5 @@
 ﻿using PhlegmaticOne.InnoGotchi.Shared.Components;
-using PhlegmaticOne.ServerRequesting.Models;
+using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.Constructor;
 

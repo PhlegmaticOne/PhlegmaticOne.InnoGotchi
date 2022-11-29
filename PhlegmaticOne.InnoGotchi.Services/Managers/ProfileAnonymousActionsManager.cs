@@ -47,10 +47,10 @@ public class ProfileAnonymousActionsManager : IProfileAnonymousActionsManager
         {
             var createdProfile = await _profilesProvider.CreateAsync(registerProfileDto);
 
-            await _unitOfWork.SaveChangesAsync();
 
             var result = _mapper.Map<AuthorizedProfileDto>(createdProfile);
             result.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(createdProfile);
+
             return result;
         });
     }

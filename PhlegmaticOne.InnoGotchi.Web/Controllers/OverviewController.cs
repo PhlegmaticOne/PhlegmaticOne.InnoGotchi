@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Overviews;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Farms;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.FarmStatistics;
-using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage;
 using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
@@ -22,7 +24,12 @@ public class OverviewController : ClientRequestsController
     {
         return FromAuthorizedGet(new GetIsFarmExistsRequest(), exists =>
         {
-            IActionResult result = exists ? View() : RedirectToAction("Create", "Farms");
+            IActionResult result = exists ? 
+                View() :
+                View("~/Views/Farms/Create.cshtml", new CreateFarmViewModel
+                {
+                    ErrorMessage = AppErrorMessages.FarmDoesNotExistMessage
+                });
             return Task.FromResult(result);
         });
     }

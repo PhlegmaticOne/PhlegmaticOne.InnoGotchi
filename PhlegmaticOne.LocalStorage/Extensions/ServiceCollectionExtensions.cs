@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PhlegmaticOne.LocalStorage.Base;
+using PhlegmaticOne.LocalStorage.Implementation;
 
 namespace PhlegmaticOne.LocalStorage.Extensions;
 

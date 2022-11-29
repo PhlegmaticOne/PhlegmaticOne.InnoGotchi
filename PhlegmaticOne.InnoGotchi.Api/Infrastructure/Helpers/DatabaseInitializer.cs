@@ -4,7 +4,7 @@ using PhlegmaticOne.InnoGotchi.Api.Services;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
-using PhlegmaticOne.PasswordHasher.Base;
+using PhlegmaticOne.PasswordHasher;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Helpers;
 
@@ -78,16 +78,7 @@ public static class DatabaseInitializer
             Avatar = new Avatar(),
             FirstName = "Firstname",
             LastName = "Secondname",
-            JoinDate = timeService.Now(),
-            //Farm = new Farm
-            //{
-            //    FarmStatistics = new FarmStatistics
-            //    {
-            //        LastDrinkTime = timeService.Now(),
-            //        LastFeedTime = timeService.Now()
-            //    },
-            //    Name = "My Farm"
-            //}
+            JoinDate = timeService.Now()
         },
 
         new()
@@ -100,16 +91,7 @@ public static class DatabaseInitializer
             Avatar = new Avatar(),
             FirstName = "Name",
             LastName = "Lastname",
-            JoinDate = timeService.Now(),
-            Farm = new Farm
-            {
-                FarmStatistics = new FarmStatistics
-                {
-                    LastDrinkTime = timeService.Now(),
-                    LastFeedTime = timeService.Now()
-                },
-                Name = "New farm"
-            }
-        },
+            JoinDate = timeService.Now()
+        }
     };
 }

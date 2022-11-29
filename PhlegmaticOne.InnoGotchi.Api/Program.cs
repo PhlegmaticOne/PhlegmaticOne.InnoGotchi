@@ -43,9 +43,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(x =>
 {
     if (builder.Environment.IsDevelopment())
     {
+        x.UseInMemoryDatabase("MEMORY");
+    }
+    else
+    {
         var connectionString = builder.Configuration.GetConnectionString("DbConnection");
         x.UseSqlServer(connectionString);
-        //x.UseInMemoryDatabase("MEMORY");
     }
 });
 builder.Services.AddEndpointsApiExplorer();

@@ -18,6 +18,6 @@ public class CollaborationsController : IdentityController
         _collaborationManager = collaborationManager;
 
     [HttpPost]
-    public Task<OperationResult<CollaborationDto>> Create([FromBody] CreateCollaborationDto createCollaborationDto) => 
+    public Task<OperationResult> Create([FromBody] CreateCollaborationDto createCollaborationDto) => 
         _collaborationManager.AddCollaboratorAsync(IdentityModel(createCollaborationDto));
 }

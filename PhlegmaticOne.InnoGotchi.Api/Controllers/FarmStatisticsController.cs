@@ -18,7 +18,7 @@ public class FarmStatisticsController : IdentityController
         _farmStatisticsManager = farmStatisticsManager;
 
     [HttpGet]
-    public Task<OperationResult<PreviewFarmStatisticsDto>> GetForAuthorized() => 
+    public Task<OperationResult<PreviewFarmStatisticsDto>> GetAuthorized() => 
         _farmStatisticsManager.BuildForProfileAsync(ProfileId());
 
     [HttpGet]
