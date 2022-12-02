@@ -13,7 +13,9 @@ public class AccountMapperConfiguration : Profile
         CreateMap<RegisterViewModel, RegisterProfileDto>()
             .ForMember(x => x.AvatarData, o => o.ConvertUsing(new FormFileToByteArrayConverter(), y => y.Avatar));
         CreateMap<LoginViewModel, LoginDto>();
-        CreateMap<DetailedProfileDto, ProfileViewModel>();
+
+        CreateMap<DetailedProfileDto, ProfileViewModel>()
+            .ForMember(x => x.JoinDate, o => o.ConvertUsing(new TimeToLocalZoneConverter(), x => x.JoinDate));
 
         CreateMap<DetailedProfileDto, UpdateAccountViewModel>()
             .ForMember(x => x.CurrentAvatar, o => o.MapFrom(x => Convert.ToBase64String(x.AvatarData)))

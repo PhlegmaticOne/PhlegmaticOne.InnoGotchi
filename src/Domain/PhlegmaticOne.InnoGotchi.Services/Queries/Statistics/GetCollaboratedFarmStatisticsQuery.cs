@@ -1,10 +1,10 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
-using PhlegmaticOne.InnoGotchi.Shared.FarmStatistics;
+using PhlegmaticOne.InnoGotchi.Shared.Statistics;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
-namespace PhlegmaticOne.InnoGotchi.Services.Queries.FarmStatistics;
+namespace PhlegmaticOne.InnoGotchi.Services.Queries.Statistics;
 
 public class GetCollaboratedFarmStatisticsQuery : IdentityOperationResultQueryBase<IList<PreviewFarmStatisticsDto>>
 {

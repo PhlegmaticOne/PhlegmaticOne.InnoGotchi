@@ -25,6 +25,7 @@ public class InnoGotchiConfiguration : IEntityTypeConfiguration<InnoGotchiModel>
         builder.Property(x => x.LastFeedTime);
         builder.Property(x => x.AgeUpdatedAt);
         builder.Property(x => x.Age);
+        builder.Property(x => x.IsDead).HasDefaultValue(false);
         builder.Property(x => x.HappinessDaysCount);
         builder.Property(x => x.LiveSince);
         builder.Property(x => x.DeadSince);

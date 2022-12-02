@@ -80,6 +80,10 @@ public class InnoGotchiesSynchronizationProvider : IInnoGotchiesSynchronizationP
 
         if (currentPetAge < pet.Age) pet.AgeUpdatedAt = now;
 
-        if (_innoGotchiSignsUpdateService.IsDeadNow(pet.HungerLevel, pet.ThirstyLevel, pet.Age)) pet.DeadSince = now;
+        if (_innoGotchiSignsUpdateService.IsDeadNow(pet.HungerLevel, pet.ThirstyLevel, pet.Age))
+        {
+            pet.IsDead = true;
+            pet.DeadSince = now;
+        }
     }
 }

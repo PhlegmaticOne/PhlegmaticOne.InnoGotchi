@@ -17,8 +17,8 @@ public class CreateInnoGotchiValidator : AbstractValidator<CreateInnoGotchiComma
             .WithMessage("You need to create farm for storing InnoGotchies");
 
         RuleFor(x => x.CreateInnoGotchiDto.Name)
-            .MustAsync((model, name, ct) =>
-                petsRepository.AllAsync(x => x.Farm.OwnerId != model.ProfileId && x.Name != name, ct))
-            .WithMessage("You have InnoGotchi with such name");
+            .MustAsync((name, ct) =>
+                petsRepository.AllAsync(x => x.Name != name, ct))
+            .WithMessage("InnoGotchi name reserved");
     }
 }

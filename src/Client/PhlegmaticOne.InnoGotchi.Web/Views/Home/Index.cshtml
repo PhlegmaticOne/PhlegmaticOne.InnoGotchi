@@ -1,5 +1,149 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GlobalStatisticsViewModel
+@{
     ViewData["Title"] = "Home Page";
+
+    if (Model.PetsTotalCount == 0)
+    {
+        ViewData["BuildStatistics"] = false;
+    }
+
+    var aliveColor = "#30c970";
+    var deadColor = "#FF1744";
+    var deadAliveDonutChartViewModel = new List<DonutChartItemViewModel>
+    {
+        new("Alive pets", Model.AlivePetsCount, aliveColor),
+        new("Dead pets", Model.DeadPetsCount, deadColor)
+    };
+
+    var deadAliveAgeChartViewModel = new BarChartViewModel
+    {
+        BarItems = new()
+        {
+            new(string.Empty, Model.AlivePetsAverageAge, Model.DeadPetsAverageAge)
+        },
+        Labels = new()
+        {
+            "Alive pets average age", "Dead pets average age"
+        },
+        Colors = new()
+        {
+            aliveColor, deadColor
+        }
+    };
 }
 
-@await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Welcome")
+@if (User.Identity!.IsAuthenticated)
+{
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", 
+        $"Welcome {User.Firstname()} {User.Lastname()}")
+
+    <div class="row text-white text-center mt-2">
+        <div class="col-md-6">
+            <h3 class="h3">Total profiles: @Model.ProfilesCount</h3>
+        </div>
+        <div class="col-md-6">
+            <h3 class="h3">Total farms: @Model.FarmsCount</h3>
+        </div>
+    </div>
+
+    <div class="row text-white text-center mt-2">
+        <div class="col-md-6">
+            <h3 class="h3">Total InnoGotchies: @Model.PetsTotalCount</h3>
+        </div>
+        <div class="col-md-6">
+            <h3 class="h3">Total collaborations: @Model.CollaborationsCount</h3>
+        </div>
+    </div>
+
+    <div class="row text-white text-center mt-2">
+        <div class="col-12">
+            <h4 class="h4">Pet max age: @Model.PetMaxAge</h4>
+            <h4 class="h4">Pet max happiness days count: @Model.PetMaxHappinessDaysCount</h4>
+            <h4 class="h4">Pets average happiness days count: @Model.AverageDaysHappinessCount</h4>
+        </div>
+    </div>
+
+    @if (ViewData["BuildStatistics"] is true)
+    {
+        <div class="row text-white justify-content-center text-center mt-2">
+            <h3 class="h3">Average ages bar</h3>
+            <div class="col-12 text-center" id="age_bar_char_element"></div>
+        </div>
+
+        <div class="row text-white justify-content-center text-center mt-2">
+            <h3 class="h3">Dead/Live statistics bar</h3>
+            <div class="col-12 text-center" id="count_donut_char_element"></div>
+        </div>
+    }
+
+    <div class="row justify-content-center text-center">
+        <div class="col-12 text-white">
+            <h6 class="h6">Create your InnoGotchies</h6>
+            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
+                    onclick="location.href = '@Url.Action("Create", "Constructor")'">
+                Create
+            </button>
+            
+            <h6 class="h6">See your farm and manage your Pets</h6>
+            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
+                    onclick="location.href = '@Url.Action("My", "Farm")'">
+                My farm
+            </button>
+            
+            <h6 class="h6">See your farm statistics</h6>
+            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
+                    onclick="location.href = '@Url.Action("My", "Overview")'">
+                My overview
+            </button>
+            
+            <h6 class="h6">See farm statistics where you are collaborator</h6>
+            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
+                    onclick="location.href = '@Url.Action("Collaborated", "Overview")'">
+                Collaborations
+            </button>
+        </div>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Welcome")
+
+    <div class="row justify-content-center text-white text-center">
+        <div class="col-8">
+            <h3>It's a site where you can manage your virtual pets - InnoGotchi</h3>
+            <h3 class="mt-3">Before creating your Pets you must be authenticated</h3>
+            <div class="mt-3">
+                <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
+                        onclick="location.href = '@Url.Action("Register", "Auth")'">
+                    Register
+                </button>
+                <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
+                        onclick="location.href = '@Url.Action("Login", "Auth")'">
+                    Login
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js" asp-append-version="true"></script>
+    <script src="~/lib/morris/js/morris.min.js" asp-append-version="true"></script>
+    <script src="~/js/pie_chart.js" asp-append-version="true"></script>
+    <script>
+        $(() => {
+            @if (ViewData["BuildStatistics"] is false)
+            {
+                return;
+            }
+
+            const donutData = @Json.Serialize(deadAliveDonutChartViewModel);
+            const barData = @Json.Serialize(deadAliveAgeChartViewModel);
+
+            donutChart(donutData, "count_donut_char_element");
+            barChart(barData.barItems, barData.labels, barData.colors, "age_bar_char_element");
+        })
+    </script>
+}

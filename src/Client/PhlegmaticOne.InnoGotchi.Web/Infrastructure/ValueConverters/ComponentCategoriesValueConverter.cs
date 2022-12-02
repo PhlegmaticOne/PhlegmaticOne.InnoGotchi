@@ -4,9 +4,8 @@ using PhlegmaticOne.InnoGotchi.Web.ViewModels.Constructor;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.ValueConverters;
 
-public class
-    ComponentCategoriesValueConverter : IValueConverter<IList<InnoGotchiComponentDto>,
-        IList<ComponentCategoryViewModel>>
+public class ComponentCategoriesValueConverter :
+    IValueConverter<IList<InnoGotchiComponentDto>, IList<ComponentCategoryViewModel>>
 {
     public IList<ComponentCategoryViewModel> Convert(IList<InnoGotchiComponentDto> sourceMember,
         ResolutionContext context)

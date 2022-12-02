@@ -1,0 +1,18 @@
+﻿@model ComponentCategoryViewModel
+
+<div class="row text-black pb-3">
+    <h5 class="pt-1">@Model.CategoryName</h5>
+    @foreach (var component in Model.Components)
+    {
+        <div class="col dragging mt-3" draggable="true">
+            <svg style="position: relative;"
+                 width="100px" height="100px">
+                <image class="@component.Name"
+                       style="position: absolute; transform: translate(0px, 0px) scale(1, 1)"
+                       width="100px" height="100px"
+                       href="@component.ImageUrl"
+                       orderInLayer="@ViewData["OrderInLayer"]" />
+            </svg>
+        </div>
+    }
+</div>

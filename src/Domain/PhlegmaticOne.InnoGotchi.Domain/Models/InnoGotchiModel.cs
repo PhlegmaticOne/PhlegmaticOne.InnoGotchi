@@ -13,6 +13,7 @@ public class InnoGotchiModel : EntityBase
     public DateTime LiveSince { get; set; }
     public DateTime DeadSince { get; set; }
     public int Age { get; set; }
+    public bool IsDead { get; set; }
     public int HappinessDaysCount { get; set; }
     public string Name { get; set; } = null!;
     public Guid FarmId { get; set; }

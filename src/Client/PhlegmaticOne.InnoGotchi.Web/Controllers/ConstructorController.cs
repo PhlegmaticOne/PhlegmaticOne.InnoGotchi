@@ -61,6 +61,13 @@ public class ConstructorController : ClientRequestsController
         });
     }
 
+    [HttpPost]
+    public IActionResult CategoryList([FromBody] ComponentCategoryViewModel categoryViewModel, [FromQuery] int orderInLayer)
+    {
+        ViewData["OrderInLayer"] = orderInLayer;
+        return PartialView("~/Views/_Partial_Views/Constructor/CategoryImagesList.cshtml", categoryViewModel);
+    }
+
     private IActionResult CreateInnoGotchiPartialView(CreateInnoGotchiViewModel createInnoGotchiViewModel)
     {
         return PartialView("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml", createInnoGotchiViewModel);

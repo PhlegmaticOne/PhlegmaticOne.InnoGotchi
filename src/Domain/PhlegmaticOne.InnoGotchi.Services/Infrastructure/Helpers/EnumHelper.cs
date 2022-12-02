@@ -8,4 +8,7 @@ internal static class EnumHelper
         var enumValue = currentEnumValue > maxEnumValue ? maxEnumValue : currentEnumValue;
         return (T)Enum.ToObject(typeof(T), enumValue);
     }
+
+    public static int MaxValue(Enum e) => 
+        Enum.GetValues(e.GetType()).Cast<int>().Max();
 }

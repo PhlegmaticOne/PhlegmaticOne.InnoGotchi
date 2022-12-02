@@ -11,7 +11,7 @@ public class ClaimsPrincipalGenerator
         {
             new(ClaimsIdentity.DefaultNameClaimType, authorizedProfileDto.Email),
             new(ProfileClaimsConstants.FirstNameClaimName, authorizedProfileDto.FirstName),
-            new(ProfileClaimsConstants.SecondNameClaimName, authorizedProfileDto.LastName)
+            new(ProfileClaimsConstants.LastNameClaimName, authorizedProfileDto.LastName)
         };
 
         var claimsIdentity = new ClaimsIdentity(claims,

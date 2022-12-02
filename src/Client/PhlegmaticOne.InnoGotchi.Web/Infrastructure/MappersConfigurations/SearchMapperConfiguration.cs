@@ -4,9 +4,9 @@ using PhlegmaticOne.InnoGotchi.Web.ViewModels.Accounts;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.MappersConfigurations;
 
-public class AccountsMapperConfiguration : Profile
+public class SearchMapperConfiguration : Profile
 {
-    public AccountsMapperConfiguration()
+    public SearchMapperConfiguration()
     {
         CreateMap<SearchProfileDto, SearchProfileViewModel>();
     }

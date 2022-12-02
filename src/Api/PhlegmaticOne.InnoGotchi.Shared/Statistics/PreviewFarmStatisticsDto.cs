@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.FarmStatistics;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.Statistics;
 
 public class PreviewFarmStatisticsDto
 {

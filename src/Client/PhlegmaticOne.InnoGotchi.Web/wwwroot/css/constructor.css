@@ -1,6 +1,9 @@
-﻿class .drop-area { border: red }
-
-class .drag {
+﻿class .drag {
     position: absolute;
     transform: translate(0px, 0px) scale(1, 1);
+}
+
+#category_images_element {
+    background: wheat;
+    border-radius: 1rem;
 }

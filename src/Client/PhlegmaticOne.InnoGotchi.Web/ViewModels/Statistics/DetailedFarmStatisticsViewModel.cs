@@ -1,4 +1,4 @@
-namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.FarmStatistics;
+namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Statistics;
 
 public class DetailedFarmStatisticsViewModel
 {

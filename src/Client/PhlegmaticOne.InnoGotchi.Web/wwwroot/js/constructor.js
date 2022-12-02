@@ -20,10 +20,13 @@ const mouseMoveEventName = "mousemove";
 
 
 function onLoaded() {
-    setup_dragging_elements();
     setup_constructor_area();
-
     document.getElementById("createNew").addEventListener("click", createNew);
+    document.getElementById("clear").addEventListener("click", clear);
+}
+
+function clear() {
+    document.querySelector(constructorElementClassName).innerHTML = "";
 }
 
 async function createNew() {
@@ -66,18 +69,11 @@ async function createNew() {
         partial.innerHTML = await response.text();
 
         if (document.getElementById('pet_creation_error') === null) {
-            document.querySelector(constructorElementClassName).innerHTML = "";
+            clear();
         }
     }
 }
 
-function setup_dragging_elements() {
-    const draggingItems = document.querySelectorAll(draggingElementClassName);
-
-    draggingItems.forEach(draggingItem => {
-        draggingItem.addEventListener(dragStartEventName, dragStart);
-    });
-}
 
 function setup_constructor_area() {
     constructorArea = document.querySelector(constructorElementClassName);

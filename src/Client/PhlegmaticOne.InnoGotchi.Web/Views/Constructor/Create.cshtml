@@ -1,53 +1,51 @@
 ﻿@model ConstructorViewModel
 
 <section>
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-lg-12 mb-4 mb-lg-0">
-                <div class="card mb-3 bg-dark">
-                    <div class="row g-0">
-                        <div class="col-md-8 bg-gradient text-center text-white">
-                            @{
-                                var i = 0;
-                            }
-                            @foreach (var componentCategory in Model.ComponentCategories)
-                            {
-                                <div class="row mt-3">
-                                    <p>@componentCategory.CategoryName</p>
-                                    @foreach (var component in componentCategory.Components)
-                                    {
-                                        <div class="col dragging" draggable="true">
-                                            <svg style="position: relative;"
-                                                 width="100px" height="100px">
-                                                <image class="@component.Name"
-                                                       style="position: absolute; transform: translate(0px, 0px) scale(1, 1)"
-                                                       width="100px" height="100px"
-                                                       href="@component.ImageUrl"
-                                                       orderInLayer="@i"/>
-                                            </svg>
-                                        </div>
-                                    }
-                                </div>
-                                i++;
-                            }
-                        </div>
-                        <div class="col-md-4 align-content-center justify-content-center">
-                            <svg class="drop-area" style="background: wheat; position: relative;"
-                                 width="100%"
-                                 height="auto">
-                            </svg>
-                        </div>
+    <div class="container py-3 h-100">
+
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-5">
+                <div class="row d-flex justify-content-center">
+                    <div class="btn-group mt-2" role="group">
+                        @foreach (var category in Model.ComponentCategories.Select((x, i) => new
+                        {
+                            x.CategoryName,
+                            Index = i
+                        }))
+                        {
+                            <button type="button" class="btn btn-outline-light category_button"
+                                    id="@category.CategoryName" orderInLayer="@category.Index">
+                                @category.CategoryName
+                            </button>
+                        }
                     </div>
-                    <div class="row justify-content-center mb-3">
-                        <div id="create_form">
-                            @await Html.PartialAsync("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml",
-                                new CreateInnoGotchiViewModel())
-                        </div>
-                        <div class="col-6 text-center mt-2">
-                            <input type="submit" class="btn-lg btn-info" id="createNew" value="Create new"/>
-                        </div>
+                    
+                    <div class="col text-center text-white">
+                        <div class="mt-3" id="category_images_element"></div>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-md-7 mt-2">
+                <div class="row justify-content-center">
+                    <div style="width: 420px; height: 620px">
+                        <svg class="drop-area" viewBox="0 0 420 620" style="background: wheat; position: relative;"
+                             width="420px"
+                             height="620px">
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div id="create_form">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml",
+                    new CreateInnoGotchiViewModel())
+            </div>
+            <div class="col-6 text-center mt-2">
+                <input type="submit" class="btn-lg btn-info" id="createNew" value="Create new"/>
+                <input type="submit" class="btn-lg btn-info" id="clear" value="Clear"/>
             </div>
         </div>
     </div>
@@ -56,6 +54,69 @@
 @section Scripts
 {
     <script src="~/js/constructor.js" asp-append-version="true"></script>
+
+    <script>
+        $(() => {
+            let categoryViewModels;
+
+            initialize();
+            getCategory(categoryViewModels[0], 0);
+
+            function initialize() {
+                categoryViewModels = @Json.Serialize(Model.ComponentCategories);
+
+                getCategoryButtons().forEach(b => {
+                    b.addEventListener("click",
+                        async (args) => {
+                            const category = categoryViewModels.find(e => e.categoryName === b.id);
+                            const orderInLayer = +b.getAttribute("orderinlayer");
+                            await getCategory(category, orderInLayer);
+                        });
+                });
+            }
+
+            async function getCategory(category, orderInLayer) {
+
+                const response = await window.fetch(`/Constructor/CategoryList?orderInLayer=${orderInLayer}`,
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-type': "application/json"
+                    },
+                    body: JSON.stringify(category)
+                });
+
+                if (response.ok) {
+                    const categoryImagesElement = document.getElementById("category_images_element");
+                    categoryImagesElement.innerHTML = await response.text();
+
+                    deselectAllButtons();
+                    selectButtonWithCategory(category.categoryName);
+                    setupDraggingElements();
+                }
+            }
+
+            function setupDraggingElements() {
+                const draggingItems = document.querySelectorAll(draggingElementClassName);
+
+                draggingItems.forEach(draggingItem => {
+                    draggingItem.addEventListener(dragStartEventName, dragStart);
+                });
+            }
+
+            function selectButtonWithCategory(category) {
+                document.getElementById(category).classList.add('active');
+            }
+
+            function deselectAllButtons() {
+                getCategoryButtons().forEach(b => b.classList.remove('active'));
+            }
+
+            function getCategoryButtons() {
+                return document.querySelectorAll(".category_button");
+            }
+        })
+    </script>
 }
 
 @section Styles

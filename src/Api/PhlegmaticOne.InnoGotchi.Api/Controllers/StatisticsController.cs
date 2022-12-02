@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
-using PhlegmaticOne.InnoGotchi.Services.Queries.FarmStatistics;
-using PhlegmaticOne.InnoGotchi.Shared.FarmStatistics;
+using PhlegmaticOne.InnoGotchi.Services.Queries.Statistics;
+using PhlegmaticOne.InnoGotchi.Shared.Statistics;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
@@ -11,11 +11,11 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
 [ApiController]
 [Route("api/[controller]/[action]")]
 [Authorize]
-public class FarmStatisticsController : IdentityController
+public class StatisticsController : IdentityController
 {
     private readonly IMediator _mediator;
 
-    public FarmStatisticsController(IMediator mediator)
+    public StatisticsController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -36,5 +36,12 @@ public class FarmStatisticsController : IdentityController
     public Task<OperationResult<DetailedFarmStatisticsDto>> GetDetailed()
     {
         return _mediator.Send(new GetDetailedStatisticsQuery(ProfileId()), HttpContext.RequestAborted);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public Task<OperationResult<GlobalStatisticsDto>> GetGlobal()
+    {
+        return _mediator.Send(new GetGlobalStatisticsQuery(), HttpContext.RequestAborted);
     }
 }

@@ -11,6 +11,6 @@ public class UserProfile : EntityBase
     public Avatar? Avatar { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
-    public Farm Farm { get; set; } = null!;
+    public Farm? Farm { get; set; }
     public IList<Collaboration> Collaborations { get; set; } = new List<Collaboration>();
 }

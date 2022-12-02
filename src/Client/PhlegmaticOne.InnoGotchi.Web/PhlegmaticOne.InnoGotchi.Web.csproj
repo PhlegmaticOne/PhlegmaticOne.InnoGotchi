@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\FarmStatistics\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Api\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.LocalStorage\PhlegmaticOne.LocalStorage.csproj" />
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.PagedList\PhlegmaticOne.PagedLists.csproj" />

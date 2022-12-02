@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.HelpModels;
-using PhlegmaticOne.InnoGotchi.Shared.FarmStatistics;
+using PhlegmaticOne.InnoGotchi.Shared.Statistics;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
-namespace PhlegmaticOne.InnoGotchi.Services.Queries.FarmStatistics;
+namespace PhlegmaticOne.InnoGotchi.Services.Queries.Statistics;
 
 public class GetPreviewStatisticsQuery : IdentityOperationResultQueryBase<PreviewFarmStatisticsDto>
 {

@@ -6,7 +6,7 @@ using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Overviews;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Farms;
-using PhlegmaticOne.InnoGotchi.Web.ViewModels.FarmStatistics;
+using PhlegmaticOne.InnoGotchi.Web.ViewModels.Statistics;
 using PhlegmaticOne.LocalStorage;
 using PhlegmaticOne.ServerRequesting.Services;
 

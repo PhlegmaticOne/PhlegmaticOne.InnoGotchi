@@ -14,12 +14,12 @@ public class InnoGotchiesMappingConfiguration : Profile
         CreateMap<InnoGotchiModel, InnoGotchiDtoBase>()
             .ForMember(x => x.HungerLevel, o => o.MapFrom(y => y.HungerLevel.ToString()))
             .ForMember(x => x.ThirstyLevel, o => o.MapFrom(y => y.ThirstyLevel.ToString()))
-            .ForMember(x => x.IsDead, o => o.MapFrom(x => DeathDateNotMin(x.DeadSince)))
+            .ForMember(x => x.IsDead, o => o.MapFrom(x => x.IsDead))
             .ForMember(x => x.IsNewBorn, o => o.MapFrom(x => x.Age == 0))
             .ForMember(x => x.IsFeedingAllowable,
-                o => o.MapFrom(x => DeathDateNotMin(x.DeadSince) == false && x.HungerLevel != HungerLevel.Full))
+                o => o.MapFrom(x => x.IsDead == false && x.HungerLevel != HungerLevel.Full))
             .ForMember(x => x.IsDrinkingAllowable,
-                o => o.MapFrom(x => DeathDateNotMin(x.DeadSince) == false && x.ThirstyLevel != ThirstyLevel.Full));
+                o => o.MapFrom(x => x.IsDead == false && x.ThirstyLevel != ThirstyLevel.Full));
 
         CreateMap<InnoGotchiModel, PreviewInnoGotchiDto>()
             .IncludeBase<InnoGotchiModel, InnoGotchiDtoBase>();
@@ -34,10 +34,5 @@ public class InnoGotchiesMappingConfiguration : Profile
             .ForMember(x => x.ProfileLastName, o => o.MapFrom(x => x.Farm.Owner.LastName));
 
         CreateMap<PagedList<InnoGotchiModel>, PagedList<ReadonlyInnoGotchiPreviewDto>>();
-    }
-
-    private static bool DeathDateNotMin(DateTime deathDate)
-    {
-        return deathDate != DateTime.MinValue;
     }
 }

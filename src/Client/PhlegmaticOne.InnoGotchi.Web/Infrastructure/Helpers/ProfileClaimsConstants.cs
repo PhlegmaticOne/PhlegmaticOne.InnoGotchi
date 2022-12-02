@@ -3,5 +3,5 @@
 public class ProfileClaimsConstants
 {
     internal const string FirstNameClaimName = "FirstName";
-    internal const string SecondNameClaimName = "SecondName";
+    internal const string LastNameClaimName = "LastName";
 }

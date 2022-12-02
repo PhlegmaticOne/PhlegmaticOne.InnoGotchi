@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IInnoGotchiesSynchronizationProvider, InnoGotchiesSynchronizationProvider>();
 
         services.AddScoped<IReadableInnoGotchiProvider, ReadableInnoGotchiProvider>();
+        services.AddScoped<IInnoGotchiOwnChecker, InnoGotchiOwnChecker>();
 
         services.AddScoped<IJwtTokenGenerationService, JwtTokenGenerationService>();
         services.AddScoped<ITimeService, TimeService>();
