@@ -9,14 +9,16 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.FarmStatistics;
 
 public class GetPreviewStatisticsQuery : IdentityOperationResultQueryBase<PreviewFarmStatisticsDto>
 {
-    public GetPreviewStatisticsQuery(Guid profileId) : base(profileId) { }
+    public GetPreviewStatisticsQuery(Guid profileId) : base(profileId)
+    {
+    }
 }
 
 public class GetPreviewStatisticsQueryHandler :
     IOperationResultQueryHandler<GetPreviewStatisticsQuery, PreviewFarmStatisticsDto>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<ExistsProfileFarmModel> _existsFarmValidator;
+    private readonly IUnitOfWork _unitOfWork;
 
     public GetPreviewStatisticsQueryHandler(IUnitOfWork unitOfWork,
         IValidator<ExistsProfileFarmModel> existsFarmValidator)
@@ -32,9 +34,7 @@ public class GetPreviewStatisticsQueryHandler :
             .ValidateAsync(new ExistsProfileFarmModel(request.ProfileId), cancellationToken);
 
         if (validationResult.IsValid == false)
-        {
             return OperationResult.FromFail<PreviewFarmStatisticsDto>(validationResult.ToString());
-        }
 
         var repository = _unitOfWork.GetRepository<Domain.Models.FarmStatistics>();
 

@@ -19,10 +19,7 @@ public class InnoGotchiRequestValidator : AbstractValidator<IdentityModel<InnoGo
                 var isPetBelongToProfile = await innoGotchiesRepository.ExistsAsync(x =>
                     x.Farm.OwnerId == model.ProfileId && x.Id == model.Entity.PetId);
 
-                if (isPetBelongToProfile)
-                {
-                    return true;
-                }
+                if (isPetBelongToProfile) return true;
 
                 var isPetFromCollaboratedFarm = await collaborationsRepository.ExistsAsync(
                     x => x.UserProfileId == model.ProfileId &&

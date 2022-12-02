@@ -2,10 +2,10 @@
 
 public class JwtTokenDto
 {
-    public string? Token { get; init; }
-
     public JwtTokenDto(string token)
     {
         Token = token;
     }
+
+    public string? Token { get; init; }
 }

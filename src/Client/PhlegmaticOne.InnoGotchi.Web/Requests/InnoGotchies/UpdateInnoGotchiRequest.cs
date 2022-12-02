@@ -5,5 +5,7 @@ namespace PhlegmaticOne.InnoGotchi.Web.Requests.InnoGotchies;
 
 public class UpdateInnoGotchiRequest : ClientOperationResultPutRequest<UpdateInnoGotchiDto>
 {
-    public UpdateInnoGotchiRequest(UpdateInnoGotchiDto requestData) : base(requestData) { }
+    public UpdateInnoGotchiRequest(UpdateInnoGotchiDto requestData) : base(requestData)
+    {
+    }
 }

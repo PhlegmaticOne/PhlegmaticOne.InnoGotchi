@@ -7,6 +7,7 @@ public interface IWritableInnoGotchiesProvider
 {
     Task<InnoGotchiModel> CreateAsync(Guid profileId, CreateInnoGotchiDto createInnoGotchiDto,
         CancellationToken cancellationToken = new());
+
     Task DrinkAsync(Guid petId, CancellationToken cancellationToken = new());
     Task FeedAsync(Guid petId, CancellationToken cancellationToken = new());
 }

@@ -11,7 +11,9 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.Profiles;
 
 public class GetDetailedProfileQuery : IdentityOperationResultQueryBase<DetailedProfileDto>
 {
-    public GetDetailedProfileQuery(Guid profileId) : base(profileId) { }
+    public GetDetailedProfileQuery(Guid profileId) : base(profileId)
+    {
+    }
 }
 
 public class GetDetailedProfileQueryHandler :
@@ -39,18 +41,13 @@ public class GetDetailedProfileQueryHandler :
                 include: i => i.Include(x => x.User).Include(x => x.Avatar)!,
                 cancellationToken: cancellationToken);
 
-        if (result is null)
-        {
-            return OperationResult.FromFail<DetailedProfileDto>("Profile doesn't exist");
-        }
+        if (result is null) return OperationResult.FromFail<DetailedProfileDto>("Profile doesn't exist");
 
         if (result.Avatar is null || result.Avatar.AvatarData.Any() == false)
-        {
             result.Avatar = new Avatar
             {
                 AvatarData = await _defaultAvatarService.GetDefaultAvatarDataAsync(cancellationToken)
             };
-        }
 
         var mapped = _mapper.Map<DetailedProfileDto>(result);
         return OperationResult.FromSuccess(mapped);

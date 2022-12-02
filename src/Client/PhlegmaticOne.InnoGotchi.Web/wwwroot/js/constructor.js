@@ -1,41 +1,41 @@
 ﻿document.addEventListener("DOMContentLoaded", onLoaded);
-document.addEventListener('keydown', onKeyDown);
+document.addEventListener("keydown", onKeyDown);
 
 let currentDraggingElement;
 let currentScalingElement;
 let canDragInConstructorArea;
 let constructorArea;
 
-const draggingElementClassName = '.dragging';
-const constructorElementClassName = '.drop-area';
-const draggingElementInConstructorClassName = '.ctor-dragging';
-const componentElementName = 'image';
+const draggingElementClassName = ".dragging";
+const constructorElementClassName = ".drop-area";
+const draggingElementInConstructorClassName = ".ctor-dragging";
+const componentElementName = "image";
 
 
-const dragStartEventName = 'dragstart';
-const dragEnterEventName = 'dragenter';
-const mouseDownEventName = 'mousedown';
-const mouseUpEventName   = 'mouseup';
-const mouseMoveEventName = 'mousemove';
+const dragStartEventName = "dragstart";
+const dragEnterEventName = "dragenter";
+const mouseDownEventName = "mousedown";
+const mouseUpEventName = "mouseup";
+const mouseMoveEventName = "mousemove";
 
 
 function onLoaded() {
     setup_dragging_elements();
     setup_constructor_area();
 
-    document.getElementById('createNew').addEventListener('click', createNew);
+    document.getElementById("createNew").addEventListener("click", createNew);
 }
 
 async function createNew() {
 
-    const components = document.querySelectorAll('.in-constructor');
-    const name = document.getElementById('innogotchi_name').value;
+    const components = document.querySelectorAll(".in-constructor");
+    const name = document.getElementById("innogotchi_name").value;
     const result = [];
 
     components.forEach(c => {
         const translate = get_element_translate(c);
         const scale = get_element_scale(c);
-        const imageUrl = c.getAttribute('href');
+        const imageUrl = c.getAttribute("href");
         const name = c.classList[0];
         result.push({
             translationX: translate.translateX,
@@ -49,21 +49,25 @@ async function createNew() {
 
     const viewModel = {
         name: name,
-        components : result
-    }
+        components: result
+    };
 
-    const response = await window.fetch("/Constructor/Create", {
-        method: "POST",
-        headers: {
-            'Content-type': "application/json"
-        },
-        body: JSON.stringify(viewModel)
-    });
+    const response = await window.fetch("/Constructor/Create",
+        {
+            method: "POST",
+            headers: {
+                'Content-type': "application/json"
+            },
+            body: JSON.stringify(viewModel)
+        });
 
     if (response.ok) {
         const partial = document.getElementById("create_form");
         partial.innerHTML = await response.text();
-        document.querySelector(constructorElementClassName).innerHTML = "";
+
+        if (document.getElementById('pet_creation_error') === null) {
+            document.querySelector(constructorElementClassName).innerHTML = "";
+        }
     }
 }
 
@@ -82,6 +86,8 @@ function setup_constructor_area() {
     constructorArea.addEventListener(mouseDownEventName, onMouseDown);
     constructorArea.addEventListener(mouseUpEventName, onMouseUp);
     constructorArea.addEventListener(mouseMoveEventName, onMouseMove);
+
+    constructorArea.removeChild(constructorArea.childNodes[0]);
 }
 
 function dragStart(e) {
@@ -147,11 +153,11 @@ function set_can_drag_in_constructor_area(canDrag) {
 
 
 function place_component_in_constructor() {
-    const img = currentDraggingElement.querySelector('image');
+    const img = currentDraggingElement.querySelector("image");
 
     const className = img.className.baseVal;
 
-    const existingChild = constructorArea.querySelector('.' + className);
+    const existingChild = constructorArea.querySelector(`.${className}`);
 
     const copy = img.cloneNode(true);
     copy.classList.add("in-constructor");
@@ -199,10 +205,8 @@ function place_component_in_constructor() {
 }
 
 function get_order_in_layer(element) {
-    return +element.getAttribute('orderinlayer');
+    return +element.getAttribute("orderinlayer");
 }
-
-
 
 
 function get_element_scale(element) {
@@ -211,7 +215,7 @@ function get_element_scale(element) {
     return {
         scaleX: matrix.m11,
         scaleY: matrix.m22
-    }
+    };
 }
 
 
@@ -221,7 +225,7 @@ function get_element_translate(element) {
     return {
         translateX: matrix.m41,
         translateY: matrix.m42
-    }
+    };
 }
 
 

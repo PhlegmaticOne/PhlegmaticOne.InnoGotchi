@@ -12,5 +12,8 @@ public class GetRequestQueryParameter
         _parameterValue = parameterValue;
     }
 
-    public string BuildQueryPart() => string.Concat(_parameterName, Equal, _parameterValue.ToString());
+    public string BuildQueryPart()
+    {
+        return string.Concat(_parameterName, Equal, _parameterValue.ToString());
+    }
 }

@@ -9,7 +9,9 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.Profiles;
 
 public class GetAuthorizedProfileAuthorizedQuery : IdentityOperationResultQueryBase<AuthorizedProfileDto>
 {
-    public GetAuthorizedProfileAuthorizedQuery(Guid profileId) : base(profileId) { }
+    public GetAuthorizedProfileAuthorizedQuery(Guid profileId) : base(profileId)
+    {
+    }
 }
 
 public class GetAuthorizedProfileAuthorizedQueryHandler :
@@ -17,7 +19,9 @@ public class GetAuthorizedProfileAuthorizedQueryHandler :
 {
     public GetAuthorizedProfileAuthorizedQueryHandler(IUnitOfWork unitOfWork,
         IJwtTokenGenerationService jwtTokenGenerationService) :
-        base(unitOfWork, jwtTokenGenerationService) { }
+        base(unitOfWork, jwtTokenGenerationService)
+    {
+    }
 
     protected override Task<AuthorizedProfileDto?> GetAuthorizedProfileAsync(
         GetAuthorizedProfileAuthorizedQuery request,
@@ -25,7 +29,7 @@ public class GetAuthorizedProfileAuthorizedQueryHandler :
     {
         var repository = UnitOfWork.GetRepository<UserProfile>();
         return repository.GetByIdOrDefaultAsync(request.ProfileId,
-            selector: x => new AuthorizedProfileDto
+            x => new AuthorizedProfileDto
             {
                 Email = x.User.Email,
                 FirstName = x.FirstName,

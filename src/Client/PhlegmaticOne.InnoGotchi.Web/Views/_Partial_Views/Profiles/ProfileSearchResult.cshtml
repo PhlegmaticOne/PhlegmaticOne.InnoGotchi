@@ -5,7 +5,8 @@
     <label class="pt-1">@Model.Email</label><br/>
     @if (Model.IsAlreadyCollaborated)
     {
-        <label class="pt-1 text-danger">@(Model.Email) already invited</label><br />
+        <label class="pt-1 text-danger">@(Model.Email) already invited</label>
+        <br/>
     }
     <input hidden asp-for="Id" class="profile_id"/>
     <div class="col-9 mt-2 mb-2">
@@ -17,5 +18,8 @@
 
 @functions
 {
-    string TryDisableInviteButton() => Model.IsAlreadyCollaborated ? "disabled" : "";
+    string TryDisableInviteButton()
+    {
+        return Model.IsAlreadyCollaborated ? "disabled" : "";
+    }
 }

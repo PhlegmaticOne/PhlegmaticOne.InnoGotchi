@@ -4,5 +4,7 @@ namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.TagHelpers.PagedList.Class
 
 public class PagerDisabledPage : PagerPageBase
 {
-    public PagerDisabledPage(string title, int value) : base(title, value, false, true) { }
+    public PagerDisabledPage(string title, int value) : base(title, value, false, true)
+    {
+    }
 }

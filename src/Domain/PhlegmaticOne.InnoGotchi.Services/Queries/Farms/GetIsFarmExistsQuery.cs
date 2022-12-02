@@ -7,14 +7,19 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.Farms;
 
 public class GetIsFarmExistsQuery : IdentityOperationResultQueryBase<bool>
 {
-    public GetIsFarmExistsQuery(Guid profileId) : base(profileId) { }
+    public GetIsFarmExistsQuery(Guid profileId) : base(profileId)
+    {
+    }
 }
 
 public class GetIsFarmExistsQueryHandler : IOperationResultQueryHandler<GetIsFarmExistsQuery, bool>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public GetIsFarmExistsQueryHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public GetIsFarmExistsQueryHandler(IUnitOfWork unitOfWork)
+    {
+        _unitOfWork = unitOfWork;
+    }
 
     public async Task<OperationResult<bool>> Handle(GetIsFarmExistsQuery request,
         CancellationToken cancellationToken)

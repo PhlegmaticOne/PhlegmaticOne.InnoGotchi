@@ -6,16 +6,20 @@ using PhlegmaticOne.InnoGotchi.Web.Infrastructure.TagHelpers.PagedList.Helpers;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.TagHelpers.PagedList;
 
-[HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.PageIndexAttributeName)]
+[HtmlTargetElement(PagedListTagHelperConstants.TagName,
+    Attributes = PagedListTagHelperConstants.PageIndexAttributeName)]
 [HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.PageSizeAttributeName)]
-[HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.TotalCountAttributeName)]
+[HtmlTargetElement(PagedListTagHelperConstants.TagName,
+    Attributes = PagedListTagHelperConstants.TotalCountAttributeName)]
 [HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.ActionAttributeName)]
 [HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.HostAttributeName)]
 [HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.FragmentAttributeName)]
 [HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.RouteAttributeName)]
-[HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.RouteDataAttributeName)]
+[HtmlTargetElement(PagedListTagHelperConstants.TagName,
+    Attributes = PagedListTagHelperConstants.RouteDataAttributeName)]
 [HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.ProtocolAttributeName)]
-[HtmlTargetElement(PagedListTagHelperConstants.TagName, Attributes = PagedListTagHelperConstants.ControllerAttributeName)]
+[HtmlTargetElement(PagedListTagHelperConstants.TagName,
+    Attributes = PagedListTagHelperConstants.ControllerAttributeName)]
 public class PagedListTagHelper : TagHelper
 {
     private const string DisableCss = "disabled";
@@ -24,11 +28,12 @@ public class PagedListTagHelper : TagHelper
     private const string ActiveTagCss = "active";
     private const string PageItemCss = "page-item";
     private const byte VisibleGroupCount = 10;
+    private readonly IHtmlGenerator _htmlGenerator;
 
 
     private readonly IPagedListPagesGenerator _pagedListPagesGenerator;
-    private readonly IHtmlGenerator _htmlGenerator;
     private readonly Dictionary<string, string> _routeValues = new();
+
     public PagedListTagHelper(IPagedListPagesGenerator pagedListPagesGenerator, IHtmlGenerator htmlGenerator)
     {
         _pagedListPagesGenerator = pagedListPagesGenerator;
@@ -65,15 +70,11 @@ public class PagedListTagHelper : TagHelper
     [HtmlAttributeName(PagedListTagHelperConstants.ControllerAttributeName)]
     public string Controller { get; set; } = null!;
 
-    [ViewContext]
-    public ViewContext? ViewContext { get; set; }
+    [ViewContext] public ViewContext? ViewContext { get; set; }
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        if (PagedListTotalCount < 1)
-        {
-            return;
-        }
+        if (PagedListTotalCount < 1) return;
 
         var ul = new TagBuilder("ul");
         ul.AddCssClass(RootTagCss);
@@ -86,15 +87,9 @@ public class PagedListTagHelper : TagHelper
             var li = new TagBuilder("li");
             li.AddCssClass(PageItemCss);
 
-            if (page.IsActive)
-            {
-                li.AddCssClass(ActiveTagCss);
-            }
+            if (page.IsActive) li.AddCssClass(ActiveTagCss);
 
-            if (page.IsDisabled)
-            {
-                li.AddCssClass(DisableCss);
-            }
+            if (page.IsDisabled) li.AddCssClass(DisableCss);
 
             li.InnerHtml.AppendHtml(GenerateLink(page.Title, page.Value.ToString()));
             ul.InnerHtml.AppendHtml(li);
@@ -108,23 +103,19 @@ public class PagedListTagHelper : TagHelper
     {
         var routeValues = new RouteValueDictionary(_routeValues)
         {
-            { RouteParameter, routeValue },
+            { RouteParameter, routeValue }
         };
 
         if (RouteParameters is not null)
         {
             var values = RouteParameters.GetType().GetProperties();
             if (values.Any())
-            {
                 foreach (var propertyInfo in values)
-                {
                     routeValues.Add(propertyInfo.Name, propertyInfo.GetValue(RouteParameters));
-                }
-            }
         }
 
         return _htmlGenerator.GenerateActionLink(
-            viewContext: ViewContext,
+            ViewContext,
             actionName: ActionName,
             controllerName: Controller,
             routeValues: routeValues,

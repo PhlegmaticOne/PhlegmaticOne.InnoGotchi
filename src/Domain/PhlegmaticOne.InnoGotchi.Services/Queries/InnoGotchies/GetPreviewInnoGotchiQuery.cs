@@ -8,15 +8,19 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.InnoGotchies;
 
 public class GetPreviewInnoGotchiQuery : IOperationResultQuery<PreviewInnoGotchiDto>
 {
-    public GetPreviewInnoGotchiQuery(Guid petId) => PetId = petId;
+    public GetPreviewInnoGotchiQuery(Guid petId)
+    {
+        PetId = petId;
+    }
+
     public Guid PetId { get; }
 }
 
 public class GetPreviewInnoGotchiQueryHandler :
     IOperationResultQueryHandler<GetPreviewInnoGotchiQuery, PreviewInnoGotchiDto>
 {
-    private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
     private readonly IMapper _mapper;
+    private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
 
     public GetPreviewInnoGotchiQueryHandler(IReadableInnoGotchiProvider readableInnoGotchiProvider,
         IMapper mapper)

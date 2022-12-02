@@ -2,10 +2,10 @@
 
 public class ExistsProfileFarmModel
 {
-    public Guid ProfileId { get; set; }
-
     public ExistsProfileFarmModel(Guid profileId)
     {
         ProfileId = profileId;
     }
+
+    public Guid ProfileId { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
 using PhlegmaticOne.UnitOfWork.Interfaces;
@@ -9,16 +10,18 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.Profiles;
 
 public class RegisterProfileCommand : IOperationResultCommand
 {
-    public RegisterProfileCommand(RegisterProfileDto registerProfileModel) =>
+    public RegisterProfileCommand(RegisterProfileDto registerProfileModel)
+    {
         RegisterProfileModel = registerProfileModel;
+    }
 
     public RegisterProfileDto RegisterProfileModel { get; }
 }
 
 public class RegisterProfileCommandHandler : IOperationResultCommandHandler<RegisterProfileCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<RegisterProfileCommand> _registerProfileValidator;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IWritableProfilesProvider _writableProfilesProvider;
 
     public RegisterProfileCommandHandler(IUnitOfWork unitOfWork,
@@ -35,9 +38,7 @@ public class RegisterProfileCommandHandler : IOperationResultCommandHandler<Regi
         var validationResult = await _registerProfileValidator.ValidateAsync(request, cancellationToken);
 
         if (validationResult.IsValid == false)
-        {
             return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToString());
-        }
 
         return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {

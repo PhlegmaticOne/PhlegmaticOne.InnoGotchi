@@ -3,4 +3,6 @@ using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.Overviews;
 
-public class GetPreviewFarmStatisticsRequest : EmptyClientGetRequest<PreviewFarmStatisticsDto> { }
+public class GetPreviewFarmStatisticsRequest : EmptyClientGetRequest<PreviewFarmStatisticsDto>
+{
+}

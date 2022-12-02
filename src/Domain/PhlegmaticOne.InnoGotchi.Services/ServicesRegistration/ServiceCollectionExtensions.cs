@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Linq.Expressions;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
@@ -10,7 +11,6 @@ using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
 using PhlegmaticOne.InnoGotchi.Services.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Services.Services;
-using System.Linq.Expressions;
 
 namespace PhlegmaticOne.InnoGotchi.Services.ServicesRegistration;
 
@@ -19,10 +19,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDomainServices(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<RegisterProfileValidator>();
-        services.AddAutoMapper(builder =>
-        {
-            builder.AddMaps(typeof(FarmMapperConfiguration).Assembly);
-        });
+        services.AddAutoMapper(builder => { builder.AddMaps(typeof(FarmMapperConfiguration).Assembly); });
         services.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
 
         services.AddScoped<IWritableCollaborationsProvider, WritableCollaborationsProvider>();
@@ -30,6 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IWritableInnoGotchiesProvider, WritableInnoGotchiProvider>();
         services.AddScoped<IWritableProfilesProvider, WritableProfileProvider>();
         services.AddScoped<IWritableFarmStatisticsProvider, WritableFarmStatisticsProvider>();
+        services.AddScoped<IInnoGotchiesSynchronizationProvider, InnoGotchiesSynchronizationProvider>();
 
         services.AddScoped<IReadableInnoGotchiProvider, ReadableInnoGotchiProvider>();
 
@@ -54,9 +52,9 @@ public static class ServiceCollectionExtensions
         {
             var timeService = x.GetRequiredService<ITimeService>();
             return new InnoGotchiSignsUpdateService(timeService,
-                timeToIncreaseHungerLevel: TimeSpan.FromDays(1),
-                timeToIncreaseThirstLevel: TimeSpan.FromDays(1),
-                timeToIncreaseAge: TimeSpan.FromDays(7));
+                TimeSpan.FromDays(1),
+                TimeSpan.FromDays(1),
+                TimeSpan.FromDays(7));
         });
 
         return services;

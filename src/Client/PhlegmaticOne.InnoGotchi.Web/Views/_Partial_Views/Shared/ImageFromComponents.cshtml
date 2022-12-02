@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<InnoGotchiComponentViewModel>
 
-<svg class="card-img" viewBox="0 0 420 620" style="position: relative; background: wheat;">
+<svg class="card-img" viewBox="0 0 420 620" style="background: wheat; position: relative;">
     @foreach (var component in Model)
     {
         <image style="position: absolute; transform: translate(@(component.TranslationX)px, @(component.TranslationY)px) scale(@component.ScaleX, @component.ScaleY)"

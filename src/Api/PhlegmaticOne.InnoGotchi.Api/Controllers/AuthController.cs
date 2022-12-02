@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Services.Commands.Profiles;
 using PhlegmaticOne.InnoGotchi.Services.Queries.Profiles;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
 using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.InnoGotchi.Api.Controllers;
@@ -15,8 +16,10 @@ public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public AuthController(IMediator mediator) =>
+    public AuthController(IMediator mediator)
+    {
         _mediator = mediator;
+    }
 
     [HttpPost]
     public async Task<OperationResult<AuthorizedProfileDto>> Register([FromBody] RegisterProfileDto registerProfileDto)
@@ -25,17 +28,19 @@ public class AuthController : ControllerBase
             await _mediator.Send(new RegisterProfileCommand(registerProfileDto), HttpContext.RequestAborted);
 
         if (registerOperationResult.IsSuccess == false)
-        {
             return OperationResult.FromFail<AuthorizedProfileDto>(registerOperationResult.ErrorMessage);
-        }
 
         return await AuthorizeAsync(registerProfileDto.Email, registerProfileDto.Password);
     }
 
     [HttpPost]
-    public Task<OperationResult<AuthorizedProfileDto>> Login([FromBody] LoginDto loginDto) =>
-        AuthorizeAsync(loginDto.Email, loginDto.Password);
+    public Task<OperationResult<AuthorizedProfileDto>> Login([FromBody] LoginDto loginDto)
+    {
+        return AuthorizeAsync(loginDto.Email, loginDto.Password);
+    }
 
-    private Task<OperationResult<AuthorizedProfileDto>> AuthorizeAsync(string email, string password) =>
-        _mediator.Send(new GetAuthorizedProfileAnonymousQuery(email, password), HttpContext.RequestAborted);
+    private Task<OperationResult<AuthorizedProfileDto>> AuthorizeAsync(string email, string password)
+    {
+        return _mediator.Send(new GetAuthorizedProfileAnonymousQuery(email, password), HttpContext.RequestAborted);
+    }
 }

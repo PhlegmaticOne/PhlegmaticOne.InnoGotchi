@@ -18,16 +18,17 @@ public class OverviewController : ClientRequestsController
     public OverviewController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
         base(clientRequestsService, localStorageService, mapper)
-    { }
+    {
+    }
 
     [HttpGet]
     public Task<IActionResult> My()
     {
         return FromAuthorizedGet(new GetIsFarmExistsRequest(), exists =>
         {
-            IActionResult result = exists ?
-                View() :
-                View("~/Views/Farms/Create.cshtml", new CreateFarmViewModel
+            IActionResult result = exists
+                ? View()
+                : View("~/Views/Farm/Create.cshtml", new CreateFarmViewModel
                 {
                     ErrorMessage = AppErrorMessages.FarmDoesNotExistMessage
                 });
@@ -63,7 +64,8 @@ public class OverviewController : ClientRequestsController
         return FromAuthorizedGet(new GetDetailedFarmStatisticsRequest(), statistics =>
         {
             var viewModel = Mapper.Map<DetailedFarmStatisticsViewModel>(statistics);
-            IActionResult view = PartialView("~/Views/_Partial_Views/Overview/DetailedFarmStatistics.cshtml", viewModel);
+            IActionResult view = PartialView("~/Views/_Partial_Views/Overview/DetailedFarmStatistics.cshtml",
+                viewModel);
             return Task.FromResult(view);
         });
     }

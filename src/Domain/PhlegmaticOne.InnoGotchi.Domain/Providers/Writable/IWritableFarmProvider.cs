@@ -5,6 +5,6 @@ namespace PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 
 public interface IWritableFarmProvider
 {
-    Task<Farm> CreateAsync(Guid profileId, CreateFarmDto createFarmDto, 
+    Task<Farm> CreateAsync(Guid profileId, CreateFarmDto createFarmDto,
         CancellationToken cancellationToken = new());
 }

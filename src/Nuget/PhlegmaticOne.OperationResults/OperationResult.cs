@@ -5,30 +5,40 @@ public class OperationResult
 {
     public bool IsSuccess { get; init; }
     public string? ErrorMessage { get; init; }
-    public static OperationResult<T> FromSuccess<T>(T result) => new()
-    {
-        IsSuccess = true,
-        ErrorMessage = null,
-        Result = result
-    };
 
     public static OperationResult Success => new()
     {
-        IsSuccess = true,
+        IsSuccess = true
     };
 
-    public static OperationResult<T> FromFail<T>(string? errorMessage = null) => new()
+    public static OperationResult<T> FromSuccess<T>(T result)
     {
-        IsSuccess = false,
-        ErrorMessage = errorMessage ?? "Operation error",
-        Result = default,
-    };
+        return new()
+        {
+            IsSuccess = true,
+            ErrorMessage = null,
+            Result = result
+        };
+    }
 
-    public static OperationResult FromFail(string? errorMessage = null) => new()
+    public static OperationResult<T> FromFail<T>(string? errorMessage = null)
     {
-        IsSuccess = false,
-        ErrorMessage = errorMessage ?? "Operation error",
-    };
+        return new()
+        {
+            IsSuccess = false,
+            ErrorMessage = errorMessage ?? "Operation error",
+            Result = default
+        };
+    }
+
+    public static OperationResult FromFail(string? errorMessage = null)
+    {
+        return new()
+        {
+            IsSuccess = false,
+            ErrorMessage = errorMessage ?? "Operation error"
+        };
+    }
 }
 
 [Serializable]

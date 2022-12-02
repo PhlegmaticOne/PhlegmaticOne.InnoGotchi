@@ -7,8 +7,8 @@ namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 
 public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly ITimeService _timeService;
+    private readonly IUnitOfWork _unitOfWork;
 
     public WritableFarmStatisticsProvider(IUnitOfWork unitOfWork, ITimeService timeService)
     {
@@ -20,7 +20,7 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
     {
         var repository = _unitOfWork.GetRepository<FarmStatistics>();
         var farmStatistics = await repository.GetFirstOrDefaultAsync(
-            x => x.Farm.Owner.Id == profileId, 
+            x => x.Farm.Owner.Id == profileId,
             cancellationToken: cancellationToken);
         var now = _timeService.Now();
 
@@ -38,12 +38,15 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
     public async Task<FarmStatistics> ProcessDrinkingAsync(Guid profileId, CancellationToken cancellationToken = new())
     {
         var repository = _unitOfWork.GetRepository<FarmStatistics>();
-        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId, cancellationToken: cancellationToken);
+        var farmStatistics =
+            await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId,
+                cancellationToken: cancellationToken);
         var now = _timeService.Now();
 
         var updated = await repository.UpdateAsync(farmStatistics!, statistics =>
         {
-            statistics.AverageDrinkTime = CalculateNewAverage(statistics.AverageDrinkTime, statistics.LastDrinkTime, now,
+            statistics.AverageDrinkTime = CalculateNewAverage(statistics.AverageDrinkTime, statistics.LastDrinkTime,
+                now,
                 statistics.TotalDrinkingsCount);
             statistics.TotalDrinkingsCount += 1;
             statistics.LastDrinkTime = now;
@@ -52,7 +55,8 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
         return updated;
     }
 
-    private static TimeSpan CalculateNewAverage(TimeSpan currentAverage, DateTime lastActionTime, DateTime now, int currentActionsCount)
+    private static TimeSpan CalculateNewAverage(TimeSpan currentAverage, DateTime lastActionTime, DateTime now,
+        int currentActionsCount)
     {
         var difference = now - lastActionTime;
         return (currentAverage + difference) / (currentActionsCount + 1);

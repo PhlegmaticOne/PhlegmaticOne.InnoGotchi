@@ -6,7 +6,8 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Profiles.Base;
 
-public abstract class GetAuthorizedProfileQueryHandlerBase<TRequest> : IOperationResultQueryHandler<TRequest, AuthorizedProfileDto>
+public abstract class
+    GetAuthorizedProfileQueryHandlerBase<TRequest> : IOperationResultQueryHandler<TRequest, AuthorizedProfileDto>
     where TRequest : IOperationResultQuery<AuthorizedProfileDto>
 {
     private readonly IJwtTokenGenerationService _jwtTokenGenerationService;
@@ -19,20 +20,19 @@ public abstract class GetAuthorizedProfileQueryHandlerBase<TRequest> : IOperatio
         UnitOfWork = unitOfWork;
         _jwtTokenGenerationService = jwtTokenGenerationService;
     }
+
     public async Task<OperationResult<AuthorizedProfileDto>> Handle(TRequest request,
         CancellationToken cancellationToken)
     {
         var authorizedProfile = await GetAuthorizedProfileAsync(request, cancellationToken);
 
-        if (authorizedProfile is null)
-        {
-            return OperationResult.FromFail<AuthorizedProfileDto>("Profile doesn't exist");
-        }
+        if (authorizedProfile is null) return OperationResult.FromFail<AuthorizedProfileDto>("Profile doesn't exist");
 
         authorizedProfile.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(authorizedProfile);
 
         return OperationResult.FromSuccess(authorizedProfile);
     }
 
-    protected abstract Task<AuthorizedProfileDto?> GetAuthorizedProfileAsync(TRequest request, CancellationToken cancellationToken);
+    protected abstract Task<AuthorizedProfileDto?> GetAuthorizedProfileAsync(TRequest request,
+        CancellationToken cancellationToken);
 }

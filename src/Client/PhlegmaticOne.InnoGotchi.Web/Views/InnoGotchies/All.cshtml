@@ -40,12 +40,9 @@ else
                        asp-paged-list-page-size="@Model.PageSize"
                        asp-paged-list-total-count="@Model.TotalCount"
                        asp-paged-list-url="All"
-                       asp-route-data="@(new { 
-                                           sortType = sortType,
-                                           pageSize = pageSize,
-                                           isAscending = isAscending
-                                       })"
-                       asp-route-parameter="pageIndex"></pager>
+                       asp-route-data="@(new { sortType, pageSize, isAscending })"
+                       asp-route-parameter="pageIndex">
+                </pager>
             </div>
         </div>
     </div>
@@ -54,8 +51,8 @@ else
 
 @section Styles
 {
-    <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pagination.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/pagination.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css"/>
 }
 

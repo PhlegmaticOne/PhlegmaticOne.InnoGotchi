@@ -18,7 +18,8 @@ public class InnoGotchiesController : ClientRequestsController
     public InnoGotchiesController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
         base(clientRequestsService, localStorageService, mapper)
-    { }
+    {
+    }
 
     [HttpGet]
     public Task<IActionResult> All(int? pageIndex, int? pageSize, int? sortType, bool? isAscending)
@@ -44,8 +45,10 @@ public class InnoGotchiesController : ClientRequestsController
     }
 
     [HttpGet]
-    public Task<IActionResult> Pet(Guid petId) =>
-        FromAuthorizedGet(new GetDetailedInnoGotchiRequest(petId), InnoGotchiView);
+    public Task<IActionResult> Pet(Guid petId)
+    {
+        return FromAuthorizedGet(new GetDetailedInnoGotchiRequest(petId), InnoGotchiView);
+    }
 
     [HttpPost]
     public Task<IActionResult> Feed(InnoGotchiActionViewModel innoGotchiActionViewModel)
@@ -106,17 +109,21 @@ public class InnoGotchiesController : ClientRequestsController
         return Task.FromResult(view);
     }
 
-    private static UpdateInnoGotchiDto FeedModel(Guid petId) =>
-        new()
+    private static UpdateInnoGotchiDto FeedModel(Guid petId)
+    {
+        return new()
         {
             InnoGotchiOperationType = InnoGotchiOperationType.Feeding,
             PetId = petId
         };
+    }
 
-    private static UpdateInnoGotchiDto DrinkModel(Guid petId) =>
-        new()
+    private static UpdateInnoGotchiDto DrinkModel(Guid petId)
+    {
+        return new()
         {
             InnoGotchiOperationType = InnoGotchiOperationType.Drinking,
             PetId = petId
         };
+    }
 }

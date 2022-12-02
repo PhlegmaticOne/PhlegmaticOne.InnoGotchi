@@ -3,6 +3,7 @@ using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
 using PhlegmaticOne.PasswordHasher;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
@@ -10,18 +11,19 @@ namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 
 public class WritableProfileProvider : IWritableProfilesProvider
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITimeService _timeService;
+    private readonly IUnitOfWork _unitOfWork;
 
     public WritableProfileProvider(IUnitOfWork unitOfWork,
-        IPasswordHasher passwordHasher, 
+        IPasswordHasher passwordHasher,
         ITimeService timeService)
     {
         _unitOfWork = unitOfWork;
         _passwordHasher = passwordHasher;
         _timeService = timeService;
     }
+
     public async Task<UserProfile> CreateAsync(RegisterProfileDto registerProfileDto,
         CancellationToken cancellationToken = new())
     {
@@ -68,10 +70,18 @@ public class WritableProfileProvider : IWritableProfilesProvider
         };
     }
 
-    private string ProcessPassword(string oldPassword, string newPassword) =>
-        string.IsNullOrEmpty(newPassword) ? oldPassword : _passwordHasher.Hash(newPassword);
-    private static Avatar? ProcessAvatar(byte[] newAvatarData, Avatar? oldAvatar) =>
-        newAvatarData.Any() == false ? oldAvatar : new() { AvatarData = newAvatarData };
-    private static string GetNewValueOrExisting(string newValue, string existing) =>
-        string.IsNullOrEmpty(newValue) == false ? newValue : existing;
+    private string ProcessPassword(string oldPassword, string newPassword)
+    {
+        return string.IsNullOrEmpty(newPassword) ? oldPassword : _passwordHasher.Hash(newPassword);
+    }
+
+    private static Avatar? ProcessAvatar(byte[] newAvatarData, Avatar? oldAvatar)
+    {
+        return newAvatarData.Any() == false ? oldAvatar : new Avatar { AvatarData = newAvatarData };
+    }
+
+    private static string GetNewValueOrExisting(string newValue, string existing)
+    {
+        return string.IsNullOrEmpty(newValue) == false ? newValue : existing;
+    }
 }

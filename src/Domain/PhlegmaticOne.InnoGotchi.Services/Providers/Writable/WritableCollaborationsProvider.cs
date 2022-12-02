@@ -9,9 +9,12 @@ public class WritableCollaborationsProvider : IWritableCollaborationsProvider
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public WritableCollaborationsProvider(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public WritableCollaborationsProvider(IUnitOfWork unitOfWork)
+    {
+        _unitOfWork = unitOfWork;
+    }
 
-    public async Task<Collaboration> AddCollaboration(Guid fromProfileId, Guid toProfileId, 
+    public async Task<Collaboration> AddCollaboration(Guid fromProfileId, Guid toProfileId,
         CancellationToken cancellationToken = new())
     {
         var farm = await GetFarm(fromProfileId, cancellationToken);
@@ -20,19 +23,27 @@ public class WritableCollaborationsProvider : IWritableCollaborationsProvider
         return collaboration;
     }
 
-    private async Task<Collaboration> CreateCollaboration(Guid profileId, Farm farm, CancellationToken cancellationToken = new()) =>
-        new()
+    private async Task<Collaboration> CreateCollaboration(Guid profileId, Farm farm,
+        CancellationToken cancellationToken = new())
+    {
+        return new()
         {
             Collaborator = await GetProfile(profileId, cancellationToken),
             Farm = farm
         };
+    }
 
-    private Task<Farm> GetFarm(Guid profileId, CancellationToken cancellationToken = new()) =>
-        _unitOfWork.GetRepository<Farm>().GetFirstOrDefaultAsync(
-            predicate: p => p.Owner.Id == profileId,
+    private Task<Farm> GetFarm(Guid profileId, CancellationToken cancellationToken = new())
+    {
+        return _unitOfWork.GetRepository<Farm>().GetFirstOrDefaultAsync(
+            p => p.Owner.Id == profileId,
             cancellationToken: cancellationToken)!;
-    private Task<UserProfile> GetProfile(Guid profileId, CancellationToken cancellationToken = new()) =>
-        _unitOfWork.GetRepository<UserProfile>()
+    }
+
+    private Task<UserProfile> GetProfile(Guid profileId, CancellationToken cancellationToken = new())
+    {
+        return _unitOfWork.GetRepository<UserProfile>()
             .GetByIdOrDefaultAsync(profileId, include: i => i.Include(x => x.User),
                 cancellationToken: cancellationToken)!;
+    }
 }

@@ -22,13 +22,11 @@ public class PagedListPagesGenerator : IPagedListPagesGenerator
 
     private static IEnumerable<PagerPageBase> PreviousPages(PagerContext pager)
     {
-        yield return pager.PageIndex == 0 ?
-            new PagerDisabledPage(LabelFirst, 1) :
-            new PagerPage(LabelFirst, 1);
+        yield return pager.PageIndex == 0 ? new PagerDisabledPage(LabelFirst, 1) : new PagerPage(LabelFirst, 1);
 
-        yield return pager.PreviousPage > 1 ?
-            new PagerPage(LabelPrevious, pager.MinPage - 1) :
-            new PagerDisabledPage(LabelPrevious, pager.MinPage - 1);
+        yield return pager.PreviousPage > 1
+            ? new PagerPage(LabelPrevious, pager.MinPage - 1)
+            : new PagerDisabledPage(LabelPrevious, pager.MinPage - 1);
     }
 
     private static IEnumerable<PagerPageBase> NumberedPages(PagerContext pager)
@@ -40,6 +38,7 @@ public class PagedListPagesGenerator : IPagedListPagesGenerator
                 yield return new PagerActivePage(i.ToString(), i);
                 continue;
             }
+
             yield return new PagerPage(i.ToString(), i);
         }
     }

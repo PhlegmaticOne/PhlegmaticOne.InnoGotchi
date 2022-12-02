@@ -2,7 +2,7 @@
 
 @if (Model.InnoGotchies.Count == 0)
 {
-    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", 
+    @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml",
         $"Looks like {Model.Email} doesn't have any InnoGotchies")
 }
 else
@@ -15,7 +15,7 @@ else
 
 @section Styles
 {
-    <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/farm_details.css" asp-append-version="true"/>
 }
 
 @section Scripts

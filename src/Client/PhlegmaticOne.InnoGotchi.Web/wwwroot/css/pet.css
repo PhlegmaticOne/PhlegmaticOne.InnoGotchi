@@ -1,10 +1,6 @@
-.pet-info {
-    border-radius: 1rem !important;
-}
+.pet-info { border-radius: 1rem !important; }
 
 
 @media (max-width: 960px) {
-    .pet-info {
-        margin-top: 1rem;
-    }
+    .pet-info { margin-top: 1rem; }
 }

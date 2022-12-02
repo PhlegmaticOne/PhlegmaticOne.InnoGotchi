@@ -11,19 +11,24 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 
 public class UpdateInnoGotchiCommand : IdentityOperationResultCommandBase
 {
-    public UpdateInnoGotchiDto UpdateInnoGotchiDto { get; }
-
-    public UpdateInnoGotchiCommand(Guid profileId, UpdateInnoGotchiDto updateInnoGotchiDto) : base(profileId) => 
+    public UpdateInnoGotchiCommand(Guid profileId, UpdateInnoGotchiDto updateInnoGotchiDto) : base(profileId)
+    {
         UpdateInnoGotchiDto = updateInnoGotchiDto;
+    }
+
+    public UpdateInnoGotchiDto UpdateInnoGotchiDto { get; }
 }
 
 public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<UpdateInnoGotchiCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IWritableInnoGotchiesProvider _innoGotchiesProvider;
     private readonly IWritableFarmStatisticsProvider _farmStatisticsProvider;
+    private readonly IWritableInnoGotchiesProvider _innoGotchiesProvider;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<IdentityModel<InnoGotchiRequestDto>> _updateCommandValidator;
-    private readonly Dictionary<InnoGotchiOperationType, Func<Guid, UpdateInnoGotchiDto, Task<OperationResult>>> _updateOperations;
+
+    private readonly Dictionary<InnoGotchiOperationType, Func<Guid, UpdateInnoGotchiDto, Task<OperationResult>>>
+        _updateOperations;
+
     public UpdateInnoGotchiCommandHandler(IUnitOfWork unitOfWork,
         IWritableInnoGotchiesProvider innoGotchiesProvider,
         IWritableFarmStatisticsProvider farmStatisticsProvider,
@@ -34,11 +39,12 @@ public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<Upd
         _farmStatisticsProvider = farmStatisticsProvider;
         _updateCommandValidator = updateCommandValidator;
 
-        _updateOperations = new()
-        {
-            { InnoGotchiOperationType.Drinking, DrinkAsync },
-            { InnoGotchiOperationType.Feeding, FeedAsync }
-        };
+        _updateOperations =
+            new Dictionary<InnoGotchiOperationType, Func<Guid, UpdateInnoGotchiDto, Task<OperationResult>>>
+            {
+                { InnoGotchiOperationType.Drinking, DrinkAsync },
+                { InnoGotchiOperationType.Feeding, FeedAsync }
+            };
     }
 
     public async Task<OperationResult> Handle(UpdateInnoGotchiCommand request, CancellationToken cancellationToken)
@@ -51,16 +57,11 @@ public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<Upd
 
         var validationResult = await _updateCommandValidator.ValidateAsync(validatingModel, cancellationToken);
 
-        if (validationResult.IsValid == false)
-        {
-            return OperationResult.FromFail(validationResult.ToString());
-        }
+        if (validationResult.IsValid == false) return OperationResult.FromFail(validationResult.ToString());
 
         var operationType = request.UpdateInnoGotchiDto.InnoGotchiOperationType;
         if (_updateOperations.TryGetValue(operationType, out var updateAction))
-        {
             return await updateAction(request.ProfileId, request.UpdateInnoGotchiDto);
-        }
 
         return OperationResult.FromFail("Unknown operation over InnoGotchi");
     }
@@ -74,7 +75,7 @@ public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<Upd
         });
     }
 
-    private Task<OperationResult> FeedAsync(Guid profileId, UpdateInnoGotchiDto  petIdModel)
+    private Task<OperationResult> FeedAsync(Guid profileId, UpdateInnoGotchiDto petIdModel)
     {
         return _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {

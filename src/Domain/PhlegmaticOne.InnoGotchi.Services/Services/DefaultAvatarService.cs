@@ -5,6 +5,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Services;
 public class DefaultAvatarService : IDefaultAvatarService
 {
     private const string AvatarsPath = "Resources\\NoAvatar.png";
+
     public Task<byte[]> GetDefaultAvatarDataAsync(CancellationToken cancellationToken = new())
     {
         var noAvatarFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AvatarsPath);

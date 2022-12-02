@@ -5,10 +5,15 @@ namespace PhlegmaticOne.PasswordHasher.Implementation;
 
 public class SecurePasswordHasher : IPasswordHasher
 {
-    public string Hash(string password) => HashPrivate(password);
+    public string Hash(string password)
+    {
+        return HashPrivate(password);
+    }
 
-    public bool Verify(string password, string hashedPassword) =>
-        HashPrivate(password) == hashedPassword;
+    public bool Verify(string password, string hashedPassword)
+    {
+        return HashPrivate(password) == hashedPassword;
+    }
 
     private static string HashPrivate(string password)
     {

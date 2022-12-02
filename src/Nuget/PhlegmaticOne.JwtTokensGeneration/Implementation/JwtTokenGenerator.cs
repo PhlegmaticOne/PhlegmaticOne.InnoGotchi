@@ -1,9 +1,9 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 using PhlegmaticOne.JwtTokensGeneration.Helpers;
 using PhlegmaticOne.JwtTokensGeneration.Models;
 using PhlegmaticOne.JwtTokensGeneration.Options;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace PhlegmaticOne.JwtTokensGeneration.Implementation;
 
@@ -11,7 +11,11 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly IJwtOptions _jwtOptions;
 
-    public JwtTokenGenerator(IJwtOptions jwtOptions) => _jwtOptions = jwtOptions;
+    public JwtTokenGenerator(IJwtOptions jwtOptions)
+    {
+        _jwtOptions = jwtOptions;
+    }
+
     public string GenerateToken(UserRegisteringModel userRegisteringModel)
     {
         var claims = new List<Claim>
@@ -31,8 +35,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             _jwtOptions.Issuer,
             _jwtOptions.Audience,
             claims,
-            notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddMinutes(_jwtOptions.ExpirationDurationInMinutes),
+            DateTime.UtcNow,
+            DateTime.UtcNow.AddMinutes(_jwtOptions.ExpirationDurationInMinutes),
             signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

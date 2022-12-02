@@ -1,13 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - InnoGotchi</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PhlegmaticOne.InnoGotchi.Web.styles.css" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/PhlegmaticOne.InnoGotchi.Web.styles.css" asp-append-version="true"/>
+    @await RenderSectionAsync("Styles", false)
 </head>
 <body>
 <header>
@@ -27,10 +27,10 @@
                         <a class="nav-link" asp-area="" asp-controller="Constructor" asp-action="Create">Constructor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Farms" asp-action="My">My farm</a>
+                        <a class="nav-link" asp-area="" asp-controller="Farm" asp-action="My">My farm</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Farms" asp-action="Collaborated">Collaborated farms</a>
+                        <a class="nav-link" asp-area="" asp-controller="Farm" asp-action="Collaborated">Collaborated farms</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Overview" asp-action="My">Farms overview</a>
@@ -52,25 +52,25 @@
                                     aria-haspopup="true"
                                     aria-expanded="false">
                                 <img class="rounded-circle"
-                                     src="@Url.Action("GetAvatar", "Account")"
+                                     src="@Url.Action("Get", "Avatar")"
                                      height="40"
-                                     asp-append-version="true" 
+                                     asp-append-version="true"
                                      alt="Avatar"/>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" asp-controller="Account" asp-action="Details">Details</a>
-                                <a class="dropdown-item" asp-controller="Account" asp-action="Update">Settings</a>
-                                <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="Details">Details</a>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="Update">Settings</a>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="Logout">Logout</a>
                             </div>
                         </div>
                     }
                     else
                     {
                         <div class="btn-group" role="group">
-                            <button class="btn btn-dark" onclick="location.href = '@Url.Action("Login", "Account")'">
+                            <button class="btn btn-dark" onclick="location.href = '@Url.Action("Login", "Auth")'">
                                 Login
                             </button>
-                            <button class="btn btn-dark" onclick="location.href = '@Url.Action("Register", "Account")'">
+                            <button class="btn btn-dark" onclick="location.href = '@Url.Action("Register", "Auth")'">
                                 Register
                             </button>
                         </div>
@@ -95,6 +95,6 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/layout.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-@await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

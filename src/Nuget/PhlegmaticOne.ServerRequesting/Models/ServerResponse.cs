@@ -1,5 +1,5 @@
-﻿using PhlegmaticOne.OperationResults;
-using System.Net;
+﻿using System.Net;
+using PhlegmaticOne.OperationResults;
 
 namespace PhlegmaticOne.ServerRequesting.Models;
 
@@ -11,29 +11,42 @@ public class ServerResponse
     public bool IsSuccess { get; init; }
     public bool IsUnauthorized => StatusCode == HttpStatusCode.Unauthorized;
 
-    public static ServerResponse<T> FromError<T>(HttpStatusCode? statusCode, string? reasonPhrase) => new()
+    public static ServerResponse<T> FromError<T>(HttpStatusCode? statusCode, string? reasonPhrase)
     {
-        ReasonPhrase = reasonPhrase ?? string.Empty,
-        StatusCode = statusCode,
-        IsSuccess = false,
-        OperationResult = default,
-    };
+        return new()
+        {
+            ReasonPhrase = reasonPhrase ?? string.Empty,
+            StatusCode = statusCode,
+            IsSuccess = false,
+            OperationResult = default
+        };
+    }
 
-    public static ServerResponse<T> FromSuccess<T>(OperationResult<T> result, HttpStatusCode? statusCode, string? reasonPhrase) => new()
+    public static ServerResponse<T> FromSuccess<T>(OperationResult<T> result, HttpStatusCode? statusCode,
+        string? reasonPhrase)
     {
-        ReasonPhrase = reasonPhrase ?? string.Empty,
-        StatusCode = statusCode,
-        IsSuccess = true,
-        OperationResult = result
-    };
+        return new()
+        {
+            ReasonPhrase = reasonPhrase ?? string.Empty,
+            StatusCode = statusCode,
+            IsSuccess = true,
+            OperationResult = result
+        };
+    }
 
-    public override string ToString() =>
-        StatusCode is not null ? StatusCode + ": " + ReasonPhrase : ReasonPhrase;
+    public override string ToString()
+    {
+        return StatusCode is not null ? StatusCode + ": " + ReasonPhrase : ReasonPhrase;
+    }
 }
 
 [Serializable]
 public class ServerResponse<TResponse> : ServerResponse
 {
     public OperationResult<TResponse>? OperationResult { get; internal set; }
-    public TResponse? GetData() => OperationResult is null ? default : OperationResult.Result;
+
+    public TResponse? GetData()
+    {
+        return OperationResult is null ? default : OperationResult.Result;
+    }
 }

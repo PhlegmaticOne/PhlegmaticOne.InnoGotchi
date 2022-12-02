@@ -2,4 +2,6 @@
 
 namespace PhlegmaticOne.OperationResults.Mediatr;
 
-public interface IOperationResultQuery<T> : IRequest<OperationResult<T>> { }
+public interface IOperationResultQuery<T> : IRequest<OperationResult<T>>
+{
+}

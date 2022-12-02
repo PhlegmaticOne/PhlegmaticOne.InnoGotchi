@@ -9,9 +9,10 @@ public class DbContextUnitOfWork : IUnitOfWork
 {
     private readonly DbContext _dbContext;
     private readonly Dictionary<Type, object> _repositories;
+
     public DbContextUnitOfWork(DbContext dbContext)
     {
-        _repositories = new();
+        _repositories = new Dictionary<Type, object>();
         _dbContext = dbContext;
     }
 
@@ -28,7 +29,10 @@ public class DbContextUnitOfWork : IUnitOfWork
         return (IRepository<TEntity>)_repositories[type];
     }
 
-    public Task<int> SaveChangesAsync() => _dbContext.SaveChangesAsync();
+    public Task<int> SaveChangesAsync()
+    {
+        return _dbContext.SaveChangesAsync();
+    }
 
     public async Task<OperationResult<T>> ResultFromExecutionInTransaction<T>(Func<Task<T>> operation)
     {

@@ -20,7 +20,8 @@ internal static class SynchronizationHelper
         DateTime lastActionTime, TimeSpan timeToIncrease) where T : struct, Enum
     {
         var currentEnumValue = Convert.ToInt32(enumValue);
-        var newEnumValue = IncreaseUntilNotSynchronizedWithTime(currentEnumValue, currentTime, lastActionTime, timeToIncrease);
+        var newEnumValue =
+            IncreaseUntilNotSynchronizedWithTime(currentEnumValue, currentTime, lastActionTime, timeToIncrease);
         return EnumHelper.EnumValueOrMax<T>(newEnumValue);
     }
 }

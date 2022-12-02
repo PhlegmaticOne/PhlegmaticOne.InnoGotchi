@@ -38,7 +38,7 @@ public class PagedList<T> : IPagedList<T>
         var items = new List<TResult>();
         return new PagedList<TResult>
         {
-            Items = items,
+            Items = items
         };
     }
 }

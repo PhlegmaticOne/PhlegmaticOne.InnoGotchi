@@ -10,16 +10,12 @@ namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 
 public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IInnoGotchiSignsUpdateService _innoGotchiSignsUpdateService;
     private readonly ITimeService _timeService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public WritableInnoGotchiProvider(IUnitOfWork unitOfWork,
-        IInnoGotchiSignsUpdateService innoGotchiSignsUpdateService,
-        ITimeService timeService)
+    public WritableInnoGotchiProvider(IUnitOfWork unitOfWork, ITimeService timeService)
     {
         _unitOfWork = unitOfWork;
-        _innoGotchiSignsUpdateService = innoGotchiSignsUpdateService;
         _timeService = timeService;
     }
 
@@ -32,43 +28,23 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         return createdInnoGotchi;
     }
 
-    public Task DrinkAsync(Guid petId, CancellationToken cancellationToken = new()) =>
-        ProcessPetUpdating(petId, pet =>
+    public Task DrinkAsync(Guid petId, CancellationToken cancellationToken = new())
+    {
+        return ProcessPetUpdating(petId, pet =>
         {
             pet.ThirstyLevel = ThirstyLevel.Full;
             pet.LastDrinkTime = _timeService.Now();
         }, cancellationToken);
+    }
 
-    public Task FeedAsync(Guid petId, CancellationToken cancellationToken = new()) =>
-        ProcessPetUpdating(petId, pet =>
+    public Task FeedAsync(Guid petId, CancellationToken cancellationToken = new())
+    {
+        return ProcessPetUpdating(petId, pet =>
         {
             pet.HungerLevel = HungerLevel.Full;
             pet.LastFeedTime = _timeService.Now();
         }, cancellationToken);
-
-
-    private void SynchronizeAction(InnoGotchiModel pet)
-    {
-        var now = _timeService.Now();
-        var currentPetAge = pet.Age;
-
-        pet.HungerLevel = _innoGotchiSignsUpdateService.TryIncreaseHungerLevel(pet.HungerLevel, pet.LastFeedTime);
-        pet.ThirstyLevel = _innoGotchiSignsUpdateService.TryIncreaseThirstLevel(pet.ThirstyLevel, pet.LastDrinkTime);
-        pet.Age = _innoGotchiSignsUpdateService.TryIncreaseAge(pet.Age, pet.AgeUpdatedAt);
-        pet.HappinessDaysCount =
-            _innoGotchiSignsUpdateService.CalculateHappinessDaysCount(pet.HungerLevel, pet.ThirstyLevel, pet.LiveSince);
-
-        if (currentPetAge < pet.Age)
-        {
-            pet.AgeUpdatedAt = now;
-        }
-
-        if (_innoGotchiSignsUpdateService.IsDeadNow(pet.HungerLevel, pet.ThirstyLevel, pet.Age))
-        {
-            pet.DeadSince = now;
-        }
     }
-
 
     private async Task ProcessPetUpdating(Guid petId, Action<InnoGotchiModel> updateAction,
         CancellationToken cancellationToken = new())
@@ -122,8 +98,9 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
 
     private static List<InnoGotchiModelComponent> CreateModelComponents(
         List<InnoGotchiModelComponentDto> dtos,
-        IEnumerable<InnoGotchiComponent> existingComponents) =>
-        dtos.Join(existingComponents, on => on.ImageUrl, on => on.ImageUrl,
+        IEnumerable<InnoGotchiComponent> existingComponents)
+    {
+        return dtos.Join(existingComponents, on => on.ImageUrl, on => on.ImageUrl,
             (dto, component) => new InnoGotchiModelComponent
             {
                 InnoGotchiComponent = component,
@@ -132,4 +109,5 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
                 ScaleX = dto.ScaleX,
                 ScaleY = dto.ScaleY
             }).ToList();
+    }
 }

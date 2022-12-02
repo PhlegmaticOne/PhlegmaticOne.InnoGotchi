@@ -20,8 +20,8 @@ $(() => {
     }
 
     function subscribeInviteButtons() {
-        document.querySelectorAll('.profile_search_result').forEach(result => {
-            const collaborateButton = result.querySelector('.invite_button');
+        document.querySelectorAll(".profile_search_result").forEach(result => {
+            const collaborateButton = result.querySelector(".invite_button");
             collaborateButton.addEventListener("click", async () => await collaborate(result));
         });
     }
@@ -29,11 +29,12 @@ $(() => {
     async function collaborate(profileElement) {
         const idModel = getIdModel(profileElement);
 
-        const result = await window.fetch("/Collaborations/Collaborate", {
-            method: "POST",
-            headers: { 'Content-type': "application/json" },
-            body: JSON.stringify(idModel)
-        });
+        const result = await window.fetch("/Collaborations/Collaborate",
+            {
+                method: "POST",
+                headers: { 'Content-type': "application/json" },
+                body: JSON.stringify(idModel)
+            });
 
         if (result.ok) {
             searchResult.removeChild(profileElement);
@@ -44,6 +45,6 @@ $(() => {
         const id = profileElement.querySelector(".profile_id").value;
         return {
             id: id
-        }
+        };
     }
 })

@@ -4,9 +4,12 @@ using PhlegmaticOne.InnoGotchi.Web.ViewModels.Constructor;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.ValueConverters;
 
-public class ComponentCategoriesValueConverter : IValueConverter<IList<InnoGotchiComponentDto>, IList<ComponentCategoryViewModel>>
+public class
+    ComponentCategoriesValueConverter : IValueConverter<IList<InnoGotchiComponentDto>,
+        IList<ComponentCategoryViewModel>>
 {
-    public IList<ComponentCategoryViewModel> Convert(IList<InnoGotchiComponentDto> sourceMember, ResolutionContext context)
+    public IList<ComponentCategoryViewModel> Convert(IList<InnoGotchiComponentDto> sourceMember,
+        ResolutionContext context)
     {
         return sourceMember.GroupBy(x => x.Name)
             .Select(x => new ComponentCategoryViewModel

@@ -4,7 +4,8 @@ namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 
 public static class RuleBuilderExtensions
 {
-    public static IRuleBuilderOptions<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength = 14)
+    public static IRuleBuilderOptions<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder,
+        int minimumLength = 14)
     {
         var options = ruleBuilder
             .NotEmpty().WithMessage("PasswordEmpty")

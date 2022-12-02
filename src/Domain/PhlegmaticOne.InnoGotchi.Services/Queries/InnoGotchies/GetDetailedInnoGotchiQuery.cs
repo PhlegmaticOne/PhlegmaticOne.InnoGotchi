@@ -11,16 +11,20 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.InnoGotchies;
 
 public class GetDetailedInnoGotchiQuery : IdentityOperationResultQueryBase<DetailedInnoGotchiDto>
 {
+    public GetDetailedInnoGotchiQuery(Guid profileId, Guid petId) : base(profileId)
+    {
+        PetId = petId;
+    }
+
     public Guid PetId { get; }
-    public GetDetailedInnoGotchiQuery(Guid profileId, Guid petId) : base(profileId) => PetId = petId;
 }
 
 public class GetDetailedInnoGotchiQueryHandler :
     IOperationResultQueryHandler<GetDetailedInnoGotchiQuery, DetailedInnoGotchiDto>
 {
-    private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
-    private readonly IMapper _mapper;
     private readonly IValidator<IdentityModel<InnoGotchiRequestDto>> _innoGotchiValidator;
+    private readonly IMapper _mapper;
+    private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
 
     public GetDetailedInnoGotchiQueryHandler(IReadableInnoGotchiProvider readableInnoGotchiProvider,
         IMapper mapper,
@@ -43,9 +47,7 @@ public class GetDetailedInnoGotchiQueryHandler :
         var validationResult = await _innoGotchiValidator.ValidateAsync(model, cancellationToken);
 
         if (validationResult.IsValid == false)
-        {
             return OperationResult.FromFail<DetailedInnoGotchiDto>(validationResult.ToString());
-        }
 
         var pet = await _readableInnoGotchiProvider.GetDetailedAsync(request.PetId, cancellationToken);
 

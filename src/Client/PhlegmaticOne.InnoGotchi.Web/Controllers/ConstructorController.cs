@@ -52,7 +52,7 @@ public class ConstructorController : ClientRequestsController
 
         return await FromAuthorizedPost(new CreateInnoGotchiRequest(createInnoGotchiDto), _ =>
         {
-            IActionResult result = CreateInnoGotchiPartialView(createInnoGotchiViewModel);
+            var result = CreateInnoGotchiPartialView(createInnoGotchiViewModel);
             return Task.FromResult(result);
         }, result =>
         {
@@ -61,6 +61,8 @@ public class ConstructorController : ClientRequestsController
         });
     }
 
-    private IActionResult CreateInnoGotchiPartialView(CreateInnoGotchiViewModel createInnoGotchiViewModel) =>
-        PartialView("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml", createInnoGotchiViewModel);
+    private IActionResult CreateInnoGotchiPartialView(CreateInnoGotchiViewModel createInnoGotchiViewModel)
+    {
+        return PartialView("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml", createInnoGotchiViewModel);
+    }
 }

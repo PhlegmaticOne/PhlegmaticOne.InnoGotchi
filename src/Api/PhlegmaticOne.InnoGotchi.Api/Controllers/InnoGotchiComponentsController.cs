@@ -14,9 +14,14 @@ public class InnoGotchiComponentsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public InnoGotchiComponentsController(IMediator mediator) => _mediator = mediator;
+    public InnoGotchiComponentsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     [HttpGet]
-    public Task<OperationResult<IList<InnoGotchiComponentDto>>> GetAll() =>
-        _mediator.Send(new GetAllComponentsQuery(), HttpContext.RequestAborted);
+    public Task<OperationResult<IList<InnoGotchiComponentDto>>> GetAll()
+    {
+        return _mediator.Send(new GetAllComponentsQuery(), HttpContext.RequestAborted);
+    }
 }

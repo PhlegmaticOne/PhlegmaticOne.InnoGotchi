@@ -14,7 +14,10 @@ public class AvatarsController : IdentityController
 {
     private readonly IMediator _mediator;
 
-    public AvatarsController(IMediator mediator) => _mediator = mediator;
+    public AvatarsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     [HttpGet]
     public async Task<OperationResult<byte[]>> GetAuthorized()
@@ -22,8 +25,8 @@ public class AvatarsController : IdentityController
         var queryResult = await _mediator.Send(new GetProfileAvatarQuery(ProfileId()),
             HttpContext.RequestAborted);
 
-        return queryResult.IsSuccess == false ?
-            OperationResult.FromFail<byte[]>(queryResult.ErrorMessage) :
-            OperationResult.FromSuccess(queryResult.Result!.AvatarData);
+        return queryResult.IsSuccess == false
+            ? OperationResult.FromFail<byte[]>(queryResult.ErrorMessage)
+            : OperationResult.FromSuccess(queryResult.Result!.AvatarData);
     }
 }

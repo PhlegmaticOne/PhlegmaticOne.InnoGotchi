@@ -8,6 +8,7 @@ namespace PhlegmaticOne.ServerRequesting.Extensions;
 public static class ClientRequestsSenderExtensions
 {
     private const string HttpClientName = "Server";
+
     public static IServiceCollection AddClientRequestsService(this IServiceCollection serviceCollection,
         string serverAddress, Action<ClientRequestsBuilder> builderAction)
     {
@@ -23,13 +24,12 @@ public static class ClientRequestsSenderExtensions
 
     private static void ConfigureHttpClient(IServiceCollection serviceCollection, string serverAddress)
     {
-        serviceCollection.AddHttpClient(HttpClientName, httpClient =>
-        {
-            httpClient.BaseAddress = new Uri(serverAddress);
-        });
+        serviceCollection.AddHttpClient(HttpClientName,
+            httpClient => { httpClient.BaseAddress = new Uri(serverAddress); });
     }
 
-    private static void AddClientRequestsService(IServiceCollection serviceCollection, ClientRequestsBuilder clientRequestsBuilder)
+    private static void AddClientRequestsService(IServiceCollection serviceCollection,
+        ClientRequestsBuilder clientRequestsBuilder)
     {
         var requestUrls = clientRequestsBuilder.Build();
         serviceCollection.AddScoped<IClientRequestsService>(x =>

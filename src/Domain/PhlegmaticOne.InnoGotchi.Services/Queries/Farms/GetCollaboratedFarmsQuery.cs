@@ -9,14 +9,16 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.Farms;
 
 public class GetCollaboratedFarmsQuery : IdentityOperationResultQueryBase<IList<PreviewFarmDto>>
 {
-    public GetCollaboratedFarmsQuery(Guid profileId) : base(profileId) { }
+    public GetCollaboratedFarmsQuery(Guid profileId) : base(profileId)
+    {
+    }
 }
 
 public class GetCollaboratedFarmsQueryHandler :
     IOperationResultQueryHandler<GetCollaboratedFarmsQuery, IList<PreviewFarmDto>>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IDefaultAvatarService _defaultAvatarService;
+    private readonly IUnitOfWork _unitOfWork;
 
     public GetCollaboratedFarmsQueryHandler(IUnitOfWork unitOfWork, IDefaultAvatarService defaultAvatarService)
     {
@@ -49,11 +51,7 @@ public class GetCollaboratedFarmsQueryHandler :
     private async Task SetEmptyAvatars(IList<PreviewFarmDto> previewFarmDtos)
     {
         foreach (var previewFarmDto in previewFarmDtos)
-        {
             if (previewFarmDto.OwnerAvatarData is null || previewFarmDto.OwnerAvatarData.Any() == false)
-            {
                 previewFarmDto.OwnerAvatarData = await _defaultAvatarService.GetDefaultAvatarDataAsync();
-            }
-        }
     }
 }

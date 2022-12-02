@@ -8,18 +8,19 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.Collaborations;
 
 public class CreateCollaborationCommand : IdentityOperationResultCommandBase
 {
-    public Guid ToProfileId { get; }
-
-    public CreateCollaborationCommand(Guid profileId, Guid toProfileId) : base(profileId) => 
+    public CreateCollaborationCommand(Guid profileId, Guid toProfileId) : base(profileId)
+    {
         ToProfileId = toProfileId;
-}
+    }
 
+    public Guid ToProfileId { get; }
+}
 
 public class CreateCollaborationCommandHandler : IOperationResultCommandHandler<CreateCollaborationCommand>
 {
+    private readonly IValidator<CreateCollaborationCommand> _createValidator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IWritableCollaborationsProvider _writableCollaborationsProvider;
-    private readonly IValidator<CreateCollaborationCommand> _createValidator;
 
     public CreateCollaborationCommandHandler(IUnitOfWork unitOfWork,
         IWritableCollaborationsProvider writableCollaborationsProvider,
@@ -35,10 +36,7 @@ public class CreateCollaborationCommandHandler : IOperationResultCommandHandler<
     {
         var validationResult = await _createValidator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.IsValid == false)
-        {
-            return OperationResult.FromFail(validationResult.ToString());
-        }
+        if (validationResult.IsValid == false) return OperationResult.FromFail(validationResult.ToString());
 
         return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {

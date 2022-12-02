@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using PhlegmaticOne.PagedLists.Extensions;
 using PhlegmaticOne.PagedLists.Implementation;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
-using System.Linq.Expressions;
 
 namespace PhlegmaticOne.UnitOfWork.Implementation;
 
@@ -12,7 +12,10 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
 {
     private readonly DbSet<TEntity> _set;
 
-    public DbSetRepository(DbSet<TEntity> dbSet) => _set = dbSet;
+    public DbSetRepository(DbSet<TEntity> dbSet)
+    {
+        _set = dbSet;
+    }
 
     public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = new())
     {
@@ -35,10 +38,7 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         var existing = await GetByIdOrDefaultAsync(id, cancellationToken: cancellationToken);
 
-        if (existing is null)
-        {
-            return null;
-        }
+        if (existing is null) return null;
 
         actionOverExistingEntity(existing);
         _set.Update(existing);
@@ -50,10 +50,7 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
         CancellationToken cancellationToken = new())
     {
         var entityBases = entities as TEntity[] ?? entities.ToArray();
-        foreach (var entity in entityBases)
-        {
-            actionOverExistingEntities(entity);
-        }
+        foreach (var entity in entityBases) actionOverExistingEntities(entity);
         _set.UpdateRange(entityBases);
         return Task.FromResult((IEnumerable<TEntity>)entityBases);
     }
@@ -62,10 +59,7 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         var entity = await GetByIdOrDefaultAsync(id, cancellationToken: cancellationToken);
 
-        if (entity is null)
-        {
-            return false;
-        }
+        if (entity is null) return false;
 
         _set.Remove(entity);
         return true;
@@ -78,17 +72,11 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         IQueryable<TEntity> query = _set;
 
-        if (include is not null)
-        {
-            query = include(query);
-        }
+        if (include is not null) query = include(query);
 
-        if (predicate is not null)
-        {
-            query = query.Where(predicate);
-        }
+        if (predicate is not null) query = query.Where(predicate);
 
-        return query.FirstOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return query.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<TResult?> GetByIdOrDefaultAsync<TResult>(Guid id,
@@ -99,17 +87,11 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         IQueryable<TEntity> query = _set;
 
-        if (include is not null)
-        {
-            query = include(query);
-        }
+        if (include is not null) query = include(query);
 
-        if (predicate is not null)
-        {
-            query = query.Where(predicate);
-        }
+        if (predicate is not null) query = query.Where(predicate);
 
-        return await query.Select(selector).FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        return await query.Select(selector).FirstOrDefaultAsync(cancellationToken);
     }
 
 
@@ -121,22 +103,13 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         IQueryable<TEntity> query = _set;
 
-        if (include is not null)
-        {
-            query = include(query);
-        }
+        if (include is not null) query = include(query);
 
-        if (predicate is not null)
-        {
-            query = query.Where(predicate);
-        }
+        if (predicate is not null) query = query.Where(predicate);
 
-        if (orderBy is not null)
-        {
-            query = orderBy(query);
-        }
+        if (orderBy is not null) query = orderBy(query);
 
-        return await query.Select(selector).ToListAsync(cancellationToken: cancellationToken);
+        return await query.Select(selector).ToListAsync(cancellationToken);
     }
 
     public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null,
@@ -146,22 +119,13 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         IQueryable<TEntity> query = _set;
 
-        if (include is not null)
-        {
-            query = include(query);
-        }
+        if (include is not null) query = include(query);
 
-        if (predicate is not null)
-        {
-            query = query.Where(predicate);
-        }
+        if (predicate is not null) query = query.Where(predicate);
 
-        if (orderBy is not null)
-        {
-            query = orderBy(query);
-        }
+        if (orderBy is not null) query = orderBy(query);
 
-        return await query.ToListAsync(cancellationToken: cancellationToken);
+        return await query.ToListAsync(cancellationToken);
     }
 
     public Task<PagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>>? predicate = null,
@@ -173,20 +137,11 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         IQueryable<TEntity> query = _set;
 
-        if (include is not null)
-        {
-            query = include(query);
-        }
+        if (include is not null) query = include(query);
 
-        if (predicate is not null)
-        {
-            query = query.Where(predicate);
-        }
+        if (predicate is not null) query = query.Where(predicate);
 
-        if (orderBy is not null)
-        {
-            query = orderBy(query);
-        }
+        if (orderBy is not null) query = orderBy(query);
 
         return query.ToPagedListAsync(pageIndex, pageSize, cancellationToken: cancellationToken);
     }
@@ -197,12 +152,9 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         IQueryable<TEntity> query = _set;
 
-        if (include is not null)
-        {
-            query = include(query);
-        }
+        if (include is not null) query = include(query);
 
-        return query.FirstOrDefaultAsync(predicate, cancellationToken: cancellationToken);
+        return query.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
     public async Task<TResult?> GetFirstOrDefaultAsync<TResult>(
@@ -213,25 +165,26 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
     {
         IQueryable<TEntity> query = _set;
 
-        if (include is not null)
-        {
-            query = include(query);
-        }
+        if (include is not null) query = include(query);
 
-        return await query.Where(predicate).Select(selector).FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        return await query.Where(predicate).Select(selector).FirstOrDefaultAsync(cancellationToken);
     }
 
     public Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = new()) =>
-        predicate is null ?
-            _set.CountAsync(cancellationToken: cancellationToken) :
-            _set.CountAsync(predicate, cancellationToken: cancellationToken);
+        CancellationToken cancellationToken = new())
+    {
+        return predicate is null ? _set.CountAsync(cancellationToken) : _set.CountAsync(predicate, cancellationToken);
+    }
 
     public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = new()) =>
-        predicate is null ? _set.AnyAsync(cancellationToken: cancellationToken) : _set.AnyAsync(predicate, cancellationToken: cancellationToken);
+        CancellationToken cancellationToken = new())
+    {
+        return predicate is null ? _set.AnyAsync(cancellationToken) : _set.AnyAsync(predicate, cancellationToken);
+    }
 
     public Task<bool> AllAsync(Expression<Func<TEntity, bool>> predicate,
-        CancellationToken cancellationToken = new()) =>
-        _set.AllAsync(predicate, cancellationToken: cancellationToken);
+        CancellationToken cancellationToken = new())
+    {
+        return _set.AllAsync(predicate, cancellationToken);
+    }
 }

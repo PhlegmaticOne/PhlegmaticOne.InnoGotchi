@@ -9,7 +9,7 @@ public class MapperConfigurationTests
     public void ShouldBeSuccess()
     {
         var mapping = new MapperConfiguration(_ => _.AddProfiles(
-            typeof(CollaborationsMapperConfiguration).Assembly.GetTypes()
+            typeof(FarmMapperConfiguration).Assembly.GetTypes()
                 .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Profile)))
                 .Select(type => (Profile)Activator.CreateInstance(type)!)));
 

@@ -9,16 +9,18 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.Farms;
 
 public class CreateFarmCommand : IdentityOperationResultCommandBase
 {
-    public CreateFarmDto CreateFarmDto { get; }
-
-    public CreateFarmCommand(Guid profileId, CreateFarmDto createFarmDto) : base(profileId) => 
+    public CreateFarmCommand(Guid profileId, CreateFarmDto createFarmDto) : base(profileId)
+    {
         CreateFarmDto = createFarmDto;
+    }
+
+    public CreateFarmDto CreateFarmDto { get; }
 }
 
 public class CreateFarmCommandHandler : IOperationResultCommandHandler<CreateFarmCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateFarmCommand> _createFarmValidator;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IWritableFarmProvider _writableFarmProvider;
 
     public CreateFarmCommandHandler(IUnitOfWork unitOfWork,
@@ -34,10 +36,7 @@ public class CreateFarmCommandHandler : IOperationResultCommandHandler<CreateFar
     {
         var validationResult = await _createFarmValidator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.IsValid == false)
-        {
-            return OperationResult.FromFail(validationResult.ToString());
-        }
+        if (validationResult.IsValid == false) return OperationResult.FromFail(validationResult.ToString());
 
         return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {

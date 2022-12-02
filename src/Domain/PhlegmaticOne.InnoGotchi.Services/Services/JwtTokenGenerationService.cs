@@ -1,5 +1,4 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
-using PhlegmaticOne.InnoGotchi.Domain.Services;
+﻿using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Shared.JwtToken;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.JwtTokensGeneration;
@@ -11,8 +10,10 @@ public class JwtTokenGenerationService : IJwtTokenGenerationService
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-    public JwtTokenGenerationService(IJwtTokenGenerator jwtTokenGenerator) =>
+    public JwtTokenGenerationService(IJwtTokenGenerator jwtTokenGenerator)
+    {
         _jwtTokenGenerator = jwtTokenGenerator;
+    }
 
     public JwtTokenDto GenerateJwtToken(AuthorizedProfileDto profile)
     {

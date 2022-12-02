@@ -5,11 +5,16 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index() => View();
+    public IActionResult Index()
+    {
+        return View();
+    }
 
-    public IActionResult Error(string errorMessage) =>
-        View(new ErrorViewModel
+    public IActionResult Error(string errorMessage)
+    {
+        return View(new ErrorViewModel
         {
             ErrorMessage = errorMessage
         });
+    }
 }

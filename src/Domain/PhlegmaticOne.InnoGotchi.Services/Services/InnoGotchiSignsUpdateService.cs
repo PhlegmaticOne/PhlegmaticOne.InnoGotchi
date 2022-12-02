@@ -7,9 +7,9 @@ namespace PhlegmaticOne.InnoGotchi.Services.Services;
 public class InnoGotchiSignsUpdateService : IInnoGotchiSignsUpdateService
 {
     private readonly ITimeService _timeService;
+    private readonly TimeSpan _timeToIncreaseAge;
     private readonly TimeSpan _timeToIncreaseHungerLevel;
     private readonly TimeSpan _timeToIncreaseThirstLevel;
-    private readonly TimeSpan _timeToIncreaseAge;
 
     public InnoGotchiSignsUpdateService(ITimeService timeService,
         TimeSpan timeToIncreaseHungerLevel,
@@ -25,13 +25,15 @@ public class InnoGotchiSignsUpdateService : IInnoGotchiSignsUpdateService
     public HungerLevel TryIncreaseHungerLevel(HungerLevel currentHungerLevel, DateTime lastFeedTime)
     {
         var now = _timeService.Now();
-        return SynchronizationHelper.SynchronizeEnumWithTime(currentHungerLevel, now, lastFeedTime, _timeToIncreaseHungerLevel);
+        return SynchronizationHelper.SynchronizeEnumWithTime(currentHungerLevel, now, lastFeedTime,
+            _timeToIncreaseHungerLevel);
     }
 
     public ThirstyLevel TryIncreaseThirstLevel(ThirstyLevel currentThirstyLevel, DateTime lastDrinkTime)
     {
         var now = _timeService.Now();
-        return SynchronizationHelper.SynchronizeEnumWithTime(currentThirstyLevel, now, lastDrinkTime, _timeToIncreaseThirstLevel);
+        return SynchronizationHelper.SynchronizeEnumWithTime(currentThirstyLevel, now, lastDrinkTime,
+            _timeToIncreaseThirstLevel);
     }
 
     public int TryIncreaseAge(int currentAge, DateTime lastAgeUpdatedTime)
@@ -46,10 +48,8 @@ public class InnoGotchiSignsUpdateService : IInnoGotchiSignsUpdateService
     {
         var now = _timeService.Now();
 
-        if ((int)currentHungerLevel > (int)HungerLevel.Normal || (int)currentThirstyLevel > (int)ThirstyLevel.Normal)
-        {
-            return 0;
-        }
+        if ((int)currentHungerLevel > (int)HungerLevel.Normal ||
+            (int)currentThirstyLevel > (int)ThirstyLevel.Normal) return 0;
 
         return (int)(now - petCreationDate).TotalDays;
     }

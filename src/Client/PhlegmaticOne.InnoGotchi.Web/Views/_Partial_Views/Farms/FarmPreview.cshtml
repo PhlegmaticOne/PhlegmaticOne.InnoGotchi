@@ -9,7 +9,9 @@
         <h5 class="card-title">@Model.Name</h5>
         <h6 class="card-text">@(Model.FirstName) @(Model.LastName)</h6>
         <h6 class="card-text">@(Model.Email)</h6>
-        <a asp-controller="Farms" asp-action="View" asp-route-farmId="@Model.FarmId"
-           class="btn btn-outline-info mt-2">Go to farm</a>
+        <a asp-controller="Farm" asp-action="View" asp-route-farmId="@Model.FarmId"
+           class="btn btn-outline-info mt-2">
+            Go to farm
+        </a>
     </div>
 </div>

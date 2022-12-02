@@ -8,19 +8,25 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.Search;
 
 public class SearchProfilesRequest : IdentityOperationResultQueryBase<IList<SearchProfileDto>>
 {
-    public string SearchText { get; }
-
-    public SearchProfilesRequest(Guid profileId, string searchText) : base(profileId) => 
+    public SearchProfilesRequest(Guid profileId, string searchText) : base(profileId)
+    {
         SearchText = searchText;
+    }
+
+    public string SearchText { get; }
 }
 
 public class SearchProfilesRequestHandler : IOperationResultQueryHandler<SearchProfilesRequest, IList<SearchProfileDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public SearchProfilesRequestHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public SearchProfilesRequestHandler(IUnitOfWork unitOfWork)
+    {
+        _unitOfWork = unitOfWork;
+    }
 
-    public async Task<OperationResult<IList<SearchProfileDto>>> Handle(SearchProfilesRequest request, CancellationToken cancellationToken)
+    public async Task<OperationResult<IList<SearchProfileDto>>> Handle(SearchProfilesRequest request,
+        CancellationToken cancellationToken)
     {
         var toSearch = request.SearchText;
         var profileId = request.ProfileId;
@@ -42,10 +48,7 @@ public class SearchProfilesRequestHandler : IOperationResultQueryHandler<SearchP
 
         IList<SearchProfileDto> list = new List<SearchProfileDto>();
 
-        if (result is not null)
-        {
-            list.Add(result);
-        }
+        if (result is not null) list.Add(result);
 
         return OperationResult.FromSuccess(list);
     }

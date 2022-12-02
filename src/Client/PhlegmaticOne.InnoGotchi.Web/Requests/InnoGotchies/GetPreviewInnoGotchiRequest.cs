@@ -1,11 +1,17 @@
 ﻿using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
+using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.InnoGotchies;
 
 public class GetPreviewInnoGotchiRequest : ClientGetRequest<Guid, PreviewInnoGotchiDto>
 {
-    public GetPreviewInnoGotchiRequest(Guid requestData) : base(requestData) { }
+    public GetPreviewInnoGotchiRequest(Guid requestData) : base(requestData)
+    {
+    }
 
-    public override string BuildQueryString() => WithOneQueryParameter(new("petId", RequestData));
+    public override string BuildQueryString()
+    {
+        return WithOneQueryParameter(new GetRequestQueryParameter("petId", RequestData));
+    }
 }

@@ -9,16 +9,18 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 
 public class CreateInnoGotchiCommand : IdentityOperationResultCommandBase
 {
-    public CreateInnoGotchiDto CreateInnoGotchiDto { get; }
-
-    public CreateInnoGotchiCommand(Guid profileId, CreateInnoGotchiDto createInnoGotchiDto) : base(profileId) => 
+    public CreateInnoGotchiCommand(Guid profileId, CreateInnoGotchiDto createInnoGotchiDto) : base(profileId)
+    {
         CreateInnoGotchiDto = createInnoGotchiDto;
+    }
+
+    public CreateInnoGotchiDto CreateInnoGotchiDto { get; }
 }
 
 public class CreateInnoGotchiCommandHandler : IOperationResultCommandHandler<CreateInnoGotchiCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateInnoGotchiCommand> _createValidator;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IWritableInnoGotchiesProvider _writableInnoGotchiesProvider;
 
     public CreateInnoGotchiCommandHandler(IUnitOfWork unitOfWork,
@@ -34,10 +36,7 @@ public class CreateInnoGotchiCommandHandler : IOperationResultCommandHandler<Cre
     {
         var validationResult = await _createValidator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.IsValid == false)
-        {
-            return OperationResult.FromFail(validationResult.ToString());
-        }
+        if (validationResult.IsValid == false) return OperationResult.FromFail(validationResult.ToString());
 
         return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {

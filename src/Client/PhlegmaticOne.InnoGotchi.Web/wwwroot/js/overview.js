@@ -19,7 +19,7 @@ $(() => {
         const deadPetsCount = document.getElementById("dead-pets-count");
 
         Morris.Donut({
-            element: 'donut-chart',
+            element: "donut-chart",
             labelColor: "#ffffff",
             data: [
                 { label: "Alive pets count", value: +alivePetsCount.innerHTML, color: "#30c970" },

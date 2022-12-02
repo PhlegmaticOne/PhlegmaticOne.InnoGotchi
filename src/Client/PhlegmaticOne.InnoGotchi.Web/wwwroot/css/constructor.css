@@ -1,6 +1,4 @@
-﻿class .drop-area {
-    border: red
-}
+﻿class .drop-area { border: red }
 
 class .drag {
     position: absolute;

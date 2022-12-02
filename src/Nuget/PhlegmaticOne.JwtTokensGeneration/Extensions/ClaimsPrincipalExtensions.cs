@@ -1,5 +1,5 @@
-﻿using PhlegmaticOne.JwtTokensGeneration.Helpers;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using PhlegmaticOne.JwtTokensGeneration.Helpers;
 
 namespace PhlegmaticOne.JwtTokensGeneration.Extensions;
 

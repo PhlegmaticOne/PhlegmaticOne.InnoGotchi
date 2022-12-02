@@ -9,5 +9,4 @@ public interface IUnitOfWork
     Task<int> SaveChangesAsync();
     Task<OperationResult<T>> ResultFromExecutionInTransaction<T>(Func<Task<T>> operation);
     Task<OperationResult> ResultFromExecutionInTransaction(Func<Task> operation);
-
 }

@@ -1,9 +1,9 @@
-﻿using PhlegmaticOne.OperationResults;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Models.Requests;
 using PhlegmaticOne.ServerRequesting.Services;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace PhlegmaticOne.ServerRequesting.Implementation;
 
@@ -13,6 +13,7 @@ public class ClientRequestsService : IClientRequestsService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _httpClientName;
     private readonly Dictionary<Type, string> _requestUrls;
+
     public ClientRequestsService(IHttpClientFactory httpClientFactory,
         Dictionary<Type, string> requestUrls,
         string httpClientName)
@@ -106,26 +107,29 @@ public class ClientRequestsService : IClientRequestsService
         return httpClient;
     }
 
-    private string BuildRequestQuery<TRequest, TResponse>(ClientQueryBuildableRequest<TRequest, TResponse> request) =>
-        string.Concat(GetRequestUrl(request), PreQueryPart, request.BuildQueryString());
+    private string BuildRequestQuery<TRequest, TResponse>(ClientQueryBuildableRequest<TRequest, TResponse> request)
+    {
+        return string.Concat(GetRequestUrl(request), PreQueryPart, request.BuildQueryString());
+    }
 
-    private string BuildGetQuery<TRequest, TResponse>(ClientGetRequest<TRequest, TResponse> clientGetRequest) =>
-        clientGetRequest.IsEmpty ?
-            GetRequestUrl(clientGetRequest) :
-            BuildRequestQuery(clientGetRequest);
+    private string BuildGetQuery<TRequest, TResponse>(ClientGetRequest<TRequest, TResponse> clientGetRequest)
+    {
+        return clientGetRequest.IsEmpty ? GetRequestUrl(clientGetRequest) : BuildRequestQuery(clientGetRequest);
+    }
 
-    private string GetRequestUrl(ClientRequest clientRequest) =>
-        _requestUrls[clientRequest.GetType()];
+    private string GetRequestUrl(ClientRequest clientRequest)
+    {
+        return _requestUrls[clientRequest.GetType()];
+    }
 
-    private static async Task<ServerResponse<TResponse>> GetServerResponse<TResponse>(HttpResponseMessage httpResponseMessage)
+    private static async Task<ServerResponse<TResponse>> GetServerResponse<TResponse>(
+        HttpResponseMessage httpResponseMessage)
     {
         var httpStatusCode = httpResponseMessage.StatusCode;
         var reasonPhrase = httpResponseMessage.ReasonPhrase;
 
         if (httpResponseMessage.IsSuccessStatusCode == false)
-        {
             return ServerResponse.FromError<TResponse>(httpStatusCode, reasonPhrase);
-        }
 
         var result = await httpResponseMessage.Content.ReadFromJsonAsync<OperationResult<TResponse>>();
         return ServerResponse.FromSuccess(result!, httpStatusCode, reasonPhrase);

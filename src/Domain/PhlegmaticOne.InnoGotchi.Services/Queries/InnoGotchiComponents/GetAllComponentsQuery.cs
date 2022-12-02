@@ -7,13 +7,15 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.InnoGotchiComponents;
 
-public class GetAllComponentsQuery : IOperationResultQuery<IList<InnoGotchiComponentDto>> { }
+public class GetAllComponentsQuery : IOperationResultQuery<IList<InnoGotchiComponentDto>>
+{
+}
 
 public class GetAllComponentsQueryHandler :
     IOperationResultQueryHandler<GetAllComponentsQuery, IList<InnoGotchiComponentDto>>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
     public GetAllComponentsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {

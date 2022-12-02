@@ -1,32 +1,35 @@
 $(() => {
 
-    document.querySelectorAll('.pet-card').forEach(card => {
+    document.querySelectorAll(".pet-card").forEach(card => {
         subscribeFeedButton(card);
         subscribeDrinkButton(card);
     });
 
     function subscribeFeedButton(card) {
         const feedButton = card.querySelector(".feed_button");
-        feedButton.addEventListener("click", async () => {
-            await performAction("/InnoGotchies/FeedPartial", card);
-        });
+        feedButton.addEventListener("click",
+            async () => {
+                await performAction("/InnoGotchies/FeedPartial", card);
+            });
     }
 
     function subscribeDrinkButton(card) {
         const drinkButton = card.querySelector(".drink_button");
-        drinkButton.addEventListener("click", async () => {
-            await performAction("/InnoGotchies/DrinkPartial", card);
-        });
+        drinkButton.addEventListener("click",
+            async () => {
+                await performAction("/InnoGotchies/DrinkPartial", card);
+            });
     }
 
     async function performAction(url, card) {
         const idModel = getIdModel(card);
 
-        const response = await window.fetch(url, {
-            method: "POST",
-            headers: { 'Content-type': "application/json" },
-            body: JSON.stringify(idModel)
-        });
+        const response = await window.fetch(url,
+            {
+                method: "POST",
+                headers: { 'Content-type': "application/json" },
+                body: JSON.stringify(idModel)
+            });
 
         if (response.ok) {
             const parent = card.parentElement;
@@ -43,6 +46,6 @@ $(() => {
         return {
             id: id,
             canSeeDetails: canSeeDetails
-        }
+        };
     }
 });

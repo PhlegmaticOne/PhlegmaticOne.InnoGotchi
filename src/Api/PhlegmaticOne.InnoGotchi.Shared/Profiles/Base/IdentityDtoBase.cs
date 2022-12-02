@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Profiles;
+﻿namespace PhlegmaticOne.InnoGotchi.Shared.Profiles.Base;
 
 public class IdentityDtoBase
 {

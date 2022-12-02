@@ -9,17 +9,19 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.Profiles;
 
 public class UpdateProfileCommand : IdentityOperationResultCommandBase
 {
-    public UpdateProfileDto UpdateProfileDto { get; }
-
-    public UpdateProfileCommand(Guid profileId, UpdateProfileDto updateProfileDto) : base(profileId) => 
+    public UpdateProfileCommand(Guid profileId, UpdateProfileDto updateProfileDto) : base(profileId)
+    {
         UpdateProfileDto = updateProfileDto;
+    }
+
+    public UpdateProfileDto UpdateProfileDto { get; }
 }
 
 public class UpdateProfileCommandHandler : IOperationResultCommandHandler<UpdateProfileCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IWritableProfilesProvider _writableProfilesProvider;
     private readonly IValidator<UpdateProfileCommand> _updateProfileValidator;
+    private readonly IWritableProfilesProvider _writableProfilesProvider;
 
     public UpdateProfileCommandHandler(IUnitOfWork unitOfWork,
         IWritableProfilesProvider writableProfilesProvider,
@@ -35,9 +37,7 @@ public class UpdateProfileCommandHandler : IOperationResultCommandHandler<Update
         var validationResult = await _updateProfileValidator.ValidateAsync(request, cancellationToken);
 
         if (validationResult.IsValid == false)
-        {
             return OperationResult.FromFail<AuthorizedProfileDto>(validationResult.ToString());
-        }
 
         return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {

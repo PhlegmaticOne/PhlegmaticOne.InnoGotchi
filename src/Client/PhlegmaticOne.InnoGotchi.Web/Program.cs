@@ -20,15 +20,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x =>
-    {
-        x.LoginPath = new PathString("/Account/Login");
-    });
+    .AddCookie(x => { x.LoginPath = new PathString("/Auth/Login"); });
 
-builder.Services.AddAutoMapper(x =>
-{
-    x.AddMaps(typeof(AccountMapperConfiguration).Assembly);
-});
+builder.Services.AddAutoMapper(x => { x.AddMaps(typeof(AccountMapperConfiguration).Assembly); });
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterViewModelValidator>();
 
@@ -66,10 +60,7 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
     a.ConfigureRequest<GetInnoGotchiesPagedListRequest>("InnoGotchies/GetPaged");
 });
 
-builder.Services.AddLocalStorage(startConf =>
-{
-    startConf.SetLoginPath("/Account/Login");
-});
+builder.Services.AddLocalStorage(startConf => { startConf.SetLoginPath("/Account/Login"); });
 
 builder.Services.AddTransient<IPagedListPagesGenerator, PagedListPagesGenerator>();
 
@@ -92,6 +83,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,4 +1,4 @@
-namespace PhlegmaticOne.InnoGotchi.Api.Services;
+namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.Services.ServerAddress;
 
 public interface IServerAddressProvider
 {

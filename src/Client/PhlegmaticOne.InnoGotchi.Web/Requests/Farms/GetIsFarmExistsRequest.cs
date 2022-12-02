@@ -2,4 +2,6 @@ using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 
-public class GetIsFarmExistsRequest : EmptyClientGetRequest<bool> { }
+public class GetIsFarmExistsRequest : EmptyClientGetRequest<bool>
+{
+}

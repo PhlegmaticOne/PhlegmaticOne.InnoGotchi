@@ -36,5 +36,8 @@ public class InnoGotchiesMappingConfiguration : Profile
         CreateMap<PagedList<InnoGotchiModel>, PagedList<ReadonlyInnoGotchiPreviewDto>>();
     }
 
-    private static bool DeathDateNotMin(DateTime deathDate) => deathDate != DateTime.MinValue;
+    private static bool DeathDateNotMin(DateTime deathDate)
+    {
+        return deathDate != DateTime.MinValue;
+    }
 }

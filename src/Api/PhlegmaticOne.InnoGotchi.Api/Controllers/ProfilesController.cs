@@ -16,11 +16,16 @@ public class ProfilesController : IdentityController
 {
     private readonly IMediator _mediator;
 
-    public ProfilesController(IMediator mediator) => _mediator = mediator;
+    public ProfilesController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     [HttpGet]
-    public Task<OperationResult<DetailedProfileDto>> GetAuthorized() =>
-        _mediator.Send(new GetDetailedProfileQuery(ProfileId()), HttpContext.RequestAborted);
+    public Task<OperationResult<DetailedProfileDto>> GetAuthorized()
+    {
+        return _mediator.Send(new GetDetailedProfileQuery(ProfileId()), HttpContext.RequestAborted);
+    }
 
     [HttpPut]
     public async Task<OperationResult<AuthorizedProfileDto>> Update([FromBody] UpdateProfileDto updateProfileDto)
@@ -29,9 +34,7 @@ public class ProfilesController : IdentityController
             HttpContext.RequestAborted);
 
         if (updateResult.IsSuccess == false)
-        {
             return OperationResult.FromFail<AuthorizedProfileDto>(updateResult.ErrorMessage);
-        }
 
         return await _mediator.Send(new GetAuthorizedProfileAuthorizedQuery(ProfileId()),
             HttpContext.RequestAborted);

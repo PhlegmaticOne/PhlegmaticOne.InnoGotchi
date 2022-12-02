@@ -9,8 +9,8 @@ namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 
 public class WritableFarmProvider : IWritableFarmProvider
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly ITimeService _timeService;
+    private readonly IUnitOfWork _unitOfWork;
 
     public WritableFarmProvider(IUnitOfWork unitOfWork, ITimeService timeService)
     {
@@ -18,7 +18,7 @@ public class WritableFarmProvider : IWritableFarmProvider
         _timeService = timeService;
     }
 
-    public async Task<Farm> CreateAsync(Guid profileId, CreateFarmDto createFarmDto, 
+    public async Task<Farm> CreateAsync(Guid profileId, CreateFarmDto createFarmDto,
         CancellationToken cancellationToken = new())
     {
         var farm = await CreateFarm(profileId, createFarmDto, cancellationToken);

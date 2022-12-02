@@ -1,5 +1,5 @@
-﻿using PhlegmaticOne.InnoGotchi.Shared.Profiles;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 
@@ -19,6 +19,6 @@ public class ClaimsPrincipalGenerator
             ClaimsIdentity.DefaultNameClaimType,
             ClaimsIdentity.DefaultRoleClaimType);
 
-        return new(claimsIdentity);
+        return new ClaimsPrincipal(claimsIdentity);
     }
 }

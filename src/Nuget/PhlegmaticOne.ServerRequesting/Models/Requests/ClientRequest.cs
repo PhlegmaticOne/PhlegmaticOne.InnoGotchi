@@ -1,11 +1,15 @@
 ﻿namespace PhlegmaticOne.ServerRequesting.Models.Requests;
 
-
-public abstract class ClientRequest { }
+public abstract class ClientRequest
+{
+}
 
 public abstract class ClientRequest<TRequest, TResponse> : ClientRequest
 {
-    protected ClientRequest(TRequest requestData) => RequestData = requestData;
+    protected ClientRequest(TRequest requestData)
+    {
+        RequestData = requestData;
+    }
 
     public TRequest RequestData { get; set; }
 }

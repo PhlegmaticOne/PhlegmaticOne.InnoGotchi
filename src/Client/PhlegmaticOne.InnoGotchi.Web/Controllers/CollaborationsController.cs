@@ -16,12 +16,14 @@ public class CollaborationsController : ClientRequestsController
     public CollaborationsController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
         base(clientRequestsService, localStorageService, mapper)
-    { }
+    {
+    }
 
     [HttpPost]
     public Task<IActionResult> Collaborate([FromBody] IdViewModel idViewModel)
     {
-        return FromAuthorizedPost(new CreateCollaborationRequest(new CreateCollaborationDto(idViewModel.Id)), dto =>
+        var createCollaborationDto = new CreateCollaborationDto(idViewModel.Id);
+        return FromAuthorizedPost(new CreateCollaborationRequest(createCollaborationDto), _ =>
         {
             IActionResult ok = Ok();
             return Task.FromResult(ok);

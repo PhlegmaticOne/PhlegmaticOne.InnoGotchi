@@ -5,5 +5,7 @@ namespace PhlegmaticOne.InnoGotchi.Web.Requests.Collaborations;
 
 public class CreateCollaborationRequest : ClientOperationResultPostRequest<CreateCollaborationDto>
 {
-    public CreateCollaborationRequest(CreateCollaborationDto requestData) : base(requestData) { }
+    public CreateCollaborationRequest(CreateCollaborationDto requestData) : base(requestData)
+    {
+    }
 }

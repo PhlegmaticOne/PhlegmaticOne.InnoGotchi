@@ -1,4 +1,6 @@
-﻿namespace PhlegmaticOne.InnoGotchi.Shared.Profiles;
+﻿using PhlegmaticOne.InnoGotchi.Shared.Profiles.Base;
+
+namespace PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
 
 public class RegisterProfileDto : IdentityDtoBase
 {

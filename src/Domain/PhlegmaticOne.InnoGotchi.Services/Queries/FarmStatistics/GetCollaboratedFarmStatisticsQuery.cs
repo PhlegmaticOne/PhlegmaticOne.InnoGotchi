@@ -8,7 +8,9 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.FarmStatistics;
 
 public class GetCollaboratedFarmStatisticsQuery : IdentityOperationResultQueryBase<IList<PreviewFarmStatisticsDto>>
 {
-    public GetCollaboratedFarmStatisticsQuery(Guid profileId) : base(profileId) { }
+    public GetCollaboratedFarmStatisticsQuery(Guid profileId) : base(profileId)
+    {
+    }
 }
 
 public class GetCollaboratedFarmStatisticsQueryHandler :
@@ -16,8 +18,10 @@ public class GetCollaboratedFarmStatisticsQueryHandler :
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public GetCollaboratedFarmStatisticsQueryHandler(IUnitOfWork unitOfWork) =>
+    public GetCollaboratedFarmStatisticsQueryHandler(IUnitOfWork unitOfWork)
+    {
         _unitOfWork = unitOfWork;
+    }
 
     public async Task<OperationResult<IList<PreviewFarmStatisticsDto>>> Handle(
         GetCollaboratedFarmStatisticsQuery request, CancellationToken cancellationToken)

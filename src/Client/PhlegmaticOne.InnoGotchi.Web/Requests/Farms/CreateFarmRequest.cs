@@ -5,5 +5,7 @@ namespace PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 
 public class CreateFarmRequest : ClientOperationResultPostRequest<CreateFarmDto>
 {
-    public CreateFarmRequest(CreateFarmDto requestData) : base(requestData) { }
+    public CreateFarmRequest(CreateFarmDto requestData) : base(requestData)
+    {
+    }
 }

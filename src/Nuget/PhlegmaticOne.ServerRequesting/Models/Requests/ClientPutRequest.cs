@@ -2,5 +2,7 @@
 
 public abstract class ClientPutRequest<TRequest, TResponse> : ClientRequest<TRequest, TResponse>
 {
-    protected ClientPutRequest(TRequest requestData) : base(requestData) { }
+    protected ClientPutRequest(TRequest requestData) : base(requestData)
+    {
+    }
 }

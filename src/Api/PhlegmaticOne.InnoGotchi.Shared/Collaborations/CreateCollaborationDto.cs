@@ -1,6 +1,11 @@
 ﻿namespace PhlegmaticOne.InnoGotchi.Shared.Collaborations;
 
-public class CreateCollaborationDto : IdDto
+public class CreateCollaborationDto
 {
-    public CreateCollaborationDto(Guid id) : base(id) { }
+    public CreateCollaborationDto(Guid toProfileId)
+    {
+        ToProfileId = toProfileId;
+    }
+
+    public Guid ToProfileId { get; }
 }

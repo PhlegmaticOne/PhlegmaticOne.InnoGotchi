@@ -10,12 +10,13 @@ using PhlegmaticOne.ServerRequesting.Services;
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
 [Authorize]
-public class AccountsController : ClientRequestsController
+public class SearchController : ClientRequestsController
 {
-    public AccountsController(IClientRequestsService clientRequestsService,
+    public SearchController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
         base(clientRequestsService, localStorageService, mapper)
-    { }
+    {
+    }
 
     [HttpGet]
     public Task<IActionResult> SearchPartial(string searchText)
@@ -23,7 +24,8 @@ public class AccountsController : ClientRequestsController
         return FromAuthorizedGet(new SearchProfilesRequest(searchText), profiles =>
         {
             var viewModels = Mapper.Map<IList<SearchProfileViewModel>>(profiles);
-            IActionResult view = PartialView("~/Views/_Partial_Views/Profiles/ProfileSearchResultsList.cshtml", viewModels);
+            IActionResult view = PartialView("~/Views/_Partial_Views/Profiles/ProfileSearchResultsList.cshtml",
+                viewModels);
             return Task.FromResult(view);
         });
     }

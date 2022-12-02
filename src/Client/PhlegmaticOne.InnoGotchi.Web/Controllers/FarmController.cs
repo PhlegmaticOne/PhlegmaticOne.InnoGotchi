@@ -11,16 +11,19 @@ using PhlegmaticOne.ServerRequesting.Services;
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 
 [Authorize]
-public class FarmsController : ClientRequestsController
+public class FarmController : ClientRequestsController
 {
-    public FarmsController(IClientRequestsService clientRequestsService,
+    public FarmController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
         base(clientRequestsService, localStorageService, mapper)
-    { }
-
+    {
+    }
 
     [HttpGet]
-    public IActionResult Create() => View();
+    public IActionResult Create()
+    {
+        return View();
+    }
 
     [HttpGet]
     public Task<IActionResult> My()
@@ -32,7 +35,7 @@ public class FarmsController : ClientRequestsController
             ViewData["CanSeeDetails"] = true;
             IActionResult view = View(farmViewModel);
             return Task.FromResult(view);
-        }, onOperationFailed: failedResult =>
+        }, failedResult =>
             ViewWithErrorsFromOperationResult(failedResult, nameof(Create), new CreateFarmViewModel()));
     }
 

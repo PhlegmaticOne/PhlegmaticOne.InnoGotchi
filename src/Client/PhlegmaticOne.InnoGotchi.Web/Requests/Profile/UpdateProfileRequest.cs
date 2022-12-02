@@ -5,5 +5,7 @@ namespace PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
 
 public class UpdateProfileRequest : ClientPutRequest<UpdateProfileDto, AuthorizedProfileDto>
 {
-    public UpdateProfileRequest(UpdateProfileDto requestData) : base(requestData) { }
+    public UpdateProfileRequest(UpdateProfileDto requestData) : base(requestData)
+    {
+    }
 }
