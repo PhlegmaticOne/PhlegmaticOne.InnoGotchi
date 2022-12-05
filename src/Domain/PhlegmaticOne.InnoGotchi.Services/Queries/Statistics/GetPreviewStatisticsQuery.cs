@@ -17,11 +17,11 @@ public class GetPreviewStatisticsQuery : IdentityOperationResultQueryBase<Previe
 public class GetPreviewStatisticsQueryHandler :
     IOperationResultQueryHandler<GetPreviewStatisticsQuery, PreviewFarmStatisticsDto>
 {
-    private readonly IValidator<ExistsProfileFarmModel> _existsFarmValidator;
+    private readonly IValidator<ProfileFarmModel> _existsFarmValidator;
     private readonly IUnitOfWork _unitOfWork;
 
     public GetPreviewStatisticsQueryHandler(IUnitOfWork unitOfWork,
-        IValidator<ExistsProfileFarmModel> existsFarmValidator)
+        IValidator<ProfileFarmModel> existsFarmValidator)
     {
         _unitOfWork = unitOfWork;
         _existsFarmValidator = existsFarmValidator;
@@ -31,7 +31,7 @@ public class GetPreviewStatisticsQueryHandler :
         CancellationToken cancellationToken)
     {
         var validationResult = await _existsFarmValidator
-            .ValidateAsync(new ExistsProfileFarmModel(request.ProfileId), cancellationToken);
+            .ValidateAsync(new ProfileFarmModel(request.ProfileId), cancellationToken);
 
         if (validationResult.IsValid == false)
             return OperationResult.FromFail<PreviewFarmStatisticsDto>(validationResult.ToString());

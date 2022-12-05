@@ -31,7 +31,7 @@ public static class PagedListExtensions
         };
     }
 
-    public static IPagedList<T> ToPagedList<T>(this IQueryable<T> source, int pageIndex, int pageSize,
+    public static PagedList<T> ToPagedList<T>(this IQueryable<T> source, int pageIndex, int pageSize,
         int indexFrom = 0)
     {
         if (indexFrom > pageIndex)

@@ -10,6 +10,7 @@ public class InnoGotchiComponentsMapperConfiguration : Profile
     {
         CreateMap<InnoGotchiComponent, InnoGotchiComponentDto>();
         CreateMap<InnoGotchiModelComponent, InnoGotchiModelComponentDto>()
-            .ForMember(x => x.ImageUrl, o => o.MapFrom(x => x.InnoGotchiComponent.ImageUrl));
+            .ForMember(x => x.ImageUrl, o => o.MapFrom(x => x.InnoGotchiComponent.ImageUrl))
+            .ForMember(x => x.Name, o => o.MapFrom(x => x.InnoGotchiComponent.Name));
     }
 }

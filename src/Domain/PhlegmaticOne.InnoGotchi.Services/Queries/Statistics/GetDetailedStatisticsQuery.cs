@@ -18,11 +18,11 @@ public class GetDetailedStatisticsQuery : IdentityOperationResultQueryBase<Detai
 public class GetDetailedStatisticsQueryHandler :
     IOperationResultQueryHandler<GetDetailedStatisticsQuery, DetailedFarmStatisticsDto>
 {
-    private readonly IValidator<ExistsProfileFarmModel> _existsFarmValidator;
+    private readonly IValidator<ProfileFarmModel> _existsFarmValidator;
     private readonly IUnitOfWork _unitOfWork;
 
     public GetDetailedStatisticsQueryHandler(IUnitOfWork unitOfWork,
-        IValidator<ExistsProfileFarmModel> existsFarmValidator)
+        IValidator<ProfileFarmModel> existsFarmValidator)
     {
         _unitOfWork = unitOfWork;
         _existsFarmValidator = existsFarmValidator;
@@ -32,7 +32,7 @@ public class GetDetailedStatisticsQueryHandler :
         CancellationToken cancellationToken)
     {
         var validationResult = await _existsFarmValidator
-            .ValidateAsync(new ExistsProfileFarmModel(request.ProfileId), cancellationToken);
+            .ValidateAsync(new ProfileFarmModel(request.ProfileId), cancellationToken);
 
         if (validationResult.IsValid == false)
             return OperationResult.FromFail<DetailedFarmStatisticsDto>(validationResult.ToString());

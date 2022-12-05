@@ -14,18 +14,15 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [AllowAnonymous]
 public class AuthController : ClientRequestsController
 {
-    private readonly IValidator<LoginViewModel> _loginViewModelValidator;
     private readonly IValidator<RegisterViewModel> _registerViewModelValidator;
 
     public AuthController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService,
         IValidator<RegisterViewModel> registerViewModelValidator,
-        IValidator<LoginViewModel> loginViewModelValidator,
         IMapper mapper) :
         base(clientRequestsService, localStorageService, mapper)
     {
         _registerViewModelValidator = registerViewModelValidator;
-        _loginViewModelValidator = loginViewModelValidator;
     }
 
     [HttpGet]
@@ -60,11 +57,6 @@ public class AuthController : ClientRequestsController
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
-        var validationResult = await _loginViewModelValidator.ValidateAsync(loginViewModel);
-
-        if (validationResult.IsValid == false)
-            return ViewWithErrorsFromValidationResult(validationResult, nameof(Login), loginViewModel);
-
         var loginDto = Mapper.Map<LoginDto>(loginViewModel);
 
         return await FromAuthorizedPost(new LoginProfileRequest(loginDto), async profile =>

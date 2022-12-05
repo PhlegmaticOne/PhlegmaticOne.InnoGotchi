@@ -14,7 +14,7 @@ public class UpdateInnoGotchiCommand : IdentityOperationResultCommandBase
         UpdateInnoGotchiDto = updateInnoGotchiDto;
     }
 
-    public UpdateInnoGotchiDto UpdateInnoGotchiDto { get; }
+    public UpdateInnoGotchiDto UpdateInnoGotchiDto { get; set; }
 }
 
 public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<UpdateInnoGotchiCommand>

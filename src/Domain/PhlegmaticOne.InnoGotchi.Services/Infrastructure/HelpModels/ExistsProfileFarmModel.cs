@@ -1,11 +1,8 @@
 ﻿namespace PhlegmaticOne.InnoGotchi.Services.Infrastructure.HelpModels;
 
-public class ExistsProfileFarmModel
+public class ProfileFarmModel
 {
-    public ExistsProfileFarmModel(Guid profileId)
-    {
-        ProfileId = profileId;
-    }
+    public ProfileFarmModel(Guid profileId) => ProfileId = profileId;
 
     public Guid ProfileId { get; set; }
 }

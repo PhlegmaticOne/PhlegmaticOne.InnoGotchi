@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
@@ -15,15 +13,9 @@ namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 [Authorize]
 public class ConstructorController : ClientRequestsController
 {
-    private readonly IValidator<CreateInnoGotchiViewModel> _createInnoGotchiViewModelValidator;
-
     public ConstructorController(IClientRequestsService clientRequestsService,
-        ILocalStorageService localStorageService, IMapper mapper,
-        IValidator<CreateInnoGotchiViewModel> createInnoGotchiViewModelValidator) :
-        base(clientRequestsService, localStorageService, mapper)
-    {
-        _createInnoGotchiViewModelValidator = createInnoGotchiViewModelValidator;
-    }
+        ILocalStorageService localStorageService, IMapper mapper) :
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
     public Task<IActionResult> Create()
@@ -39,15 +31,6 @@ public class ConstructorController : ClientRequestsController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateInnoGotchiViewModel createInnoGotchiViewModel)
     {
-        var validationResult = await _createInnoGotchiViewModelValidator.ValidateAsync(createInnoGotchiViewModel);
-
-        if (validationResult.IsValid == false)
-        {
-            validationResult.AddToModelState(ModelState);
-            createInnoGotchiViewModel.ErrorMessage = validationResult.ToString(".");
-            return CreateInnoGotchiPartialView(createInnoGotchiViewModel);
-        }
-
         var createInnoGotchiDto = Mapper.Map<CreateInnoGotchiDto>(createInnoGotchiViewModel);
 
         return await FromAuthorizedPost(new CreateInnoGotchiRequest(createInnoGotchiDto), _ =>

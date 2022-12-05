@@ -23,6 +23,13 @@ public class DbSetRepository<TEntity> : IRepository<TEntity> where TEntity : Ent
         return result.Entity;
     }
 
+    public async Task<IList<TEntity>> CreateRangeAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken = new CancellationToken())
+    {
+        var list = entity as IList<TEntity> ?? entity.ToList();
+        await _set.AddRangeAsync(list, cancellationToken);
+        return list;
+    }
+
     public Task<TEntity> UpdateAsync(TEntity entity,
         Action<TEntity> actionOverExistingEntity,
         CancellationToken cancellationToken = new())

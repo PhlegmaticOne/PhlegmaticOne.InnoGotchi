@@ -22,13 +22,13 @@ public class GetDetailedInnoGotchiQuery : IdentityOperationResultQueryBase<Detai
 public class GetDetailedInnoGotchiQueryHandler :
     IOperationResultQueryHandler<GetDetailedInnoGotchiQuery, DetailedInnoGotchiDto>
 {
-    private readonly IValidator<IdentityModel<InnoGotchiRequestDto>> _innoGotchiValidator;
+    private readonly IValidator<GetDetailedInnoGotchiQuery> _innoGotchiValidator;
     private readonly IMapper _mapper;
     private readonly IReadableInnoGotchiProvider _readableInnoGotchiProvider;
 
     public GetDetailedInnoGotchiQueryHandler(IReadableInnoGotchiProvider readableInnoGotchiProvider,
         IMapper mapper,
-        IValidator<IdentityModel<InnoGotchiRequestDto>> innoGotchiValidator)
+        IValidator<GetDetailedInnoGotchiQuery> innoGotchiValidator)
     {
         _readableInnoGotchiProvider = readableInnoGotchiProvider;
         _mapper = mapper;
@@ -38,13 +38,7 @@ public class GetDetailedInnoGotchiQueryHandler :
     public async Task<OperationResult<DetailedInnoGotchiDto>> Handle(GetDetailedInnoGotchiQuery request,
         CancellationToken cancellationToken)
     {
-        var model = new IdentityModel<InnoGotchiRequestDto>
-        {
-            Entity = new InnoGotchiRequestDto(request.PetId),
-            ProfileId = request.ProfileId
-        };
-
-        var validationResult = await _innoGotchiValidator.ValidateAsync(model, cancellationToken);
+        var validationResult = await _innoGotchiValidator.ValidateAsync(request, cancellationToken);
 
         if (validationResult.IsValid == false)
             return OperationResult.FromFail<DetailedInnoGotchiDto>(validationResult.ToString());

@@ -5,9 +5,12 @@ using PhlegmaticOne.UnitOfWork.Models;
 
 namespace PhlegmaticOne.UnitOfWork.Interfaces;
 
-public interface IRepository<TEntity> where TEntity : EntityBase
+public interface IRepository { }
+
+public interface IRepository<TEntity> : IRepository where TEntity : EntityBase
 {
     Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = new());
+    Task<IList<TEntity>> CreateRangeAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken = new());
 
     Task<TEntity> UpdateAsync(TEntity entity, Action<TEntity> actionOverExistingEntity,
         CancellationToken cancellationToken = new());

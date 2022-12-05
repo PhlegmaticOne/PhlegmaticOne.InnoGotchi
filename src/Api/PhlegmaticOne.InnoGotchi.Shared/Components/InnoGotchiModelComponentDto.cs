@@ -7,4 +7,5 @@ public class InnoGotchiModelComponentDto
     public float ScaleX { get; set; }
     public float ScaleY { get; set; }
     public string ImageUrl { get; set; } = null!;
+    public string Name { get; set; } = null!;
 }

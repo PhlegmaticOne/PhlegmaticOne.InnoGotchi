@@ -1,21 +1,26 @@
 ﻿using FluentValidation;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
-using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
+using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
 
 public class UpdateInnoGotchiValidator : AbstractValidator<UpdateInnoGotchiCommand>
 {
-    public UpdateInnoGotchiValidator(IInnoGotchiOwnChecker innoGotchiOwnChecker)
+    public UpdateInnoGotchiValidator(IInnoGotchiOwnChecker innoGotchiOwnChecker, IUnitOfWork unitOfWork)
     {
-        RuleFor(x => x)
-            .MustAsync((model, ct) =>
-                innoGotchiOwnChecker.IsBelongAsync(model.ProfileId, model.UpdateInnoGotchiDto.PetId, ct))
-            .WithMessage("You can't make any actions with this InnoGotchi");
+        var petsRepository = unitOfWork.GetRepository<InnoGotchiModel>();
 
-        RuleFor(x => x.UpdateInnoGotchiDto.InnoGotchiOperationType)
-            .Must(type => (int)type != EnumHelper.MaxValue(type))
-            .WithMessage("You can't update dead InnoGotchi");
+        RuleFor(x => x)
+            .MustAsync(async (model, ct) =>
+                await innoGotchiOwnChecker.IsBelongAsync(model.ProfileId, model.UpdateInnoGotchiDto.PetId, ct))
+            .WithMessage(AppErrorMessages.PetDoesNotBelongToProfileMessage);
+
+        RuleFor(x => x.UpdateInnoGotchiDto.PetId)
+            .MustAsync(async (id, ct) => 
+                await petsRepository.ExistsAsync(x => x.Id == id && x.IsDead == false, ct))
+            .WithMessage(AppErrorMessages.CannotUpdateDeadPetMessage);
     }
 }

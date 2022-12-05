@@ -1,6 +1,6 @@
 ﻿namespace PhlegmaticOne.OperationResults.Mediatr;
 
-public abstract class IdentityOperationResultQueryBase<T> : IOperationResultQuery<T>
+public abstract class IdentityOperationResultQueryBase<T> : IOperationResultQuery<T>, IIdentity
 {
     protected IdentityOperationResultQueryBase(Guid profileId)
     {

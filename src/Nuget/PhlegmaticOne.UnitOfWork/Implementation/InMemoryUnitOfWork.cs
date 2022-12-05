@@ -1,20 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PhlegmaticOne.OperationResults;
+﻿using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
 
 namespace PhlegmaticOne.UnitOfWork.Implementation;
 
-public class DbContextUnitOfWork : IUnitOfWork
+public class InMemoryUnitOfWork : IUnitOfWork
 {
-    private readonly DbContext _dbContext;
     private readonly Dictionary<Type, IRepository> _repositories;
+    public InMemoryUnitOfWork() => _repositories = new Dictionary<Type, IRepository>();
 
-    public DbContextUnitOfWork(DbContext dbContext)
-    {
-        _repositories = new Dictionary<Type, IRepository>();
-        _dbContext = dbContext;
-    }
+    public InMemoryUnitOfWork(IEnumerable<IRepository> repositories) =>
+        _repositories = repositories.ToDictionary(
+            key => key.GetType().GetGenericArguments().First(),
+            value => value);
 
     public IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
     {
@@ -22,24 +20,19 @@ public class DbContextUnitOfWork : IUnitOfWork
 
         if (_repositories.ContainsKey(type) == false)
         {
-            var set = _dbContext.Set<TEntity>();
-            _repositories[type] = new DbSetRepository<TEntity>(set);
+            _repositories[type] = new InMemoryRepository<TEntity>();
         }
 
         return (IRepository<TEntity>)_repositories[type];
     }
 
-    public Task<int> SaveChangesAsync()
-    {
-        return _dbContext.SaveChangesAsync();
-    }
+    public Task<int> SaveChangesAsync() => Task.FromResult(0);
 
     public async Task<OperationResult<T>> ResultFromExecutionInTransaction<T>(Func<Task<T>> operation)
     {
         try
         {
             var result = await operation();
-            await SaveChangesAsync();
             return OperationResult.FromSuccess(result);
         }
         catch (Exception e)
@@ -53,7 +46,6 @@ public class DbContextUnitOfWork : IUnitOfWork
         try
         {
             await operation();
-            await SaveChangesAsync();
             return OperationResult.Success;
         }
         catch (Exception e)
