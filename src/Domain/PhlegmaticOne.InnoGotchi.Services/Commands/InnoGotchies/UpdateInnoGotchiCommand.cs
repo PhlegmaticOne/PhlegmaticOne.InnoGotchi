@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
@@ -8,22 +9,18 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 
-public class UpdateInnoGotchiCommand : IdentityOperationResultCommandBase
+public class UpdateInnoGotchiCommand : IdentityOperationResultCommand
 {
-    public UpdateInnoGotchiCommand(Guid profileId, UpdateInnoGotchiDto updateInnoGotchiDto) : base(profileId)
-    {
-        UpdateInnoGotchiDto = updateInnoGotchiDto;
-    }
+    public UpdateInnoGotchiCommand(Guid profileId, UpdateInnoGotchiDto updateInnoGotchiDto) : base(profileId) => UpdateInnoGotchiDto = updateInnoGotchiDto;
 
     public UpdateInnoGotchiDto UpdateInnoGotchiDto { get; set; }
 }
 
-public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<UpdateInnoGotchiCommand>
+public class UpdateInnoGotchiCommandHandler : ValidatableCommandHandler<UpdateInnoGotchiCommand>
 {
     private readonly IWritableFarmStatisticsProvider _farmStatisticsProvider;
     private readonly IWritableInnoGotchiesProvider _innoGotchiesProvider;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<UpdateInnoGotchiCommand> _updateCommandValidator;
 
     private readonly Dictionary<InnoGotchiOperationType, Func<Guid, UpdateInnoGotchiDto, Task<OperationResult>>>
         _updateOperations;
@@ -31,12 +28,11 @@ public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<Upd
     public UpdateInnoGotchiCommandHandler(IUnitOfWork unitOfWork,
         IWritableInnoGotchiesProvider innoGotchiesProvider,
         IWritableFarmStatisticsProvider farmStatisticsProvider,
-        IValidator<UpdateInnoGotchiCommand> updateCommandValidator)
+        IValidator<UpdateInnoGotchiCommand> updateCommandValidator) : base(updateCommandValidator)
     {
         _unitOfWork = unitOfWork;
         _innoGotchiesProvider = innoGotchiesProvider;
         _farmStatisticsProvider = farmStatisticsProvider;
-        _updateCommandValidator = updateCommandValidator;
 
         _updateOperations =
             new Dictionary<InnoGotchiOperationType, Func<Guid, UpdateInnoGotchiDto, Task<OperationResult>>>
@@ -46,17 +42,17 @@ public class UpdateInnoGotchiCommandHandler : IOperationResultCommandHandler<Upd
             };
     }
 
-    public async Task<OperationResult> Handle(UpdateInnoGotchiCommand request, CancellationToken cancellationToken)
+    protected override Task<OperationResult> HandleValidCommand(UpdateInnoGotchiCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _updateCommandValidator.ValidateAsync(request, cancellationToken);
-
-        if (validationResult.IsValid == false) return OperationResult.FromFail(validationResult.ToString());
-
         var operationType = request.UpdateInnoGotchiDto.InnoGotchiOperationType;
-        if (_updateOperations.TryGetValue(operationType, out var updateAction))
-            return await updateAction(request.ProfileId, request.UpdateInnoGotchiDto);
 
-        return OperationResult.FromFail("Unknown operation over InnoGotchi");
+        if (_updateOperations.TryGetValue(operationType, out var updateAction))
+        {
+            return updateAction(request.ProfileId, request.UpdateInnoGotchiDto);
+        }
+
+        var result = OperationResult.Failed(AppErrorMessages.UnknownPetOperationType);
+        return Task.FromResult(result);
     }
 
     private Task<OperationResult> DrinkAsync(Guid profileId, UpdateInnoGotchiDto petIdModel)

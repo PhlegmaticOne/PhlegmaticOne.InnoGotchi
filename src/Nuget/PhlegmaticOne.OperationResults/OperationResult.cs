@@ -11,7 +11,7 @@ public class OperationResult
         IsSuccess = true
     };
 
-    public static OperationResult<T> FromSuccess<T>(T result)
+    public static OperationResult<T> Successful<T>(T result)
     {
         return new()
         {
@@ -21,7 +21,7 @@ public class OperationResult
         };
     }
 
-    public static OperationResult<T> FromFail<T>(string? errorMessage = null)
+    public static OperationResult<T> Failed<T>(string? errorMessage = null)
     {
         return new()
         {
@@ -31,7 +31,7 @@ public class OperationResult
         };
     }
 
-    public static OperationResult FromFail(string? errorMessage = null)
+    public static OperationResult Failed(string? errorMessage = null)
     {
         return new()
         {

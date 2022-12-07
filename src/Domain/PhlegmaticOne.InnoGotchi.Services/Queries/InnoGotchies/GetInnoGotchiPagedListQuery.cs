@@ -13,7 +13,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.InnoGotchies;
 
-public class GetInnoGotchiPagedListQuery : IdentityOperationResultQueryBase<PagedList<ReadonlyInnoGotchiPreviewDto>>
+public class GetInnoGotchiPagedListQuery : IdentityOperationResultQuery<PagedList<ReadonlyInnoGotchiPreviewDto>>
 {
     public GetInnoGotchiPagedListQuery(Guid profileId, PagedListData pagedListData) : base(profileId)
     {
@@ -57,7 +57,7 @@ public class GetInnoGotchiPagedListQueryHandler :
                 include: IncludeWithProfile(), cancellationToken: cancellationToken);
 
         var mapped = _mapper.Map<PagedList<ReadonlyInnoGotchiPreviewDto>>(result);
-        return OperationResult.FromSuccess(mapped);
+        return OperationResult.Successful(mapped);
     }
 
     private static Expression<Func<InnoGotchiModel, bool>> WherePetsNotInFarmWithOwner(Guid ownerId)

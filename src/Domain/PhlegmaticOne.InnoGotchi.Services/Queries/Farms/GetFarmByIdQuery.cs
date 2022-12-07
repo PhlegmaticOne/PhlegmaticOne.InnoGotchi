@@ -10,7 +10,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Farms;
 
-public class GetFarmByIdQuery : IdentityOperationResultQueryBase<DetailedFarmDto>
+public class GetFarmByIdQuery : IdentityOperationResultQuery<DetailedFarmDto>
 {
     public GetFarmByIdQuery(Guid profileId, Guid farmId) : base(profileId)
     {
@@ -37,8 +37,8 @@ public class GetFarmByIdQueryHandler : GetFarmQueryHandlerBase<GetFarmByIdQuery>
         return p => p.Id == request.FarmId;
     }
 
-    protected override Task<ValidationResult> ValidateAsync(GetFarmByIdQuery request)
+    protected override Task<ValidationResult> ValidateAsync(GetFarmByIdQuery request, CancellationToken cancellationToken)
     {
-        return _getFarmValidator.ValidateAsync(request);
+        return _getFarmValidator.ValidateAsync(request, cancellationToken);
     }
 }

@@ -6,11 +6,9 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Avatars;
 
-public class GetProfileAvatarQuery : IdentityOperationResultQueryBase<Avatar>
+public class GetProfileAvatarQuery : IdentityOperationResultQuery<Avatar>
 {
-    public GetProfileAvatarQuery(Guid profileId) : base(profileId)
-    {
-    }
+    public GetProfileAvatarQuery(Guid profileId) : base(profileId) { }
 }
 
 public class GetProfileAvatarQueryHandler : IOperationResultQueryHandler<GetProfileAvatarQuery, Avatar>
@@ -33,11 +31,13 @@ public class GetProfileAvatarQueryHandler : IOperationResultQueryHandler<GetProf
             cancellationToken: cancellationToken);
 
         if (result is null || result.AvatarData.Any() == false)
+        {
             result = new Avatar
             {
                 AvatarData = await _defaultAvatarService.GetDefaultAvatarDataAsync(cancellationToken)
             };
+        }
 
-        return OperationResult.FromSuccess(result);
+        return OperationResult.Successful(result);
     }
 }

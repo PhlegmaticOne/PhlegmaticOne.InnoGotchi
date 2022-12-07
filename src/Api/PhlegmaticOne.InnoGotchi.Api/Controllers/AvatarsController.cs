@@ -26,7 +26,7 @@ public class AvatarsController : IdentityController
             HttpContext.RequestAborted);
 
         return queryResult.IsSuccess == false
-            ? OperationResult.FromFail<byte[]>(queryResult.ErrorMessage)
-            : OperationResult.FromSuccess(queryResult.Result!.AvatarData);
+            ? OperationResult.Failed<byte[]>(queryResult.ErrorMessage)
+            : OperationResult.Successful(queryResult.Result!.AvatarData);
     }
 }

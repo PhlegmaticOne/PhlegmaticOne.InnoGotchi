@@ -1,4 +1,5 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
@@ -26,11 +27,14 @@ public abstract class
     {
         var authorizedProfile = await GetAuthorizedProfileAsync(request, cancellationToken);
 
-        if (authorizedProfile is null) return OperationResult.FromFail<AuthorizedProfileDto>("Profile doesn't exist");
+        if (authorizedProfile is null)
+        {
+            return OperationResult.Failed<AuthorizedProfileDto>(AppErrorMessages.ProfileDoesNotExistMessage);
+        }
 
         authorizedProfile.JwtToken = _jwtTokenGenerationService.GenerateJwtToken(authorizedProfile);
 
-        return OperationResult.FromSuccess(authorizedProfile);
+        return OperationResult.Successful(authorizedProfile);
     }
 
     protected abstract Task<AuthorizedProfileDto?> GetAuthorizedProfileAsync(TRequest request,

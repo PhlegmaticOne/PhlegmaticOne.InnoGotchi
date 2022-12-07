@@ -9,7 +9,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Profiles;
 
-public class GetDetailedProfileQuery : IdentityOperationResultQueryBase<DetailedProfileDto>
+public class GetDetailedProfileQuery : IdentityOperationResultQuery<DetailedProfileDto>
 {
     public GetDetailedProfileQuery(Guid profileId) : base(profileId)
     {
@@ -41,7 +41,7 @@ public class GetDetailedProfileQueryHandler :
                 include: i => i.Include(x => x.User).Include(x => x.Avatar)!,
                 cancellationToken: cancellationToken);
 
-        if (result is null) return OperationResult.FromFail<DetailedProfileDto>("Profile doesn't exist");
+        if (result is null) return OperationResult.Failed<DetailedProfileDto>("Profile doesn't exist");
 
         if (result.Avatar is null || result.Avatar.AvatarData.Any() == false)
             result.Avatar = new Avatar
@@ -50,6 +50,6 @@ public class GetDetailedProfileQueryHandler :
             };
 
         var mapped = _mapper.Map<DetailedProfileDto>(result);
-        return OperationResult.FromSuccess(mapped);
+        return OperationResult.Successful(mapped);
     }
 }

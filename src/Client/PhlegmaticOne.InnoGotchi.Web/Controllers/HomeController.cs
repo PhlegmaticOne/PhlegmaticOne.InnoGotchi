@@ -19,16 +19,10 @@ public class HomeController : ClientRequestsController
     [HttpGet]
     public Task<IActionResult> Index()
     {
-        if (User.Identity!.IsAuthenticated == false)
-        {
-            ViewData["BuildStatistics"] = false;
-            IActionResult view = View(model: new GlobalStatisticsViewModel());
-            return Task.FromResult(view);
-        }
-
         return FromAuthorizedGet(new GetGlobalStatisticsRequest(), dto =>
         {
-            ViewData["BuildStatistics"] = true;
+            ViewData["BuildCountStatistics"] = dto.PetsTotalCount != 0;
+            ViewData["BuildAgeStatistics"] = dto.DeadPetsAverageAge != 0 || dto.AlivePetsAverageAge != 0;
             var viewModel = Mapper.Map<GlobalStatisticsViewModel>(dto);
             IActionResult view = View(viewModel);
             return Task.FromResult(view);

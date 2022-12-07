@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
+using FluentValidation;
 using FluentValidation.Results;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
+using PhlegmaticOne.InnoGotchi.Services.Infrastructure.HelpModels;
 using PhlegmaticOne.InnoGotchi.Services.Queries.Farms.Base;
 using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.OperationResults.Mediatr;
@@ -9,7 +11,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Farms;
 
-public class GetFarmByProfileQuery : IdentityOperationResultQueryBase<DetailedFarmDto>
+public class GetFarmByProfileQuery : IdentityOperationResultQuery<DetailedFarmDto>
 {
     public GetFarmByProfileQuery(Guid profileId) : base(profileId)
     {
@@ -18,9 +20,12 @@ public class GetFarmByProfileQuery : IdentityOperationResultQueryBase<DetailedFa
 
 public class GetFarmByProfileQueryHandler : GetFarmQueryHandlerBase<GetFarmByProfileQuery>
 {
-    public GetFarmByProfileQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) :
+    private readonly IValidator<ProfileFarmModel> _farmValidator;
+
+    public GetFarmByProfileQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ProfileFarmModel> farmValidator) :
         base(unitOfWork, mapper)
     {
+        _farmValidator = farmValidator;
     }
 
     protected override Expression<Func<Farm, bool>> GetQueryPredicate(GetFarmByProfileQuery request)
@@ -28,8 +33,8 @@ public class GetFarmByProfileQueryHandler : GetFarmQueryHandlerBase<GetFarmByPro
         return p => p.OwnerId == request.ProfileId;
     }
 
-    protected override Task<ValidationResult> ValidateAsync(GetFarmByProfileQuery request)
+    protected override Task<ValidationResult> ValidateAsync(GetFarmByProfileQuery request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new ValidationResult());
+        return _farmValidator.ValidateAsync(new ProfileFarmModel(request.ProfileId), cancellationToken);
     }
 }

@@ -8,7 +8,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Statistics;
 
-public class GetDetailedStatisticsQuery : IdentityOperationResultQueryBase<DetailedFarmStatisticsDto>
+public class GetDetailedStatisticsQuery : IdentityOperationResultQuery<DetailedFarmStatisticsDto>
 {
     public GetDetailedStatisticsQuery(Guid profileId) : base(profileId)
     {
@@ -35,7 +35,7 @@ public class GetDetailedStatisticsQueryHandler :
             .ValidateAsync(new ProfileFarmModel(request.ProfileId), cancellationToken);
 
         if (validationResult.IsValid == false)
-            return OperationResult.FromFail<DetailedFarmStatisticsDto>(validationResult.ToString());
+            return OperationResult.Failed<DetailedFarmStatisticsDto>(validationResult.ToString());
 
         return await Build(request.ProfileId, cancellationToken);
     }
@@ -45,9 +45,9 @@ public class GetDetailedStatisticsQueryHandler :
         var farmsRepository = _unitOfWork.GetRepository<Farm>();
         var farmStatistics = await farmsRepository.GetFirstOrDefaultAsync(
             predicate: p => p.OwnerId == profileId,
-            selector: s => new
+            selector: farm => new
             {
-                PetsInfo = s.InnoGotchies.GroupBy(x => x.IsDead)
+                PetsInfo = farm.InnoGotchies.GroupBy(x => x.IsDead)
                     .Select(x => new
                     {
                         IsDead = x.Key,
@@ -55,13 +55,13 @@ public class GetDetailedStatisticsQueryHandler :
                         AverageAge = x.Select(d => d.Age).DefaultIfEmpty().Average()
                     }),
 
-                AverageHappinessDaysCount = s.InnoGotchies
+                AverageHappinessDaysCount = farm.InnoGotchies
                     .Select(x => x.HappinessDaysCount).DefaultIfEmpty().Average(),
-                s.FarmStatistics,
-                Farm = s
+                FarmStatistics = farm.FarmStatistics,
+                Farm = farm
             }, cancellationToken: cancellationToken);
 
-        return OperationResult.FromSuccess(new DetailedFarmStatisticsDto
+        return OperationResult.Successful(new DetailedFarmStatisticsDto
         {
             FarmName = farmStatistics!.Farm.Name,
             FarmId = farmStatistics.Farm.Id,
@@ -69,15 +69,15 @@ public class GetDetailedStatisticsQueryHandler :
             AverageFeedingPeriod = farmStatistics.FarmStatistics.AverageFeedTime,
             AverageThirstQuenchingPeriod = farmStatistics.FarmStatistics.AverageDrinkTime,
             AverageHappinessDaysCount = farmStatistics.AverageHappinessDaysCount,
-            AlivePetsCount = DynamicValue<int>(farmStatistics.PetsInfo, false, s => s.Count),
-            DeadPetsCount = DynamicValue<int>(farmStatistics.PetsInfo, true, s => s.Count),
-            AverageAlivePetsAge = DynamicValue<double>(farmStatistics.PetsInfo, false, s => s.AverageAge),
-            AverageDeadPetsAge = DynamicValue<double>(farmStatistics.PetsInfo, true, s => s.AverageAge)
+            AlivePetsCount = DynamicFirstValue<int>(farmStatistics.PetsInfo, false, s => s.Count),
+            DeadPetsCount = DynamicFirstValue<int>(farmStatistics.PetsInfo, true, s => s.Count),
+            AverageAlivePetsAge = DynamicFirstValue<double>(farmStatistics.PetsInfo, false, s => s.AverageAge),
+            AverageDeadPetsAge = DynamicFirstValue<double>(farmStatistics.PetsInfo, true, s => s.AverageAge)
         });
     }
 
     //Lol
-    private static T DynamicValue<T>(IEnumerable<dynamic> petsInfo, 
+    private static T DynamicFirstValue<T>(IEnumerable<dynamic> petsInfo, 
         bool isDead, Func<dynamic, T> selector) =>
         petsInfo
             .Where(x => x.IsDead == isDead)

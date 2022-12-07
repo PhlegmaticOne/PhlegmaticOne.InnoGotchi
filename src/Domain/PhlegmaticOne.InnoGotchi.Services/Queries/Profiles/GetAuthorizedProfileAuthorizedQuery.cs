@@ -7,7 +7,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Profiles;
 
-public class GetAuthorizedProfileAuthorizedQuery : IdentityOperationResultQueryBase<AuthorizedProfileDto>
+public class GetAuthorizedProfileAuthorizedQuery : IdentityOperationResultQuery<AuthorizedProfileDto>
 {
     public GetAuthorizedProfileAuthorizedQuery(Guid profileId) : base(profileId)
     {

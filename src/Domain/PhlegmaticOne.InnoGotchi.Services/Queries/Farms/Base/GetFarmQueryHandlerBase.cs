@@ -24,28 +24,25 @@ public abstract class GetFarmQueryHandlerBase<TRequest> : IOperationResultQueryH
 
     public async Task<OperationResult<DetailedFarmDto>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await ValidateAsync(request);
+        var validationResult = await ValidateAsync(request, cancellationToken);
 
         if (validationResult.IsValid == false)
-            return OperationResult.FromFail<DetailedFarmDto>(validationResult.ToString());
+        {
+            return OperationResult.Failed<DetailedFarmDto>(validationResult.ToString());
+        }
 
-        var farmsRepository = _unitOfWork.GetRepository<Farm>();
-
-        var result = await farmsRepository.GetFirstOrDefaultAsync(
-            GetQueryPredicate(request),
-            i => i
+        var result = await _unitOfWork.GetRepository<Farm>().GetFirstOrDefaultAsync(
+            GetQueryPredicate(request), i => i
                 .Include(x => x.Owner)
                 .ThenInclude(x => x.User)
                 .Include(x => x.InnoGotchies)
                 .ThenInclude(x => x.Components)
                 .ThenInclude(x => x.InnoGotchiComponent), cancellationToken);
 
-        if (result is null) return OperationResult.FromFail<DetailedFarmDto>("Profile doesn't have a farm");
-
         var mapped = _mapper.Map<DetailedFarmDto>(result);
-        return OperationResult.FromSuccess(mapped);
+        return OperationResult.Successful(mapped);
     }
 
     protected abstract Expression<Func<Farm, bool>> GetQueryPredicate(TRequest request);
-    protected abstract Task<ValidationResult> ValidateAsync(TRequest request);
+    protected abstract Task<ValidationResult> ValidateAsync(TRequest request, CancellationToken cancellationToken);
 }

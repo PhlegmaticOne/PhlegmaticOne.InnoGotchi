@@ -8,41 +8,26 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 
-public class CreateInnoGotchiCommand : IdentityOperationResultCommandBase
+public class CreateInnoGotchiCommand : IdentityOperationResultCommand
 {
-    public CreateInnoGotchiCommand(Guid profileId, CreateInnoGotchiDto createInnoGotchiDto) : base(profileId)
-    {
-        CreateInnoGotchiDto = createInnoGotchiDto;
-    }
-
+    public CreateInnoGotchiCommand(Guid profileId, CreateInnoGotchiDto createInnoGotchiDto) : base(profileId) => CreateInnoGotchiDto = createInnoGotchiDto;
     public CreateInnoGotchiDto CreateInnoGotchiDto { get; }
 }
 
-public class CreateInnoGotchiCommandHandler : IOperationResultCommandHandler<CreateInnoGotchiCommand>
+public class CreateInnoGotchiCommandHandler : ValidatableCommandHandler<CreateInnoGotchiCommand>
 {
-    private readonly IValidator<CreateInnoGotchiCommand> _createValidator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IWritableInnoGotchiesProvider _writableInnoGotchiesProvider;
 
     public CreateInnoGotchiCommandHandler(IUnitOfWork unitOfWork,
-        IValidator<CreateInnoGotchiCommand> createValidator,
-        IWritableInnoGotchiesProvider writableInnoGotchiesProvider)
-    {
-        _unitOfWork = unitOfWork;
-        _createValidator = createValidator;
-        _writableInnoGotchiesProvider = writableInnoGotchiesProvider;
-    }
+        IWritableInnoGotchiesProvider writableInnoGotchiesProvider,
+        IValidator<CreateInnoGotchiCommand> createValidator) : base(createValidator) =>
+        (_unitOfWork, _writableInnoGotchiesProvider) = (unitOfWork, writableInnoGotchiesProvider);
 
-    public async Task<OperationResult> Handle(CreateInnoGotchiCommand request, CancellationToken cancellationToken)
-    {
-        var validationResult = await _createValidator.ValidateAsync(request, cancellationToken);
-
-        if (validationResult.IsValid == false) return OperationResult.FromFail(validationResult.ToString());
-
-        return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
+    protected override Task<OperationResult> HandleValidCommand(CreateInnoGotchiCommand request, CancellationToken cancellationToken) =>
+        _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
             await _writableInnoGotchiesProvider
                 .CreateAsync(request.ProfileId, request.CreateInnoGotchiDto, cancellationToken);
         });
-    }
 }

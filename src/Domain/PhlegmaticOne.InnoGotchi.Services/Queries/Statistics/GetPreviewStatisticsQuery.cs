@@ -7,7 +7,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Statistics;
 
-public class GetPreviewStatisticsQuery : IdentityOperationResultQueryBase<PreviewFarmStatisticsDto>
+public class GetPreviewStatisticsQuery : IdentityOperationResultQuery<PreviewFarmStatisticsDto>
 {
     public GetPreviewStatisticsQuery(Guid profileId) : base(profileId)
     {
@@ -34,7 +34,7 @@ public class GetPreviewStatisticsQueryHandler :
             .ValidateAsync(new ProfileFarmModel(request.ProfileId), cancellationToken);
 
         if (validationResult.IsValid == false)
-            return OperationResult.FromFail<PreviewFarmStatisticsDto>(validationResult.ToString());
+            return OperationResult.Failed<PreviewFarmStatisticsDto>(validationResult.ToString());
 
         var repository = _unitOfWork.GetRepository<Domain.Models.FarmStatistics>();
 
@@ -50,6 +50,6 @@ public class GetPreviewStatisticsQueryHandler :
                 PetsCount = s.Farm.InnoGotchies.Count
             }, cancellationToken: cancellationToken);
 
-        return OperationResult.FromSuccess(result!);
+        return OperationResult.Successful(result!);
     }
 }

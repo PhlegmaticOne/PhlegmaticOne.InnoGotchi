@@ -10,7 +10,7 @@ public class PetsSynchronizationHostedService : CrontabScheduledHostedService
     {
     }
 
-    protected override string Schedule => "*/10 * * * *";
+    protected override string Schedule => "*/15 * * * *";
 
     protected override async Task ProcessInScopeAsync(IServiceScope serviceScope, CancellationToken token)
     {

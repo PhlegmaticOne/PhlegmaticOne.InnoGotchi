@@ -34,6 +34,6 @@ public class GetPreviewInnoGotchiQueryHandler :
     {
         var result = await _readableInnoGotchiProvider.GetDetailedAsync(request.PetId, cancellationToken);
         var mapped = _mapper.Map<PreviewInnoGotchiDto>(result);
-        return OperationResult.FromSuccess(mapped);
+        return OperationResult.Successful(mapped);
     }
 }

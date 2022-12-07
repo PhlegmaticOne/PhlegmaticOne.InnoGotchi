@@ -7,7 +7,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Farms;
 
-public class GetCollaboratedFarmsQuery : IdentityOperationResultQueryBase<IList<PreviewFarmDto>>
+public class GetCollaboratedFarmsQuery : IdentityOperationResultQuery<IList<PreviewFarmDto>>
 {
     public GetCollaboratedFarmsQuery(Guid profileId) : base(profileId)
     {
@@ -45,7 +45,7 @@ public class GetCollaboratedFarmsQueryHandler :
 
         await SetEmptyAvatars(result);
 
-        return OperationResult.FromSuccess(result);
+        return OperationResult.Successful(result);
     }
 
     private async Task SetEmptyAvatars(IList<PreviewFarmDto> previewFarmDtos)

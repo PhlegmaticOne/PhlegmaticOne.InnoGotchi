@@ -6,7 +6,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Commands.Synchronization;
 
-public class SynchronizeInnoGotchiesInProfileFarmCommand : IdentityOperationResultCommandBase
+public class SynchronizeInnoGotchiesInProfileFarmCommand : IdentityOperationResultCommand
 {
     public SynchronizeInnoGotchiesInProfileFarmCommand(Guid profileId) : base(profileId)
     {

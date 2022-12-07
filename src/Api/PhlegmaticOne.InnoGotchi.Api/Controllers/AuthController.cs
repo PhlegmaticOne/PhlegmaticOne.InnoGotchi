@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
             await _mediator.Send(new RegisterProfileCommand(registerProfileDto), HttpContext.RequestAborted);
 
         if (registerOperationResult.IsSuccess == false)
-            return OperationResult.FromFail<AuthorizedProfileDto>(registerOperationResult.ErrorMessage);
+            return OperationResult.Failed<AuthorizedProfileDto>(registerOperationResult.ErrorMessage);
 
         return await AuthorizeAsync(registerProfileDto.Email, registerProfileDto.Password);
     }

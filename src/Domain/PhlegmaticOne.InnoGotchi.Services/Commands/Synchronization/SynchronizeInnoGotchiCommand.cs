@@ -8,10 +8,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.Synchronization;
 
 public class SynchronizeInnoGotchiCommand : IOperationResultCommand
 {
-    public SynchronizeInnoGotchiCommand(Guid petId)
-    {
-        PetId = petId;
-    }
+    public SynchronizeInnoGotchiCommand(Guid petId) => PetId = petId;
 
     public Guid PetId { get; }
 }
@@ -30,12 +27,9 @@ public class SynchronizeInnoGotchiCommandHandler :
         _innoGotchiesSynchronizationProvider = innoGotchiesSynchronizationProvider;
     }
 
-    public Task<OperationResult> Handle(SynchronizeInnoGotchiCommand request,
-        CancellationToken cancellationToken)
-    {
-        return _unitOfWork.ResultFromExecutionInTransaction(async () =>
+    public Task<OperationResult> Handle(SynchronizeInnoGotchiCommand request, CancellationToken cancellationToken) =>
+        _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
             await _innoGotchiesSynchronizationProvider.SynchronizePetAsync(request.PetId, cancellationToken);
         });
-    }
 }

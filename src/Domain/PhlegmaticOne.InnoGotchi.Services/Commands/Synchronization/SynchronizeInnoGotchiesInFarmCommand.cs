@@ -7,10 +7,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Commands.Synchronization;
 
 public class SynchronizeInnoGotchiesInFarmCommand : IOperationResultCommand
 {
-    public SynchronizeInnoGotchiesInFarmCommand(Guid farmId)
-    {
-        FarmId = farmId;
-    }
+    public SynchronizeInnoGotchiesInFarmCommand(Guid farmId) => FarmId = farmId;
 
     public Guid FarmId { get; }
 }
@@ -20,13 +17,8 @@ public class SynchronizeInnoGotchiesInFarmCommandHandler :
 {
     public SynchronizeInnoGotchiesInFarmCommandHandler(IUnitOfWork unitOfWork,
         IInnoGotchiesSynchronizationProvider innoGotchiesSynchronizationProvider) :
-        base(unitOfWork, innoGotchiesSynchronizationProvider)
-    {
-    }
+        base(unitOfWork, innoGotchiesSynchronizationProvider) { }
 
     protected override Task<Guid> GetFarmId(SynchronizeInnoGotchiesInFarmCommand request,
-        CancellationToken cancellationToken)
-    {
-        return Task.FromResult(request.FarmId);
-    }
+        CancellationToken cancellationToken) => Task.FromResult(request.FarmId);
 }

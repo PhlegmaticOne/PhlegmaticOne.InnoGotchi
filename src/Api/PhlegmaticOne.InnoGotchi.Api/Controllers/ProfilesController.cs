@@ -34,7 +34,7 @@ public class ProfilesController : IdentityController
             HttpContext.RequestAborted);
 
         if (updateResult.IsSuccess == false)
-            return OperationResult.FromFail<AuthorizedProfileDto>(updateResult.ErrorMessage);
+            return OperationResult.Failed<AuthorizedProfileDto>(updateResult.ErrorMessage);
 
         return await _mediator.Send(new GetAuthorizedProfileAuthorizedQuery(ProfileId()),
             HttpContext.RequestAborted);

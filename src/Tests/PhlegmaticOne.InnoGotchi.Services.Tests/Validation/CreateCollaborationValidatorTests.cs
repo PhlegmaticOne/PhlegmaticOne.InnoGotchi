@@ -29,7 +29,7 @@ public class CreateCollaborationValidatorTests
     [Fact]
     public async Task ShouldBeValid_Test()
     {
-        var fromProfileId = _data.ThatHasFarm.Id;
+        var fromProfileId = _data.Profiles[2].Id;
         var toProfileId = _data.ThatHasNoFarm.Id;
         var collaborationCommand = new CreateCollaborationCommand(fromProfileId, toProfileId);
         var sut = new CreateCollaborationValidator(_data.UnitOfWork);

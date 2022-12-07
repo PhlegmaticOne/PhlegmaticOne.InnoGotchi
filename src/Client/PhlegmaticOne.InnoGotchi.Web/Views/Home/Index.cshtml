@@ -1,35 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Globalization
 @model GlobalStatisticsViewModel
 @{
     ViewData["Title"] = "Home Page";
 
-    if (Model.PetsTotalCount == 0)
-    {
-        ViewData["BuildStatistics"] = false;
-    }
-
-    var aliveColor = "#30c970";
-    var deadColor = "#FF1744";
+    const string aliveColor = "#30c970";
+    const string deadColor = "#FF1744";
     var deadAliveDonutChartViewModel = new List<DonutChartItemViewModel>
     {
         new("Alive pets", Model.AlivePetsCount, aliveColor),
         new("Dead pets", Model.DeadPetsCount, deadColor)
     };
 
-    var deadAliveAgeChartViewModel = new BarChartViewModel
+    var agesDonutChartViewModel = new List<DonutChartItemViewModel>
     {
-        BarItems = new()
-        {
-            new(string.Empty, Model.AlivePetsAverageAge, Model.DeadPetsAverageAge)
-        },
-        Labels = new()
-        {
-            "Alive pets average age", "Dead pets average age"
-        },
-        Colors = new()
-        {
-            aliveColor, deadColor
-        }
+        new("Alive pets average age", Model.AlivePetsAverageAge, aliveColor),
+        new("Dead pets average age", Model.DeadPetsAverageAge, deadColor),
     };
 }
 
@@ -37,82 +23,16 @@
 {
     @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", 
         $"Welcome {User.Firstname()} {User.Lastname()}")
-
-    <div class="row text-white text-center mt-2">
-        <div class="col-md-6">
-            <h3 class="h3">Total profiles: @Model.ProfilesCount</h3>
-        </div>
-        <div class="col-md-6">
-            <h3 class="h3">Total farms: @Model.FarmsCount</h3>
-        </div>
-    </div>
-
-    <div class="row text-white text-center mt-2">
-        <div class="col-md-6">
-            <h3 class="h3">Total InnoGotchies: @Model.PetsTotalCount</h3>
-        </div>
-        <div class="col-md-6">
-            <h3 class="h3">Total collaborations: @Model.CollaborationsCount</h3>
-        </div>
-    </div>
-
-    <div class="row text-white text-center mt-2">
-        <div class="col-12">
-            <h4 class="h4">Pet max age: @Model.PetMaxAge</h4>
-            <h4 class="h4">Pet max happiness days count: @Model.PetMaxHappinessDaysCount</h4>
-            <h4 class="h4">Pets average happiness days count: @Model.AverageDaysHappinessCount</h4>
-        </div>
-    </div>
-
-    @if (ViewData["BuildStatistics"] is true)
-    {
-        <div class="row text-white justify-content-center text-center mt-2">
-            <h3 class="h3">Average ages bar</h3>
-            <div class="col-12 text-center" id="age_bar_char_element"></div>
-        </div>
-
-        <div class="row text-white justify-content-center text-center mt-2">
-            <h3 class="h3">Dead/Live statistics bar</h3>
-            <div class="col-12 text-center" id="count_donut_char_element"></div>
-        </div>
-    }
-
-    <div class="row justify-content-center text-center">
-        <div class="col-12 text-white">
-            <h6 class="h6">Create your InnoGotchies</h6>
-            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
-                    onclick="location.href = '@Url.Action("Create", "Constructor")'">
-                Create
-            </button>
-            
-            <h6 class="h6">See your farm and manage your Pets</h6>
-            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
-                    onclick="location.href = '@Url.Action("My", "Farm")'">
-                My farm
-            </button>
-            
-            <h6 class="h6">See your farm statistics</h6>
-            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
-                    onclick="location.href = '@Url.Action("My", "Overview")'">
-                My overview
-            </button>
-            
-            <h6 class="h6">See farm statistics where you are collaborator</h6>
-            <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
-                    onclick="location.href = '@Url.Action("Collaborated", "Overview")'">
-                Collaborations
-            </button>
-        </div>
-    </div>
 }
 else
 {
     @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Welcome")
 
-    <div class="row justify-content-center text-white text-center">
+
+    <div class="row justify-content-center text-center" style="color: wheat">
         <div class="col-8">
-            <h3>It's a site where you can manage your virtual pets - InnoGotchi</h3>
-            <h3 class="mt-3">Before creating your Pets you must be authenticated</h3>
+            <h4 class="h4">It's a site where you can manage your virtual pets - InnoGotchi</h4>
+            <h4 class="h4 mt-3">Before creating your Pets you must be authenticated</h4>
             <div class="mt-3">
                 <button class="btn btn-outline-light btn-lg px-5 m-1 text-center"
                         onclick="location.href = '@Url.Action("Register", "Auth")'">
@@ -124,6 +44,194 @@ else
                 </button>
             </div>
         </div>
+    </div>
+}
+
+<div class="container-fluid text-white">
+    <section>
+        <div class="row">
+            <div class="col-12 mt-3 mb-1">
+                <h5 class="text-uppercase ps-2">Application statistics</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-12 mb-4">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Home/StatCard.cshtml", new StatCardViewModel
+                {
+                    Value = Model.ProfilesCount.ToString(),
+                    Description = "Profiles registered",
+                    FontAwesomeClasses = "fa-solid fa-users text-warning fa-3x fa-pencil-alt"
+                })
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-12 mb-4">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Home/StatCard.cshtml", new StatCardViewModel
+                {
+                    Value = Model.FarmsCount.ToString(),
+                    Description = "Farms created",
+                    FontAwesomeClasses = "fa-solid fa-house text-warning fa-3x"
+                })
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-12 mb-4">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Home/StatCard.cshtml", new StatCardViewModel
+                {
+                    Value = Model.PetsTotalCount.ToString(),
+                    Description = "InnoGotchies created",
+                    FontAwesomeClasses = "fa-solid fa-paw text-success fa-3x"
+                })
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-12 mb-4">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Home/StatCard.cshtml", new StatCardViewModel
+                {
+                    Value = Model.PetsTotalCount.ToString(),
+                    Description = "Total collaborations",
+                    FontAwesomeClasses = "fa-solid fa-user-group text-warning fa-3x"
+                })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-4 col-md-12 col-sm-12 mb-4">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Home/StatCard.cshtml", new StatCardViewModel
+                {
+                    Value = Model.PetMaxAge.ToString(),
+                    Description = "Pet max age",
+                    FontAwesomeClasses = "fa-solid fa-heart text-danger fa-3x fa-pencil-alt"
+                })
+            </div>
+            <div class="col-xl-4 col-md-12 col-sm-12 mb-4">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Home/StatCard.cshtml", new StatCardViewModel
+                {
+                    Value = Model.PetMaxHappinessDaysCount.ToString(),
+                    Description = "Pet max happiness days count",
+                    FontAwesomeClasses = "fa-solid fa-face-smile text-warning fa-3x"
+                })
+            </div>
+            <div class="col-xl-4 col-md-12 col-sm-12 mb-4">
+                @await Html.PartialAsync("~/Views/_Partial_Views/Home/StatCard.cshtml", new StatCardViewModel
+                {
+                    Value = Model.AverageDaysHappinessCount.ToString(CultureInfo.InvariantCulture),
+                    Description = "Pets average happiness days count",
+                    FontAwesomeClasses = "fa-solid fa-face-laugh-beam text-warning fa-3x"
+                })
+            </div>
+        </div>
+    </section>
+</div>
+
+@if (ViewData["BuildAgeStatistics"] is true)
+{
+    <div class="container-fluid text-white">
+        <section>
+            <div class="row justify-content-center text-center">
+                <div class="col-10 mt-3 mb-2">
+                    <h5 class="text-uppercase ps-2">Average ages bar</h5>
+                </div>
+            </div>
+            <div class="row text-white justify-content-center text-center mt-2">
+                <div class="col-10 text-center" id="age_donut_chart_element"></div>
+            </div>
+        </section>
+    </div>
+}
+
+@if (ViewData["BuildCountStatistics"] is true)
+{
+    <div class="container-fluid text-white">
+        <section>
+            <div class="row mt-3 justify-content-center text-center">
+                <div class="col-10 mb-2">
+                    <h5 class="text-uppercase ps-2">Dead/Live statistics bar</h5>
+                </div>
+            </div>
+            <div class="row text-white justify-content-center text-center mt-2">
+                <div class="col-10 text-center" id="count_donut_chart_element"></div>
+            </div>
+        </section>
+    </div>
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container-fluid text-white">
+        <section>
+        <div class="row">
+            <div class="col-12 mt-3 mb-1">
+                <h5 class="text-uppercase ps-2">Site navigation</h5>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-xl-6 col-sm-6 col-12 mb-4">
+                <div class="card text-white bg-dark">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between px-md-1">
+                            <div class="align-self-center">
+                                <i class="fa-solid fa-plus text-warning fa-3x"></i>
+                            </div>
+                            <div class="text-end">
+                                <h5 class="h5">Create your InnoGotchies</h5>
+                                <a class="btn btn-grad mt-2 text-center"
+                                   asp-action="Create" asp-controller="Constructor">Start creating</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-sm-6 col-12 mb-4">
+                <div class="card text-white bg-dark">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between px-md-1">
+                            <div class="align-self-center">
+                                <i class="fa-solid fa-house text-warning fa-3x"></i>
+                            </div>
+                            <div class="text-end">
+                                <h5 class="h5">See your farm and manage your Pets</h5>
+
+                                <a class="btn btn-grad mt-2 text-center"
+                                   asp-action="My" asp-controller="Farm">Manage my farm</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-xl-6 col-sm-6 col-12 mb-4">
+                <div class="card text-white bg-dark">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between px-md-1">
+                            <div class="align-self-center">
+                                <i class="fa-solid fa-chart-line text-warning fa-3x"></i>
+                            </div>
+                            <div class="text-end">
+                                <h5 class="h5">See statistic for your and collaborated farms</h5>
+                                <a class="btn btn-grad mt-2 text-center"
+                                   asp-action="My" asp-controller="Overview">Statistics</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-sm-6 col-12 mb-4">
+                <div class="card text-white bg-dark">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between px-md-1">
+                            <div class="align-self-center">
+                                <i class="fa-solid fa-chart-area text-warning fa-3x"></i>
+                            </div>
+                            <div class="text-end">
+                                <h5 class="h5">Manage collaborated farms</h5>
+
+                                <a class="btn btn-grad mt-2 text-center"
+                                   asp-action="Collaborated" asp-controller="Farm">Collaborations</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
     </div>
 }
 
@@ -139,11 +247,17 @@ else
                 return;
             }
 
-            const donutData = @Json.Serialize(deadAliveDonutChartViewModel);
-            const barData = @Json.Serialize(deadAliveAgeChartViewModel);
+            const countData = @Json.Serialize(deadAliveDonutChartViewModel);
+            const ageData = @Json.Serialize(agesDonutChartViewModel);
 
-            donutChart(donutData, "count_donut_char_element");
-            barChart(barData.barItems, barData.labels, barData.colors, "age_bar_char_element");
+            donutChart(countData, "count_donut_chart_element");
+            donutChart(ageData, "age_donut_chart_element");
         })
     </script>
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/home.css" />
 }

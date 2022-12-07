@@ -12,11 +12,11 @@ public static class UnitOfWorkExtensions
         {
             var result = await operation();
             await unitOfWork.SaveChangesAsync();
-            return OperationResult.FromSuccess(result);
+            return OperationResult.Successful(result);
         }
         catch (Exception e)
         {
-            return OperationResult.FromFail<T>(e.Message);
+            return OperationResult.Failed<T>(e.Message);
         }
     }
 
@@ -31,7 +31,7 @@ public static class UnitOfWorkExtensions
         }
         catch (Exception e)
         {
-            return OperationResult.FromFail(e.Message);
+            return OperationResult.Failed(e.Message);
         }
     }
 }

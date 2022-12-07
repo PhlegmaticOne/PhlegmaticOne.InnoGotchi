@@ -29,6 +29,6 @@ public class GetAllComponentsQueryHandler :
         var repository = _unitOfWork.GetRepository<InnoGotchiComponent>();
         var all = await repository.GetAllAsync(cancellationToken: cancellationToken);
         var mapped = _mapper.Map<IList<InnoGotchiComponentDto>>(all);
-        return OperationResult.FromSuccess(mapped);
+        return OperationResult.Successful(mapped);
     }
 }

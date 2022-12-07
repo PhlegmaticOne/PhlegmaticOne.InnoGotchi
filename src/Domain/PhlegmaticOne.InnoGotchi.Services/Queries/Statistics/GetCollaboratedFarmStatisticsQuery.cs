@@ -6,7 +6,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Statistics;
 
-public class GetCollaboratedFarmStatisticsQuery : IdentityOperationResultQueryBase<IList<PreviewFarmStatisticsDto>>
+public class GetCollaboratedFarmStatisticsQuery : IdentityOperationResultQuery<IList<PreviewFarmStatisticsDto>>
 {
     public GetCollaboratedFarmStatisticsQuery(Guid profileId) : base(profileId)
     {
@@ -40,6 +40,6 @@ public class GetCollaboratedFarmStatisticsQueryHandler :
                 PetsCount = s.Farm.InnoGotchies.Count
             }, cancellationToken: cancellationToken);
 
-        return OperationResult.FromSuccess(result);
+        return OperationResult.Successful(result);
     }
 }

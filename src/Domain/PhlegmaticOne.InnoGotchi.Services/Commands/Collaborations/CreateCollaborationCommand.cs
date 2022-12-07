@@ -7,42 +7,26 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Commands.Collaborations;
 
-public class CreateCollaborationCommand : IdentityOperationResultCommandBase
+public class CreateCollaborationCommand : IdentityOperationResultCommand
 {
-    public CreateCollaborationCommand(Guid profileId, Guid toProfileId) : base(profileId)
-    {
-        ToProfileId = toProfileId;
-    }
-
+    public CreateCollaborationCommand(Guid profileId, Guid toProfileId) : base(profileId) => ToProfileId = toProfileId;
     public Guid ToProfileId { get; }
 }
 
-public class CreateCollaborationCommandHandler : IOperationResultCommandHandler<CreateCollaborationCommand>
+public class CreateCollaborationCommandHandler : ValidatableCommandHandler<CreateCollaborationCommand>
 {
-    private readonly IValidator<CreateCollaborationCommand> _createValidator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IWritableCollaborationsProvider _writableCollaborationsProvider;
 
     public CreateCollaborationCommandHandler(IUnitOfWork unitOfWork,
         IWritableCollaborationsProvider writableCollaborationsProvider,
-        IValidator<CreateCollaborationCommand> createValidator)
-    {
-        _unitOfWork = unitOfWork;
-        _writableCollaborationsProvider = writableCollaborationsProvider;
-        _createValidator = createValidator;
-    }
+        IValidator<CreateCollaborationCommand> createValidator) : base(createValidator)
+        => (_unitOfWork, _writableCollaborationsProvider) = (unitOfWork, writableCollaborationsProvider);
 
-    public async Task<OperationResult> Handle(CreateCollaborationCommand request,
-        CancellationToken cancellationToken)
-    {
-        var validationResult = await _createValidator.ValidateAsync(request, cancellationToken);
-
-        if (validationResult.IsValid == false) return OperationResult.FromFail(validationResult.ToString());
-
-        return await _unitOfWork.ResultFromExecutionInTransaction(async () =>
+    protected override Task<OperationResult> HandleValidCommand(CreateCollaborationCommand request, CancellationToken cancellationToken) =>
+        _unitOfWork.ResultFromExecutionInTransaction(async () =>
         {
             await _writableCollaborationsProvider
                 .CreateCollaborationAsync(request.ProfileId, request.ToProfileId, cancellationToken);
         });
-    }
 }

@@ -5,7 +5,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Farms;
 
-public class GetIsFarmExistsQuery : IdentityOperationResultQueryBase<bool>
+public class GetIsFarmExistsQuery : IdentityOperationResultQuery<bool>
 {
     public GetIsFarmExistsQuery(Guid profileId) : base(profileId)
     {
@@ -26,6 +26,6 @@ public class GetIsFarmExistsQueryHandler : IOperationResultQueryHandler<GetIsFar
     {
         var repository = _unitOfWork.GetRepository<Farm>();
         var isExists = await repository.ExistsAsync(x => x.OwnerId == request.ProfileId, cancellationToken);
-        return OperationResult.FromSuccess(isExists);
+        return OperationResult.Successful(isExists);
     }
 }

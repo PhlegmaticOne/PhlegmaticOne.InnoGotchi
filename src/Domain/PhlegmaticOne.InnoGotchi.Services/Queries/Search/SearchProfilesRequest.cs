@@ -6,7 +6,7 @@ using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Search;
 
-public class SearchProfilesRequest : IdentityOperationResultQueryBase<IList<SearchProfileDto>>
+public class SearchProfilesRequest : IdentityOperationResultQuery<IList<SearchProfileDto>>
 {
     public SearchProfilesRequest(Guid profileId, string searchText) : base(profileId)
     {
@@ -33,7 +33,7 @@ public class SearchProfilesRequestHandler : IOperationResultQueryHandler<SearchP
 
         var repository = _unitOfWork.GetRepository<UserProfile>();
         var result = await repository.GetFirstOrDefaultAsync(
-            predicate: p => p.User.Email.Contains(toSearch) &&
+            predicate: p => p.User.Email == toSearch &&
                             p.Farm != null &&
                             p.Id != profileId,
             selector: s => new SearchProfileDto
@@ -50,6 +50,6 @@ public class SearchProfilesRequestHandler : IOperationResultQueryHandler<SearchP
 
         if (result is not null) list.Add(result);
 
-        return OperationResult.FromSuccess(list);
+        return OperationResult.Successful(list);
     }
 }
