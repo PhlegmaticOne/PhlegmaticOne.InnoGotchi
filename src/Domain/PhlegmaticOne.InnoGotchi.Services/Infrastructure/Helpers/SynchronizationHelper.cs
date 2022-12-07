@@ -1,6 +1,6 @@
 ﻿namespace PhlegmaticOne.InnoGotchi.Services.Infrastructure.Helpers;
 
-internal static class SynchronizationHelper
+public static class SynchronizationHelper
 {
     public static int IncreaseUntilNotSynchronizedWithTime(int valueToIncrease, DateTime currentTime,
         DateTime lastActionTime, TimeSpan timeToIncrease)

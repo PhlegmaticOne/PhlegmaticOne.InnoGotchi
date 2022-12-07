@@ -1,7 +1,7 @@
 ﻿using PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Helpers;
 using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
+using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
 using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;

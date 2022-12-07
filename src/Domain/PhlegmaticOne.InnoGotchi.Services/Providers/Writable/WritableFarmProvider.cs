@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using PhlegmaticOne.InnoGotchi.Domain.Exceptions;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
@@ -29,10 +30,14 @@ public class WritableFarmProvider : IWritableFarmProvider
     private async Task<Farm> CreateFarm(Guid profileId, CreateFarmDto createFarmDto,
         CancellationToken cancellationToken = new())
     {
-        var userProfilesRepository = _unitOfWork.GetRepository<UserProfile>();
-        var userProfile = await userProfilesRepository.GetByIdOrDefaultAsync(profileId,
-            include: i => i.Include(x => x.User),
-            cancellationToken: cancellationToken);
+        var userProfile = await _unitOfWork
+            .GetRepository<UserProfile>()
+            .GetByIdOrDefaultAsync(profileId, cancellationToken: cancellationToken);
+
+        if (userProfile is null)
+        {
+            throw new DomainException(AppErrorMessages.ProfileDoesNotExistMessage);
+        }
 
         var now = _timeService.Now();
         return new Farm

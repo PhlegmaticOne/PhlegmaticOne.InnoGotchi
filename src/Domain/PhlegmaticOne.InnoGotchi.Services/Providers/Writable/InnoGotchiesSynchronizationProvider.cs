@@ -1,6 +1,7 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.UnitOfWork.Extensions;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;

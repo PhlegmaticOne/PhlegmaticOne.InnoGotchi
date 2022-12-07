@@ -1,9 +1,11 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
+﻿using PhlegmaticOne.InnoGotchi.Domain.Exceptions;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
@@ -19,16 +21,15 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         _timeService = timeService;
     }
 
-    public async Task<InnoGotchiModel> CreateAsync(Guid profileId, CreateInnoGotchiDto createInnoGotchiDto,
-        CancellationToken cancellationToken = new())
+    public async Task<InnoGotchiModel> CreateAsync(Guid profileId,
+        CreateInnoGotchiDto createInnoGotchiDto, CancellationToken cancellationToken = new())
     {
         var created = await CreateInnoGotchi(profileId, createInnoGotchiDto, cancellationToken);
         var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
-        var createdInnoGotchi = await repository.CreateAsync(created, cancellationToken);
-        return createdInnoGotchi;
+        return await repository.CreateAsync(created, cancellationToken);
     }
 
-    public Task DrinkAsync(Guid petId, CancellationToken cancellationToken = new())
+    public Task<InnoGotchiModel> DrinkAsync(Guid petId, CancellationToken cancellationToken = new())
     {
         return ProcessPetUpdating(petId, pet =>
         {
@@ -37,7 +38,7 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         }, cancellationToken);
     }
 
-    public Task FeedAsync(Guid petId, CancellationToken cancellationToken = new())
+    public Task<InnoGotchiModel> FeedAsync(Guid petId, CancellationToken cancellationToken = new())
     {
         return ProcessPetUpdating(petId, pet =>
         {
@@ -46,12 +47,18 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         }, cancellationToken);
     }
 
-    private async Task ProcessPetUpdating(Guid petId, Action<InnoGotchiModel> updateAction,
+    private async Task<InnoGotchiModel> ProcessPetUpdating(Guid petId, Action<InnoGotchiModel> updateAction,
         CancellationToken cancellationToken = new())
     {
         var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
         var pet = await repository.GetByIdOrDefaultAsync(petId, cancellationToken: cancellationToken);
-        await repository.UpdateAsync(pet!, updateAction, cancellationToken);
+
+        if (pet is null)
+        {
+            throw new DomainException(AppErrorMessages.PetDoesNotExistMessage);
+        }
+
+        return await repository.UpdateAsync(pet!, updateAction, cancellationToken);
     }
 
     private async Task<InnoGotchiModel> CreateInnoGotchi(Guid profileId, CreateInnoGotchiDto createInnoGotchiDto,
@@ -79,21 +86,36 @@ public class WritableInnoGotchiProvider : IWritableInnoGotchiesProvider
         };
     }
 
-    private Task<IList<InnoGotchiComponent>> GetExistingComponents(
+    private async Task<IList<InnoGotchiComponent>> GetExistingComponents(
         List<InnoGotchiModelComponentDto> componentsToCreate,
         CancellationToken cancellationToken = new())
     {
         var urls = componentsToCreate.Select(x => x.ImageUrl).ToList();
         var componentsRepository = _unitOfWork.GetRepository<InnoGotchiComponent>();
-        return componentsRepository.GetAllAsync(predicate: x => urls.Contains(x.ImageUrl),
+        var components = await componentsRepository.GetAllAsync(
+            predicate: x => urls.Contains(x.ImageUrl),
             cancellationToken: cancellationToken);
+
+        if (components.Count < componentsToCreate.Count)
+        {
+            throw new DomainException(AppErrorMessages.UnknownComponentMessage);
+        }
+
+        return components;
     }
 
-    private Task<Farm> GetProfileFarm(Guid profileId, CancellationToken cancellationToken = new())
+    private async Task<Farm> GetProfileFarm(Guid profileId, CancellationToken cancellationToken = new())
     {
         var farmRepository = _unitOfWork.GetRepository<Farm>();
-        return farmRepository.GetFirstOrDefaultAsync(x => x.Owner.Id == profileId,
-            cancellationToken: cancellationToken)!;
+        var farm = await farmRepository.GetFirstOrDefaultAsync(x => x.OwnerId == profileId,
+            cancellationToken: cancellationToken);
+
+        if (farm is null)
+        {
+            throw new DomainException(AppErrorMessages.FarmDoesNotExistMessage);
+        }
+
+        return farm;
     }
 
     private static List<InnoGotchiModelComponent> CreateModelComponents(

@@ -1,5 +1,5 @@
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.MapperConfigurations;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Helpers;
+using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Tests.Mapper;
 

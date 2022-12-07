@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddValidatorsFromAssemblyContaining<RegisterProfileValidator>();
         services.AddAutoMapper(builder => { builder.AddMaps(typeof(FarmMapperConfiguration).Assembly); });
         services.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
-
+        
         services.AddScoped<IWritableCollaborationsProvider, WritableCollaborationsProvider>();
         services.AddScoped<IWritableFarmProvider, WritableFarmProvider>();
         services.AddScoped<IWritableInnoGotchiesProvider, WritableInnoGotchiProvider>();

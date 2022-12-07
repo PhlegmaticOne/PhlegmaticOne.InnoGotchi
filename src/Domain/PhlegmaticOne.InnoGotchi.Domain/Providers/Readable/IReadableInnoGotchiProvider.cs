@@ -4,5 +4,5 @@ namespace PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 
 public interface IReadableInnoGotchiProvider
 {
-    Task<InnoGotchiModel> GetDetailedAsync(Guid petId, CancellationToken cancellationToken = new());
+    Task<InnoGotchiModel?> GetDetailedAsync(Guid petId, CancellationToken cancellationToken = new());
 }

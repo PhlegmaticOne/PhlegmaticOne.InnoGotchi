@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PhlegmaticOne.InnoGotchi.Domain.Exceptions;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
 using PhlegmaticOne.PasswordHasher;
@@ -24,13 +26,11 @@ public class WritableProfileProvider : IWritableProfilesProvider
         _timeService = timeService;
     }
 
-    public async Task<UserProfile> CreateAsync(RegisterProfileDto registerProfileDto,
-        CancellationToken cancellationToken = new())
+    public async Task<UserProfile> CreateAsync(RegisterProfileDto registerProfileDto, CancellationToken cancellationToken = new())
     {
         var prepared = PrepareProfile(registerProfileDto);
         var repository = _unitOfWork.GetRepository<UserProfile>();
-        var createdProfile = await repository.CreateAsync(prepared, cancellationToken);
-        return createdProfile;
+        return await repository.CreateAsync(prepared, cancellationToken);
     }
 
     public async Task<UserProfile> UpdateAsync(Guid profileId, UpdateProfileDto updateProfileDto,
@@ -38,16 +38,21 @@ public class WritableProfileProvider : IWritableProfilesProvider
     {
         var repository = _unitOfWork.GetRepository<UserProfile>();
         var profile = await repository.GetByIdOrDefaultAsync(profileId,
-            include: i => i.Include(x => x.User), cancellationToken: cancellationToken);
-        var updatedProfile = (await repository.UpdateAsync(profile!, updating =>
+            include: i => i.Include(x => x.User), 
+            cancellationToken: cancellationToken);
+
+        if (profile is null)
+        {
+            throw new DomainException(AppErrorMessages.ProfileDoesNotExistMessage);
+        }
+
+        return await repository.UpdateAsync(profile, updating =>
         {
             updating.FirstName = GetNewValueOrExisting(updateProfileDto.FirstName, profile!.FirstName);
             updating.LastName = GetNewValueOrExisting(updateProfileDto.LastName, profile.LastName);
             updating.User.Password = ProcessPassword(profile.User.Password, updateProfileDto.NewPassword);
             updating.Avatar = ProcessAvatar(updateProfileDto.AvatarData, profile.Avatar);
-        }, cancellationToken))!;
-
-        return updatedProfile;
+        }, cancellationToken);
     }
 
 

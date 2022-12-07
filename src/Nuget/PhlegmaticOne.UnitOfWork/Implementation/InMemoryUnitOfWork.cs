@@ -1,5 +1,4 @@
-﻿using PhlegmaticOne.OperationResults;
-using PhlegmaticOne.UnitOfWork.Interfaces;
+﻿using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
 
 namespace PhlegmaticOne.UnitOfWork.Implementation;
@@ -27,30 +26,4 @@ public class InMemoryUnitOfWork : IUnitOfWork
     }
 
     public Task<int> SaveChangesAsync() => Task.FromResult(0);
-
-    public async Task<OperationResult<T>> ResultFromExecutionInTransaction<T>(Func<Task<T>> operation)
-    {
-        try
-        {
-            var result = await operation();
-            return OperationResult.FromSuccess(result);
-        }
-        catch (Exception e)
-        {
-            return OperationResult.FromFail<T>(e.Message);
-        }
-    }
-
-    public async Task<OperationResult> ResultFromExecutionInTransaction(Func<Task> operation)
-    {
-        try
-        {
-            await operation();
-            return OperationResult.Success;
-        }
-        catch (Exception e)
-        {
-            return OperationResult.FromFail(e.Message);
-        }
-    }
 }

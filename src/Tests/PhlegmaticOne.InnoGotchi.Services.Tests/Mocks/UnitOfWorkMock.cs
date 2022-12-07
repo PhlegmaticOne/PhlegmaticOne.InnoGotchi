@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using PhlegmaticOne.InnoGotchi.Data.EntityFramework.Context;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
@@ -30,38 +29,40 @@ public class UnitOfWorkMock
     private static Collaboration GetCollaboration(List<UserProfile> profiles) =>
         new()
         {
-            Collaborator = profiles.First(),
-            Farm = profiles[1].Farm!
+            Collaborator = profiles[1],
+            Farm = profiles.First().Farm!
         };
     private static List<InnoGotchiModel> GetPets(List<UserProfile> profiles)
     {
         var farm = profiles.First().Farm!;
         var now = DateTime.Now;
+        var components = new List<InnoGotchiModelComponent>()
+        {
+            new()
+            {
+                InnoGotchiComponent = new()
+                {
+                    Name = "Bodies",
+                    ImageUrl = "BodyUrl"
+                },
+            },
+            new()
+            {
+                InnoGotchiComponent = new()
+                {
+                    Name = "Noses",
+                    ImageUrl = "NosesUrl"
+                }
+            }
+        };
+
         return new()
         {
             new()
             {
                 Age = 0,
                 AgeUpdatedAt = now,
-                Components = new List<InnoGotchiModelComponent>
-                {
-                    new()
-                    {
-                        InnoGotchiComponent = new()
-                        {
-                            Name = "Bodies",
-                            ImageUrl = "BodyUrl"
-                        },
-                    },
-                    new()
-                    {
-                        InnoGotchiComponent = new()
-                        {
-                            Name = "Noses",
-                            ImageUrl = "NosesUrl"
-                        }
-                    }
-                },
+                Components = components,
                 DeadSince = DateTime.MinValue,
                 Farm = farm,
                 HappinessDaysCount = 0,
@@ -77,25 +78,7 @@ public class UnitOfWorkMock
             {
                 Age = 10,
                 AgeUpdatedAt = now,
-                Components = new List<InnoGotchiModelComponent>
-                {
-                    new()
-                    {
-                        InnoGotchiComponent = new()
-                        {
-                            Name = "Bodies",
-                            ImageUrl = "BodyUrl"
-                        },
-                    },
-                    new()
-                    {
-                        InnoGotchiComponent = new()
-                        {
-                            Name = "Noses",
-                            ImageUrl = "NosesUrl"
-                        }
-                    }
-                },
+                Components = components,
                 DeadSince = now,
                 Farm = farm,
                 HappinessDaysCount = 1,

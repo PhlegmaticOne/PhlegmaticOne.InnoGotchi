@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
 
@@ -32,33 +31,5 @@ public class DbContextUnitOfWork : IUnitOfWork
     public Task<int> SaveChangesAsync()
     {
         return _dbContext.SaveChangesAsync();
-    }
-
-    public async Task<OperationResult<T>> ResultFromExecutionInTransaction<T>(Func<Task<T>> operation)
-    {
-        try
-        {
-            var result = await operation();
-            await SaveChangesAsync();
-            return OperationResult.FromSuccess(result);
-        }
-        catch (Exception e)
-        {
-            return OperationResult.FromFail<T>(e.Message);
-        }
-    }
-
-    public async Task<OperationResult> ResultFromExecutionInTransaction(Func<Task> operation)
-    {
-        try
-        {
-            await operation();
-            await SaveChangesAsync();
-            return OperationResult.Success;
-        }
-        catch (Exception e)
-        {
-            return OperationResult.FromFail(e.Message);
-        }
     }
 }

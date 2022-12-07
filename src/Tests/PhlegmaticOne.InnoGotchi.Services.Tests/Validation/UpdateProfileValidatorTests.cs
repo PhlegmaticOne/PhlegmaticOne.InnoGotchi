@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using PhlegmaticOne.InnoGotchi.Services.Commands.Profiles;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Helpers;
 using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
+using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.PasswordHasher.Implementation;

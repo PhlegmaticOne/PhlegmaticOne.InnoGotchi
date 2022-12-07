@@ -1,7 +1,7 @@
 ﻿using PhlegmaticOne.InnoGotchi.Services.Infrastructure.HelpModels;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Helpers;
 using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
+using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Tests.Validation;

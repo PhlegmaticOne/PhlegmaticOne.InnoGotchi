@@ -3,8 +3,8 @@ using Moq;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Helpers;
 using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
+using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 

@@ -16,8 +16,8 @@ public class InnoGotchiOwnChecker : IInnoGotchiOwnChecker
         var innoGotchiesRepository = _unitOfWork.GetRepository<InnoGotchiModel>();
         var collaborationsRepository = _unitOfWork.GetRepository<Collaboration>();
 
-        var isPetBelongToProfile = await innoGotchiesRepository.ExistsAsync(x =>
-            x.Farm.OwnerId == profileId && x.Id == petId, cancellationToken);
+        var isPetBelongToProfile = await innoGotchiesRepository
+            .ExistsAsync(x => x.Farm.OwnerId == profileId && x.Id == petId, cancellationToken);
 
         if (isPetBelongToProfile) return true;
 

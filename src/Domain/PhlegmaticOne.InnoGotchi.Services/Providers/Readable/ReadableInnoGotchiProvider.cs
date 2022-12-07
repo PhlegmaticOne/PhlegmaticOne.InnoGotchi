@@ -15,13 +15,12 @@ public class ReadableInnoGotchiProvider : IReadableInnoGotchiProvider
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<InnoGotchiModel> GetDetailedAsync(Guid petId, CancellationToken cancellationToken = new())
+    public async Task<InnoGotchiModel?> GetDetailedAsync(Guid petId, CancellationToken cancellationToken = new())
     {
         var repository = _unitOfWork.GetRepository<InnoGotchiModel>();
-        var pet = await repository.GetByIdOrDefaultAsync(petId,
+        return await repository.GetByIdOrDefaultAsync(petId,
             include: IncludeComponents(),
             cancellationToken: cancellationToken);
-        return pet!;
     }
 
     private static Func<IQueryable<InnoGotchiModel>, IIncludableQueryable<InnoGotchiModel, object>> IncludeComponents()

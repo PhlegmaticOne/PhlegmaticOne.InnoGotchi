@@ -2,6 +2,9 @@
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.UnitOfWork.Interfaces;
+using PhlegmaticOne.InnoGotchi.Domain.Exceptions;
+using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
 
@@ -18,16 +21,14 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
 
     public async Task<FarmStatistics> ProcessFeedingAsync(Guid profileId, CancellationToken cancellationToken = new())
     {
-        var repository = _unitOfWork.GetRepository<FarmStatistics>();
-        var farmStatistics = await repository.GetFirstOrDefaultAsync(
-            x => x.Farm.Owner.Id == profileId,
-            cancellationToken: cancellationToken);
+        var farmStatistics = await GetStatistics(profileId, cancellationToken);
         var now = _timeService.Now();
+        var repository = _unitOfWork.GetRepository<FarmStatistics>();
 
-        var updated = await repository.UpdateAsync(farmStatistics!, statistics =>
+        var updated = await repository.UpdateAsync(farmStatistics, statistics =>
         {
-            statistics.AverageFeedTime = CalculateNewAverage(statistics.AverageFeedTime, statistics.LastFeedTime, now,
-                statistics.TotalFeedingsCount);
+            statistics.AverageFeedTime = AverageCalculator.CalculateNewAverage(
+                statistics.AverageFeedTime, statistics.LastFeedTime, now, statistics.TotalFeedingsCount);
             statistics.TotalFeedingsCount += 1;
             statistics.LastFeedTime = now;
         }, cancellationToken);
@@ -37,17 +38,14 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
 
     public async Task<FarmStatistics> ProcessDrinkingAsync(Guid profileId, CancellationToken cancellationToken = new())
     {
-        var repository = _unitOfWork.GetRepository<FarmStatistics>();
-        var farmStatistics =
-            await repository.GetFirstOrDefaultAsync(x => x.Farm.OwnerId == profileId,
-                cancellationToken: cancellationToken);
+        var farmStatistics = await GetStatistics(profileId, cancellationToken);
         var now = _timeService.Now();
+        var repository = _unitOfWork.GetRepository<FarmStatistics>();
 
-        var updated = await repository.UpdateAsync(farmStatistics!, statistics =>
+        var updated = await repository.UpdateAsync(farmStatistics, statistics =>
         {
-            statistics.AverageDrinkTime = CalculateNewAverage(statistics.AverageDrinkTime, statistics.LastDrinkTime,
-                now,
-                statistics.TotalDrinkingsCount);
+            statistics.AverageDrinkTime = AverageCalculator.CalculateNewAverage(
+                    statistics.AverageDrinkTime, statistics.LastDrinkTime, now, statistics.TotalDrinkingsCount);
             statistics.TotalDrinkingsCount += 1;
             statistics.LastDrinkTime = now;
         }, cancellationToken);
@@ -55,10 +53,15 @@ public class WritableFarmStatisticsProvider : IWritableFarmStatisticsProvider
         return updated;
     }
 
-    private static TimeSpan CalculateNewAverage(TimeSpan currentAverage, DateTime lastActionTime, DateTime now,
-        int currentActionsCount)
+    private async Task<FarmStatistics> GetStatistics(Guid profileId, CancellationToken cancellationToken)
     {
-        var difference = now - lastActionTime;
-        return (currentAverage + difference) / (currentActionsCount + 1);
+        var repository = _unitOfWork.GetRepository<FarmStatistics>();
+        var farmStatistics = await repository.GetFirstOrDefaultAsync(x => x.Farm.Owner.Id == profileId, cancellationToken: cancellationToken);
+
+        if (farmStatistics is null)
+        {
+            throw new DomainException(AppErrorMessages.ProfileDoesNotHaveFarmStatistics);
+        }
+        return farmStatistics;
     }
 }

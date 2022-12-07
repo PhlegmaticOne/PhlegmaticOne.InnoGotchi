@@ -21,4 +21,7 @@ public static class AppErrorMessages
     public const string PasswordIncorrectMessage = "Password specified is not correct";
     public const string CannotUpdateDeadPetMessage = "You can't update dead pet";
     public const string OldPasswordIsIncorrectMessage = "Old password is incorrect";
+    public const string ProfileDoesNotHaveFarmStatistics = "Profile does not have farm statistics. You must create your farm";
+    public const string UnknownComponentMessage = "Unknown component for creating InnoGotchi";
+    public const string PetDoesNotExistMessage = "Pet doesn't exist";
 }
