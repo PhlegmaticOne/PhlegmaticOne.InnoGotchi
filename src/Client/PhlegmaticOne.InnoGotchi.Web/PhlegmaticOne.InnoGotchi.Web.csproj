@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\Shared\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\ViewComponents\Base\" />
+  </ItemGroup>
+
 </Project>

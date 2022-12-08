@@ -1,5 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", onLoaded);
 document.addEventListener("keydown", onKeyDown);
+document.addEventListener("mousedown", onDocumentMouseDown);
 
 let currentDraggingElement;
 let currentScalingElement;
@@ -27,6 +28,14 @@ function onLoaded() {
 
 function clear() {
     document.querySelector(constructorElementClassName).innerHTML = "";
+}
+
+function onDocumentMouseDown(e) {
+    const elementUnderMouse = get_element_under_mouse(e);
+
+    if (elementUnderMouse !== currentScalingElement) {
+        currentScalingElement = null;
+    }
 }
 
 async function createNew() {
@@ -100,10 +109,11 @@ function onDragEnter(e) {
 function onMouseDown(e) {
     set_can_drag_in_constructor_area(true);
     const elementUnderMouse = get_element_under_mouse(e);
-    if (elementUnderMouse === null) return;
+    if (elementUnderMouse === null) {
+        return;
+    }
 
     currentDraggingElement = elementUnderMouse;
-
     currentScalingElement = elementUnderMouse;
 }
 

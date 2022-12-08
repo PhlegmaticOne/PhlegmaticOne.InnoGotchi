@@ -9,18 +9,18 @@
 
         <div class="col-lg-9 bg-dark pet-info text-white">
 
-            <div class="row">
+            <div class="row pt-2">
                 @if (Model.IsNewBorn)
                 {
-                    <h4 class="h4 text-center">@(Model.Name) is newborn</h4>
+                    <h4 class="h4 text-center">@(Model.Name) is <vc:inno-gotchi-status status="newborn"/></h4>
                 }
                 else if (Model.IsDead)
                 {
-                    <h4 class="h4 text-center">@(Model.Name) is dead. Lived: @(Model.DeadSince - Model.LiveSince)</h4>
+                    <h4 class="h4 text-center">@(Model.Name) is <vc:inno-gotchi-status status="dead"/>. Lived: @(Model.DeadSince - Model.LiveSince)</h4>
                 }
                 else
                 {
-                    <h4 class="h4 text-center">@(Model.Name) is alive</h4>
+                    <h4 class="h4 text-center">@(Model.Name) is <vc:inno-gotchi-status status="alive"/></h4>
                 }
             </div>
 
@@ -28,8 +28,8 @@
                 <div class="col-md-6">
                     <h3 class="my-3 h3">Vital signs</h3>
                     <div>
-                        <h6 class="h6">Hunger level: @Model.HungerLevel</h6>
-                        <h6 class="h6">Thirsty level: @Model.ThirstyLevel</h6>
+                        <h6 class="h6">Hunger level: <vc:inno-gotchi-status status="@Model.HungerLevel"/></h6>
+                        <h6 class="h6">Thirsty level: <vc:inno-gotchi-status status="@Model.ThirstyLevel" /></h6>
                         <h6 class="h6">Age: @Model.Age</h6>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
 
     <div class="row text-center my-4" style="justify-content: center">
         <div class="col-6">
-            <a asp-controller="Farm" asp-action="My" class="btn btn-outline-secondary btn-dark">Back to farm</a>
+            <a asp-controller="Farm" asp-action="My" class="btn btn-outline-light btn-dark">Back to farm</a>
         </div>
     </div>
 </div>

@@ -4,6 +4,7 @@ using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.MappersConfigurations;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.TagHelpers.PagedList.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Validators;
+using PhlegmaticOne.InnoGotchi.Web.Infrastructure.ViewComponents.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Collaborations;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Constructor;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
@@ -63,7 +64,8 @@ builder.Services.AddClientRequestsService("https://localhost:7142/api/", a =>
 
 builder.Services.AddLocalStorage(startConf => { startConf.SetLoginPath("/Account/Login"); });
 
-builder.Services.AddTransient<IPagedListPagesGenerator, PagedListPagesGenerator>();
+builder.Services.AddScoped<IPagedListPagesGenerator, PagedListPagesGenerator>();
+builder.Services.AddScoped<IInnoGotchiStatusGenerator, InnoGotchiStatusGenerator>();
 
 
 var app = builder.Build();

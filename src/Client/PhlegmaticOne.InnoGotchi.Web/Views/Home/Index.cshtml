@@ -23,11 +23,11 @@
 {
     @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", 
         $"Welcome {User.Firstname()} {User.Lastname()}")
+
 }
 else
 {
     @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", "Welcome")
-
 
     <div class="row justify-content-center text-center" style="color: wheat">
         <div class="col-8">
@@ -242,16 +242,28 @@ else
     <script src="~/js/pie_chart.js" asp-append-version="true"></script>
     <script>
         $(() => {
-            @if (ViewData["BuildStatistics"] is false)
-            {
-                return;
+            ageChart();
+            countChart();
+
+            function ageChart() {
+                @if (ViewData["BuildAgeStatistics"] is false)
+                {
+                    return;
+                }
+
+                const ageData = @Json.Serialize(agesDonutChartViewModel);
+                donutChart(ageData, "age_donut_chart_element");
             }
 
-            const countData = @Json.Serialize(deadAliveDonutChartViewModel);
-            const ageData = @Json.Serialize(agesDonutChartViewModel);
+            function countChart() {
+                @if (ViewData["BuildCountStatistics"] is false)
+                {
+                    return;
+                }
 
-            donutChart(countData, "count_donut_chart_element");
-            donutChart(ageData, "age_donut_chart_element");
+                const countData = @Json.Serialize(deadAliveDonutChartViewModel);
+                donutChart(countData, "count_donut_chart_element");
+            }
         })
     </script>
 }

@@ -10,15 +10,15 @@
             <div class="row">
                 @if (Model.IsNewBorn)
                 {
-                    <h4 class="h4 text-center">Name: @(Model.Name). Newborn</h4>
+                    <h4 class="h4 text-center">Name: @(Model.Name).<vc:inno-gotchi-status status="newborn" /></h4>
                 }
                 else if (Model.IsDead)
                 {
-                    <h4 class="h4 text-center">Name: @(Model.Name). Dead</h4>
+                    <h4 class="h4 text-center">Name: @(Model.Name). <vc:inno-gotchi-status status="dead" /></h4>
                 }
                 else
                 {
-                    <h4 class="h4 text-center">Name: @(Model.Name). Alive</h4>
+                    <h4 class="h4 text-center">Name: @(Model.Name). <vc:inno-gotchi-status status="alive"/></h4>
                 }
             </div>
 
@@ -26,8 +26,8 @@
                 <div class="col-md-6">
                     <h4 class="my-3 h4">Vital signs</h4>
 
-                    <h6 class="h6">Hunger level: @Model.HungerLevel</h6>
-                    <h6 class="h6">Thirsty level: @Model.ThirstyLevel</h6>
+                    <h6 class="h6">Hunger level: <vc:inno-gotchi-status status="@Model.HungerLevel" /></h6>
+                    <h6 class="h6">Thirsty level: <vc:inno-gotchi-status status="@Model.ThirstyLevel" /></h6>
                     <h6 class="h6">Age: @Model.Age</h6>
                 </div>
                 <div class="col-md-6">

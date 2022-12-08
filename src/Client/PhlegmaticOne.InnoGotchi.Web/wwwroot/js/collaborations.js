@@ -11,7 +11,7 @@ $(() => {
             return;
         }
 
-        const response = await window.fetch(`/Accounts/SearchPartial?searchText=${inputValue}`);
+        const response = await window.fetch(`/Search/SearchPartial?searchText=${inputValue}`);
 
         if (response.ok) {
             searchResult.innerHTML = await response.text();
