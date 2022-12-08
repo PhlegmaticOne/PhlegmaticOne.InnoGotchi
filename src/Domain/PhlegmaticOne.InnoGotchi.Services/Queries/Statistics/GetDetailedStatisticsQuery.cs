@@ -35,7 +35,9 @@ public class GetDetailedStatisticsQueryHandler :
             .ValidateAsync(new ProfileFarmModel(request.ProfileId), cancellationToken);
 
         if (validationResult.IsValid == false)
+        {
             return OperationResult.Failed<DetailedFarmStatisticsDto>(validationResult.ToString());
+        }
 
         return await Build(request.ProfileId, cancellationToken);
     }
@@ -78,10 +80,10 @@ public class GetDetailedStatisticsQueryHandler :
 
     //Lol
     private static T DynamicFirstValue<T>(IEnumerable<dynamic> petsInfo, 
-        bool isDead, Func<dynamic, T> selector) =>
+        bool isDead, Func<dynamic, T> selector) where T : struct =>
         petsInfo
             .Where(x => x.IsDead == isDead)
             .Select(selector)
             .DefaultIfEmpty()
-            .First()!;
+            .First();
 }

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 
-namespace PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
+namespace PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Helpers;
 
 public class ValidationResultAssertionHelper
 {

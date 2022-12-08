@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.HelpModels;
 using PhlegmaticOne.InnoGotchi.Shared.Statistics;
 using PhlegmaticOne.OperationResults;
@@ -36,7 +37,7 @@ public class GetPreviewStatisticsQueryHandler :
         if (validationResult.IsValid == false)
             return OperationResult.Failed<PreviewFarmStatisticsDto>(validationResult.ToString());
 
-        var repository = _unitOfWork.GetRepository<Domain.Models.FarmStatistics>();
+        var repository = _unitOfWork.GetRepository<FarmStatistics>();
 
         var result = await repository.GetFirstOrDefaultAsync(
             predicate: p => p.Farm.OwnerId == request.ProfileId,

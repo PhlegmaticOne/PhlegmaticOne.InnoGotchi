@@ -4,7 +4,7 @@ using PhlegmaticOne.InnoGotchi.Domain.Exceptions;
 using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
@@ -13,7 +13,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Tests.Providers.Writable;
 
 public class WritableInnoGotchiProviderTests
 {
-    private readonly UnitOfWorkData _data;
+    private readonly UnitOfWorkMock _data;
     private readonly WritableInnoGotchiProvider _sut;
     private static readonly DateTime Now = DateTime.MinValue;
     public WritableInnoGotchiProviderTests()

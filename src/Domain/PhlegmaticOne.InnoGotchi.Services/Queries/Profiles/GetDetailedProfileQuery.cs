@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
@@ -19,16 +20,16 @@ public class GetDetailedProfileQuery : IdentityOperationResultQuery<DetailedProf
 public class GetDetailedProfileQueryHandler :
     IOperationResultQueryHandler<GetDetailedProfileQuery, DetailedProfileDto>
 {
-    private readonly IDefaultAvatarService _defaultAvatarService;
+    private readonly IAvatarProcessor _avatarProcessor;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
     public GetDetailedProfileQueryHandler(
-        IDefaultAvatarService defaultAvatarService,
+        IAvatarProcessor avatarProcessor,
         IMapper mapper,
         IUnitOfWork unitOfWork)
     {
-        _defaultAvatarService = defaultAvatarService;
+        _avatarProcessor = avatarProcessor;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
@@ -41,13 +42,12 @@ public class GetDetailedProfileQueryHandler :
                 include: i => i.Include(x => x.User).Include(x => x.Avatar)!,
                 cancellationToken: cancellationToken);
 
-        if (result is null) return OperationResult.Failed<DetailedProfileDto>("Profile doesn't exist");
+        if (result is null)
+        {
+            return OperationResult.Failed<DetailedProfileDto>(AppErrorMessages.ProfileDoesNotExistMessage);
+        }
 
-        if (result.Avatar is null || result.Avatar.AvatarData.Any() == false)
-            result.Avatar = new Avatar
-            {
-                AvatarData = await _defaultAvatarService.GetDefaultAvatarDataAsync(cancellationToken)
-            };
+        result.Avatar = await _avatarProcessor.ProcessAvatarAsync(result.Avatar, cancellationToken);
 
         var mapped = _mapper.Map<DetailedProfileDto>(result);
         return OperationResult.Successful(mapped);

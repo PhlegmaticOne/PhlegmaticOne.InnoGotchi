@@ -1,5 +1,6 @@
 ﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
 using PhlegmaticOne.UnitOfWork.Interfaces;
@@ -13,30 +14,30 @@ public class GetProfileAvatarQuery : IdentityOperationResultQuery<Avatar>
 
 public class GetProfileAvatarQueryHandler : IOperationResultQueryHandler<GetProfileAvatarQuery, Avatar>
 {
-    private readonly IDefaultAvatarService _defaultAvatarService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAvatarProcessor _avatarProcessor;
 
-    public GetProfileAvatarQueryHandler(IUnitOfWork unitOfWork,
-        IDefaultAvatarService defaultAvatarService)
+    public GetProfileAvatarQueryHandler(IUnitOfWork unitOfWork, IAvatarProcessor avatarProcessor)
     {
         _unitOfWork = unitOfWork;
-        _defaultAvatarService = defaultAvatarService;
+        _avatarProcessor = avatarProcessor;
     }
 
     public async Task<OperationResult<Avatar>> Handle(GetProfileAvatarQuery request,
         CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.GetRepository<Avatar>().GetFirstOrDefaultAsync(
-            x => x.UserProfile.Id == request.ProfileId,
-            cancellationToken: cancellationToken);
+        var result = await _unitOfWork
+            .GetRepository<Avatar>()
+            .GetFirstOrDefaultAsync(
+                predicate: x => x.UserProfile.Id == request.ProfileId, 
+                cancellationToken: cancellationToken);
 
-        if (result is null || result.AvatarData.Any() == false)
+        if (result is null)
         {
-            result = new Avatar
-            {
-                AvatarData = await _defaultAvatarService.GetDefaultAvatarDataAsync(cancellationToken)
-            };
+            return OperationResult.Failed<Avatar>(AppErrorMessages.ProfileDoesNotExistMessage);
         }
+
+        result = await _avatarProcessor.ProcessAvatarAsync(result, cancellationToken);
 
         return OperationResult.Successful(result);
     }

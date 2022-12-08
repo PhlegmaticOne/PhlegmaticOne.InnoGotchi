@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using PhlegmaticOne.InnoGotchi.Services.Providers.Readable;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Tests.Providers.Readable;
 
 public class ReadableInnoGotchiProviderTests
 {
-    private readonly UnitOfWorkData _data;
+    private readonly UnitOfWorkMock _data;
     public ReadableInnoGotchiProviderTests() => _data = UnitOfWorkMock.Create();
 
     [Fact]

@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using PhlegmaticOne.InnoGotchi.Services.Commands.Profiles;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
-using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.PasswordHasher.Implementation;
@@ -11,7 +11,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Tests.Validation;
 
 public class UpdateProfileValidatorTests
 {
-    private readonly UnitOfWorkData _data;
+    private readonly UnitOfWorkMock _data;
     public UpdateProfileValidatorTests() => _data = UnitOfWorkMock.Create();
 
     [Fact]

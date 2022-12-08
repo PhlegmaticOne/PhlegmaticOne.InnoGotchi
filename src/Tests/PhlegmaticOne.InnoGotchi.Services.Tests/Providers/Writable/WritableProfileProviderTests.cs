@@ -2,7 +2,7 @@
 using Moq;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Services.Providers.Writable;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
 using PhlegmaticOne.PasswordHasher;
@@ -11,7 +11,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Tests.Providers.Writable;
 
 public class WritableProfileProviderTests
 {
-    private readonly UnitOfWorkData _data;
+    private readonly UnitOfWorkMock _data;
     private readonly WritableProfileProvider _sut;
     private static readonly DateTime Now = DateTime.MinValue;
     public WritableProfileProviderTests()

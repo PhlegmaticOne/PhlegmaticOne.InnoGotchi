@@ -1,14 +1,14 @@
 ﻿using PhlegmaticOne.InnoGotchi.Services.Commands.Collaborations;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
-using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Tests.Validation;
 
 public class CreateCollaborationValidatorTests
 {
-    private readonly UnitOfWorkData _data;
+    private readonly UnitOfWorkMock _data;
     public CreateCollaborationValidatorTests() => _data = UnitOfWorkMock.Create();
 
     [Fact]

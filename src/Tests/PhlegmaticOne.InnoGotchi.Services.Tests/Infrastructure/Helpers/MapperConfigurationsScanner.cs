@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using AutoMapper;
 
-namespace PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
+namespace PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Helpers;
 
 public static class MapperConfigurationsScanner
 {

@@ -1,7 +1,7 @@
 ﻿using PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
-using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 using PhlegmaticOne.InnoGotchi.Shared.Components;
 using PhlegmaticOne.InnoGotchi.Shared.Constructor;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
@@ -10,7 +10,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Tests.Validation;
 
 public class CreateInnoGotchiValidatorTests
 {
-    private readonly UnitOfWorkData _data;
+    private readonly UnitOfWorkMock _data;
     public CreateInnoGotchiValidatorTests() => _data = UnitOfWorkMock.Create();
 
     [Fact]

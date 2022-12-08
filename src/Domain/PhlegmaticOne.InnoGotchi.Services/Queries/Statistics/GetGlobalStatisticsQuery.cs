@@ -21,6 +21,12 @@ public class GetGlobalStatisticsQueryHandler :
     public async Task<OperationResult<GlobalStatisticsDto>> Handle(GetGlobalStatisticsQuery request,
         CancellationToken cancellationToken)
     {
+        var result = await BuildStatistics(cancellationToken);
+        return OperationResult.Successful(result);
+    }
+
+    private async Task<GlobalStatisticsDto> BuildStatistics(CancellationToken cancellationToken)
+    {
         var innoGotchiesInfo = await _unitOfWork.GetRepository<InnoGotchiModel>()
             .GetAllAsync(selector: s => new
             {
@@ -50,6 +56,6 @@ public class GetGlobalStatisticsQueryHandler :
         };
         result.PetsTotalCount = result.AlivePetsCount + result.DeadPetsCount;
 
-        return OperationResult.Successful(result);
+        return result;
     }
 }

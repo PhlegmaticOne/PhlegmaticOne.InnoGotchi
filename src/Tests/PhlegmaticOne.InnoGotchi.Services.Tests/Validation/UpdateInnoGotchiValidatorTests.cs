@@ -3,8 +3,8 @@ using Moq;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Mocks;
-using PhlegmaticOne.InnoGotchi.Services.Tests.TestsInfrastructre;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Helpers;
+using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Shared.InnoGotchies;
 
@@ -12,7 +12,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Tests.Validation;
 
 public class UpdateInnoGotchiValidatorTests
 {
-    private readonly UnitOfWorkData _data;
+    private readonly UnitOfWorkMock _data;
     public UpdateInnoGotchiValidatorTests() => _data = UnitOfWorkMock.Create();
     [Fact]
     public async Task ShouldBeNotValid_BecausePetIsDead_Test()

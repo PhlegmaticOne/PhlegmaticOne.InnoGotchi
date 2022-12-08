@@ -33,7 +33,7 @@ public class SearchProfilesRequestHandler : IOperationResultQueryHandler<SearchP
 
         var repository = _unitOfWork.GetRepository<UserProfile>();
         var result = await repository.GetFirstOrDefaultAsync(
-            predicate: p => p.User.Email == toSearch &&
+            predicate: p => p.User.Email.ToLower() == toSearch.ToLower() &&
                             p.Farm != null &&
                             p.Id != profileId,
             selector: s => new SearchProfileDto
@@ -48,7 +48,10 @@ public class SearchProfilesRequestHandler : IOperationResultQueryHandler<SearchP
 
         IList<SearchProfileDto> list = new List<SearchProfileDto>();
 
-        if (result is not null) list.Add(result);
+        if (result is not null)
+        {
+            list.Add(result);
+        }
 
         return OperationResult.Successful(list);
     }

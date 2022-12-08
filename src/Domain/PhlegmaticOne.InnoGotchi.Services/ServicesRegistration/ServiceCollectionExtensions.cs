@@ -6,6 +6,7 @@ using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Writable;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
+using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.MapperConfigurations;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;
 using PhlegmaticOne.InnoGotchi.Services.Providers.Readable;
@@ -35,18 +36,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtTokenGenerationService, JwtTokenGenerationService>();
         services.AddScoped<ITimeService, TimeService>();
         services.AddScoped<IDefaultAvatarService, DefaultAvatarService>();
+        services.AddScoped<IAvatarProcessor, AvatarProcessor>();
         services.AddScoped<ISortingService<InnoGotchiModel>, SortingServiceBase<InnoGotchiModel>>(x =>
         {
-            var sortByProperties =
-                new Dictionary<int, Expression<Func<InnoGotchiModel, object>>>
-                {
-                    { 0, model => model.HappinessDaysCount },
-                    { 1, model => model.Age },
-                    { 2, model => model.HungerLevel },
-                    { 3, model => model.ThirstyLevel },
-                    { 4, model => model.Name },
-                    { 5, model => model.Farm.Name }
-                };
+            var sortByProperties = InnoGotchiSortingExpressions.GetSortingExpressions();
             return new SortingServiceBase<InnoGotchiModel>(sortByProperties);
         });
         services.AddScoped<IInnoGotchiSignsUpdateService>(x =>

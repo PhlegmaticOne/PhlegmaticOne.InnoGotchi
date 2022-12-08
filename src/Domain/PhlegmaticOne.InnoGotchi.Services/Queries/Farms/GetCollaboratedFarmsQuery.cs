@@ -17,13 +17,13 @@ public class GetCollaboratedFarmsQuery : IdentityOperationResultQuery<IList<Prev
 public class GetCollaboratedFarmsQueryHandler :
     IOperationResultQueryHandler<GetCollaboratedFarmsQuery, IList<PreviewFarmDto>>
 {
-    private readonly IDefaultAvatarService _defaultAvatarService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAvatarProcessor _avatarProcessor;
 
-    public GetCollaboratedFarmsQueryHandler(IUnitOfWork unitOfWork, IDefaultAvatarService defaultAvatarService)
+    public GetCollaboratedFarmsQueryHandler(IUnitOfWork unitOfWork, IAvatarProcessor avatarProcessor)
     {
         _unitOfWork = unitOfWork;
-        _defaultAvatarService = defaultAvatarService;
+        _avatarProcessor = avatarProcessor;
     }
 
     public async Task<OperationResult<IList<PreviewFarmDto>>> Handle(GetCollaboratedFarmsQuery request,
@@ -43,15 +43,17 @@ public class GetCollaboratedFarmsQueryHandler :
                 OwnerAvatarData = s.Farm.Owner.Avatar!.AvatarData
             }, cancellationToken: cancellationToken);
 
-        await SetEmptyAvatars(result);
+        await SetEmptyAvatars(result, cancellationToken);
 
         return OperationResult.Successful(result);
     }
 
-    private async Task SetEmptyAvatars(IList<PreviewFarmDto> previewFarmDtos)
+    private async Task SetEmptyAvatars(IList<PreviewFarmDto> previewFarmDtos, CancellationToken cancellationToken)
     {
         foreach (var previewFarmDto in previewFarmDtos)
-            if (previewFarmDto.OwnerAvatarData is null || previewFarmDto.OwnerAvatarData.Any() == false)
-                previewFarmDto.OwnerAvatarData = await _defaultAvatarService.GetDefaultAvatarDataAsync();
+        {
+            previewFarmDto.OwnerAvatarData =
+                await _avatarProcessor.ProcessAvatarDataAsync(previewFarmDto.OwnerAvatarData, cancellationToken);
+        }
     }
 }

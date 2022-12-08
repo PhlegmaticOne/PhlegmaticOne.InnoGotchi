@@ -7,9 +7,9 @@ using PhlegmaticOne.PagedLists.Implementation;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Infrastructure.MapperConfigurations;
 
-public class InnoGotchiesMappingConfiguration : Profile
+public class InnoGotchiesMapperConfiguration : Profile
 {
-    public InnoGotchiesMappingConfiguration()
+    public InnoGotchiesMapperConfiguration()
     {
         CreateMap<InnoGotchiModel, InnoGotchiDtoBase>()
             .ForMember(x => x.HungerLevel, o => o.MapFrom(y => y.HungerLevel.ToString()))
