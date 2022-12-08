@@ -7,9 +7,9 @@ public class EnumHelperTests
 {
     private enum TestEnum
     {
-        First, 
+        First,
         Second,
-        Third 
+        Third
     }
 
     [Fact]

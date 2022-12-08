@@ -79,7 +79,7 @@ public class GetDetailedStatisticsQueryHandler :
     }
 
     //Lol
-    private static T DynamicFirstValue<T>(IEnumerable<dynamic> petsInfo, 
+    private static T DynamicFirstValue<T>(IEnumerable<dynamic> petsInfo,
         bool isDead, Func<dynamic, T> selector) where T : struct =>
         petsInfo
             .Where(x => x.IsDead == isDead)

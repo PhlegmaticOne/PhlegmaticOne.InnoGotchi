@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication;
@@ -14,6 +13,7 @@ using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Models.Requests;
 using PhlegmaticOne.ServerRequesting.Services;
+using System.Security.Claims;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 
@@ -62,20 +62,14 @@ public class ClientRequestsController : Controller
         return await HandleResponse(serverResponse, onSuccess, onOperationFailed, onServerResponseFailed);
     }
 
-    protected IActionResult LoginView()
-    {
-        return Redirect(LocalStorageService.GetLoginPath() ?? Constants.HomeUrl);
-    }
+    protected IActionResult LoginView() => 
+        Redirect(LocalStorageService.GetLoginPath() ?? Constants.HomeUrl);
 
-    protected IActionResult ErrorView(string errorMessage)
-    {
-        return RedirectToAction("Error", "Home", new { errorMessage });
-    }
+    protected IActionResult ErrorView(string errorMessage) => 
+        RedirectToAction("Error", "Home", new { errorMessage });
 
-    protected IActionResult HomeView()
-    {
-        return Redirect(Constants.HomeUrl);
-    }
+    protected IActionResult HomeView() => 
+        Redirect(Constants.HomeUrl);
 
     protected IActionResult ViewWithErrorsFromOperationResult(OperationResult operationResult, string viewName,
         ErrorHavingViewModel viewModel)
@@ -109,15 +103,9 @@ public class ClientRequestsController : Controller
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
     }
 
-    protected string? JwtToken()
-    {
-        return LocalStorageService.GetJwtToken();
-    }
+    protected string? JwtToken() => LocalStorageService.GetJwtToken();
 
-    protected void SetJwtToken(string jwtToken)
-    {
-        LocalStorageService.SetJwtToken(jwtToken);
-    }
+    protected void SetJwtToken(string jwtToken) => LocalStorageService.SetJwtToken(jwtToken);
 
     private async Task<IActionResult> HandleResponse<TResponse>(
         ServerResponse<TResponse> serverResponse,
@@ -132,16 +120,20 @@ public class ClientRequestsController : Controller
         }
 
         if (serverResponse.IsSuccess == false)
+        {
             return onServerResponseFailed is not null
                 ? onServerResponseFailed(serverResponse)
                 : ErrorView(serverResponse.ToString());
+        }
 
         var operationResult = serverResponse.OperationResult!;
 
         if (operationResult.IsSuccess == false)
+        {
             return onOperationFailed is not null
                 ? onOperationFailed(operationResult)
                 : ErrorView(operationResult.ErrorMessage!);
+        }
 
         var data = serverResponse.GetData()!;
         return await onSuccess(data);

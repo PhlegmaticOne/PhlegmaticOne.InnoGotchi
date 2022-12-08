@@ -5,8 +5,5 @@ namespace PhlegmaticOne.InnoGotchi.Api.Controllers.Base;
 
 public class IdentityController : ControllerBase
 {
-    protected Guid ProfileId()
-    {
-        return User.GetUserId();
-    }
+    protected Guid ProfileId() => User.GetUserId();
 }

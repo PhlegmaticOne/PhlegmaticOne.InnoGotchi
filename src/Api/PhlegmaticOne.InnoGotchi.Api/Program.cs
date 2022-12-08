@@ -9,7 +9,6 @@ using PhlegmaticOne.InnoGotchi.Services.ServicesRegistration;
 using PhlegmaticOne.JwtTokensGeneration.Extensions;
 using PhlegmaticOne.JwtTokensGeneration.Options;
 using PhlegmaticOne.PasswordHasher.Extensions;
-using PhlegmaticOne.UnitOfWork.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +62,6 @@ builder.Services.AddPetsSynchronizationHostedService(builder.Environment);
 
 builder.Services.AddPasswordHasher();
 builder.Services.AddJwtTokenGeneration(jwtOptions);
-builder.Services.AddUnitOfWork<ApplicationDbContext>();
 
 builder.Services.AddDomainServices();
 

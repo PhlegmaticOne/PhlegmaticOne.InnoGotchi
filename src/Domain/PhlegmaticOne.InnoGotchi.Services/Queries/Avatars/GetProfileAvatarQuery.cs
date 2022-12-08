@@ -29,7 +29,7 @@ public class GetProfileAvatarQueryHandler : IOperationResultQueryHandler<GetProf
         var result = await _unitOfWork
             .GetRepository<Avatar>()
             .GetFirstOrDefaultAsync(
-                predicate: x => x.UserProfile.Id == request.ProfileId, 
+                predicate: x => x.UserProfile.Id == request.ProfileId,
                 cancellationToken: cancellationToken);
 
         if (result is null)

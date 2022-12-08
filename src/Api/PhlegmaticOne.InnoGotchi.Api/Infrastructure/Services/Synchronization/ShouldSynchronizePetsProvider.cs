@@ -2,10 +2,7 @@
 
 public class ShouldSynchronizePetsProvider : IShouldSynchronizePetsProvider
 {
-    public ShouldSynchronizePetsProvider(bool shouldSynchronize)
-    {
-        ShouldSynchronize = shouldSynchronize;
-    }
+    public ShouldSynchronizePetsProvider(bool shouldSynchronize) => ShouldSynchronize = shouldSynchronize;
 
     public bool ShouldSynchronize { get; }
 }

@@ -3,7 +3,7 @@ using FluentValidation.Results;
 
 namespace PhlegmaticOne.OperationResults.Mediatr;
 
-public abstract class ValidatableCommandHandler<TCommand> : IOperationResultCommandHandler<TCommand> 
+public abstract class ValidatableCommandHandler<TCommand> : IOperationResultCommandHandler<TCommand>
     where TCommand : IOperationResultCommand
 {
     private readonly IValidator<TCommand> _commandValidator;
@@ -24,6 +24,6 @@ public abstract class ValidatableCommandHandler<TCommand> : IOperationResultComm
 
     protected abstract Task<OperationResult> HandleValidCommand(TCommand request, CancellationToken cancellationToken);
 
-    protected virtual OperationResult OnValidationTriggered(ValidationResult validationResult) => 
+    protected virtual OperationResult OnValidationTriggered(ValidationResult validationResult) =>
         OperationResult.Failed(validationResult.ToString());
 }

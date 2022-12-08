@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Services.Queries.InnoGotchies;
-using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Data;
 using PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Mocks;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Tests.Queries.InnoGotchies;

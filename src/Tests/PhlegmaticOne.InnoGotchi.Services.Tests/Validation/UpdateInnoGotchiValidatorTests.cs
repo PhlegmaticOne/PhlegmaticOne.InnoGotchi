@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using Moq;
+﻿using Moq;
 using PhlegmaticOne.InnoGotchi.Domain.Providers.Readable;
 using PhlegmaticOne.InnoGotchi.Services.Commands.InnoGotchies;
 using PhlegmaticOne.InnoGotchi.Services.Infrastructure.Validators;

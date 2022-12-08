@@ -1,5 +1,5 @@
-﻿using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
-using PhlegmaticOne.InnoGotchi.Domain.Models;
+﻿using PhlegmaticOne.InnoGotchi.Domain.Models;
+using PhlegmaticOne.InnoGotchi.Domain.Models.Enums;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Data;
 

@@ -1,5 +1,5 @@
-﻿using System.Linq.Expressions;
-using PhlegmaticOne.InnoGotchi.Domain.Services;
+﻿using PhlegmaticOne.InnoGotchi.Domain.Services;
+using System.Linq.Expressions;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Services;
 

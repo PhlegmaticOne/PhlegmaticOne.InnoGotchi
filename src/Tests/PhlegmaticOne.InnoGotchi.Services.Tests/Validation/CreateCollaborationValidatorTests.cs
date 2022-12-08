@@ -23,7 +23,7 @@ public class CreateCollaborationValidatorTests
 
     [Fact]
     public Task ShouldBeNotValid_BecauseSuchCollaborationExists_Test() =>
-        NotValidTestWithProfiles(AppErrorMessages.SuchCollaborationExistsMessage, 
+        NotValidTestWithProfiles(AppErrorMessages.SuchCollaborationExistsMessage,
              () => (_data.CreatedCollaboration.Farm.OwnerId, _data.CreatedCollaboration.UserProfileId));
 
     [Fact]

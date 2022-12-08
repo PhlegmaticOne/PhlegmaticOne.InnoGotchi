@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E1C00DA6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Api", "src\Api\PhlegmaticOne.InnoGotchi.Api\PhlegmaticOne.InnoGotchi.Api.csproj", "{FAADEDC7-660C-49B2-BE55-2F17047049C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Shared", "src\Api\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj", "{9E556FEE-9D40-4C98-88C0-F91B1EC7721E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Web", "src\Client\PhlegmaticOne.InnoGotchi.Web\PhlegmaticOne.InnoGotchi.Web.csproj", "{9BEE14DA-DD59-4948-A39A-5F3219587367}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Data.EntityFramework", "src\Domain\PhlegmaticOne.InnoGotchi.Data.EntityFramework\PhlegmaticOne.InnoGotchi.Data.EntityFramework.csproj", "{40891EFF-254C-465D-87A7-0A7C9557E84F}"
@@ -47,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.HostedService
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{E3710C40-80BD-425A-B031-E65C6F2AD820}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.InnoGotchi.Shared", "src\Shared\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj", "{890D6CEB-7CE4-44AE-BACB-128960C8095D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,10 +57,6 @@ Global
 		{FAADEDC7-660C-49B2-BE55-2F17047049C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAADEDC7-660C-49B2-BE55-2F17047049C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAADEDC7-660C-49B2-BE55-2F17047049C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E556FEE-9D40-4C98-88C0-F91B1EC7721E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E556FEE-9D40-4C98-88C0-F91B1EC7721E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E556FEE-9D40-4C98-88C0-F91B1EC7721E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E556FEE-9D40-4C98-88C0-F91B1EC7721E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9BEE14DA-DD59-4948-A39A-5F3219587367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9BEE14DA-DD59-4948-A39A-5F3219587367}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BEE14DA-DD59-4948-A39A-5F3219587367}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -117,13 +113,16 @@ Global
 		{A9DB2634-3ACD-421D-8E07-18DB13C36706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9DB2634-3ACD-421D-8E07-18DB13C36706}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9DB2634-3ACD-421D-8E07-18DB13C36706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{890D6CEB-7CE4-44AE-BACB-128960C8095D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{890D6CEB-7CE4-44AE-BACB-128960C8095D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{890D6CEB-7CE4-44AE-BACB-128960C8095D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{890D6CEB-7CE4-44AE-BACB-128960C8095D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FAADEDC7-660C-49B2-BE55-2F17047049C5} = {760806A2-C6A7-434C-A5F4-8009FDE8C938}
-		{9E556FEE-9D40-4C98-88C0-F91B1EC7721E} = {E3710C40-80BD-425A-B031-E65C6F2AD820}
 		{9BEE14DA-DD59-4948-A39A-5F3219587367} = {FC5BF24B-8CCF-4033-AA73-F23062D89624}
 		{40891EFF-254C-465D-87A7-0A7C9557E84F} = {D8AB625D-113E-4F81-9711-723A7C2285CF}
 		{AE7199FB-4B19-49C0-9881-CA20BEB98272} = {D8AB625D-113E-4F81-9711-723A7C2285CF}
@@ -138,6 +137,7 @@ Global
 		{ED2AC927-BB9C-43A7-BF75-8052DD4BBB8C} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
 		{8683C5F2-E527-47F5-B091-7BE75B413F1D} = {E1C00DA6-98AF-495F-A87E-1ADEEDFB3379}
 		{A9DB2634-3ACD-421D-8E07-18DB13C36706} = {F4B34CDC-04A1-461A-B962-0A4E95B4A6DC}
+		{890D6CEB-7CE4-44AE-BACB-128960C8095D} = {E3710C40-80BD-425A-B031-E65C6F2AD820}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F503F9F6-0369-431A-BF1E-79BBAD139A76}

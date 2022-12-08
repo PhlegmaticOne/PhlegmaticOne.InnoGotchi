@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore.Query;
 using PhlegmaticOne.PagedLists.Extensions;
 using PhlegmaticOne.PagedLists.Implementation;
 using PhlegmaticOne.UnitOfWork.Interfaces;
 using PhlegmaticOne.UnitOfWork.Models;
+using System.Linq.Expressions;
 
 namespace PhlegmaticOne.UnitOfWork.Implementation;
 
@@ -32,7 +29,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
     public Task<T> UpdateAsync(T entity, Action<T> actionOverExistingEntity,
         CancellationToken cancellationToken = new())
     {
-        if(_entities.Remove(entity))
+        if (_entities.Remove(entity))
         {
             actionOverExistingEntity(entity);
             _entities.Add(entity);
@@ -69,7 +66,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
         return Task.FromResult(_entities.Remove(entity));
     }
 
-    public Task<T?> GetByIdOrDefaultAsync(Guid id, 
+    public Task<T?> GetByIdOrDefaultAsync(Guid id,
         Expression<Func<T, bool>>? predicate = null,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
         CancellationToken cancellationToken = new())
@@ -84,7 +81,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
 
     public Task<TResult?> GetByIdOrDefaultAsync<TResult>(Guid id,
         Expression<Func<T, TResult>> selector,
-        Expression<Func<T, bool>>? predicate = null, 
+        Expression<Func<T, bool>>? predicate = null,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
         CancellationToken cancellationToken = new())
     {
@@ -97,7 +94,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
     }
 
     public Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector,
-        Expression<Func<T, bool>>? predicate = null, 
+        Expression<Func<T, bool>>? predicate = null,
         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
         CancellationToken cancellationToken = new())
@@ -133,7 +130,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
         int pageIndex = 0,
-        int pageSize = 20, 
+        int pageSize = 20,
         CancellationToken cancellationToken = new())
     {
         var query = _entities.AsQueryable();
@@ -161,7 +158,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
     }
 
     public Task<TResult?> GetFirstOrDefaultAsync<TResult>(Expression<Func<T, TResult>> selector,
-        Expression<Func<T, bool>> predicate, 
+        Expression<Func<T, bool>> predicate,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
         CancellationToken cancellationToken = new())
     {
@@ -174,7 +171,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
         return Task.FromResult(result);
     }
 
-    public Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null, 
+    public Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null,
         CancellationToken cancellationToken = new())
     {
         var result = predicate is null ? _entities.Count() : _entities.AsQueryable().Count(predicate);
@@ -188,7 +185,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : EntityBase
         return Task.FromResult(result);
     }
 
-    public Task<bool> AllAsync(Expression<Func<T, bool>> predicate, 
+    public Task<bool> AllAsync(Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = new())
     {
         var result = _entities.AsQueryable().All(predicate);

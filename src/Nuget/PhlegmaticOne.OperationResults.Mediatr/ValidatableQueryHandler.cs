@@ -25,6 +25,6 @@ public abstract class ValidatableQueryHandler<TRequest, TResponse> :
 
     protected abstract Task<OperationResult<TResponse>> HandleValidQuery(TRequest request, CancellationToken cancellationToken);
 
-    protected virtual OperationResult<TResponse> OnValidationTriggered(ValidationResult validationResult) => 
+    protected virtual OperationResult<TResponse> OnValidationTriggered(ValidationResult validationResult) =>
         OperationResult.Failed<TResponse>(validationResult.ToString());
 }

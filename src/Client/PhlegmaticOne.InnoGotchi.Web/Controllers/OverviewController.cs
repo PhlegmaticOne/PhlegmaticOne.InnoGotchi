@@ -17,9 +17,7 @@ public class OverviewController : ClientRequestsController
 {
     public OverviewController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService, mapper)
-    {
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
     public Task<IActionResult> My()

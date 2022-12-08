@@ -22,7 +22,7 @@ public class RegisterProfileCommandHandler : ValidatableCommandHandler<RegisterP
 
     public RegisterProfileCommandHandler(IUnitOfWork unitOfWork,
         IWritableProfilesProvider writableProfilesProvider,
-        IValidator<RegisterProfileCommand> registerProfileValidator) : base(registerProfileValidator) => 
+        IValidator<RegisterProfileCommand> registerProfileValidator) : base(registerProfileValidator) =>
         (_unitOfWork, _writableProfilesProvider) = (unitOfWork, writableProfilesProvider);
 
     protected override Task<OperationResult> HandleValidCommand(RegisterProfileCommand request, CancellationToken cancellationToken) =>

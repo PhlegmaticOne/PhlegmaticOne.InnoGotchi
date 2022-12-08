@@ -15,15 +15,10 @@ public class FarmController : ClientRequestsController
 {
     public FarmController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService, mapper)
-    {
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
+    public IActionResult Create() => View();
 
     [HttpGet]
     public Task<IActionResult> My()
@@ -56,7 +51,6 @@ public class FarmController : ClientRequestsController
         return FromAuthorizedGet(new GetFarmRequest(farmId), dto =>
         {
             var mapped = Mapper.Map<DetailedFarmViewModel>(dto);
-
             ViewData["CanSeeDetails"] = false;
             IActionResult view = View(mapped);
             return Task.FromResult(view);

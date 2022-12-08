@@ -24,10 +24,14 @@ public static class DatabaseInitializer
         var userProfilesSet = dbContext.Set<UserProfile>();
 
         if (innoGotchiComponentsSet.Any() == false)
+        {
             await innoGotchiComponentsSet.AddRangeAsync(SeedComponents(webHostEnvironment, serverAddressProvider));
+        }
 
         if (userProfilesSet.Any() == false)
+        {
             await userProfilesSet.AddRangeAsync(SeedUserProfile(passwordHasher, timeService));
+        }
 
         await dbContext.SaveChangesAsync();
     }
@@ -35,9 +39,13 @@ public static class DatabaseInitializer
     private static async Task CreateOrMigrate(ApplicationDbContext dbContext)
     {
         if (dbContext.Database.IsRelational())
+        {
             await dbContext.Database.MigrateAsync();
+        }
         else
+        {
             await dbContext.Database.EnsureCreatedAsync();
+        }
     }
 
     private static IEnumerable<InnoGotchiComponent> SeedComponents(IWebHostEnvironment webHostEnvironment,
@@ -46,19 +54,23 @@ public static class DatabaseInitializer
         var componentFiles = WwwRootHelper.GetComponents(webHostEnvironment);
         var serverAddress = serverAddressProvider.ServerAddressUri;
         foreach (var component in componentFiles)
-        foreach (var componentImageUrl in component.Value)
-            yield return new InnoGotchiComponent
+        {
+            foreach (var componentImageUrl in component.Value)
             {
-                Name = component.Key,
-                ImageUrl = Combine(serverAddress, componentImageUrl).AbsoluteUri
-            };
+                yield return new InnoGotchiComponent
+                {
+                    Name = component.Key,
+                    ImageUrl = Combine(serverAddress, componentImageUrl).AbsoluteUri
+                };
+            }
+        }
     }
 
     private static List<UserProfile> SeedUserProfile(IPasswordHasher passwordHasher, ITimeService timeService)
     {
         return new List<UserProfile>
         {
-            new UserProfile
+            new()
             {
                 User = new User
                 {
@@ -71,7 +83,7 @@ public static class DatabaseInitializer
                 JoinDate = timeService.Now()
             },
 
-            new UserProfile
+            new()
             {
                 User = new User
                 {
@@ -86,8 +98,5 @@ public static class DatabaseInitializer
         };
     }
 
-    private static Uri Combine(Uri uri, string nextUri)
-    {
-        return new Uri(uri, nextUri);
-    }
+    private static Uri Combine(Uri uri, string nextUri) => new Uri(uri, nextUri);
 }

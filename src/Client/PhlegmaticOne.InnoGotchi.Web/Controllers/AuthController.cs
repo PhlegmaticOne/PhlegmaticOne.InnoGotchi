@@ -26,16 +26,10 @@ public class AuthController : ClientRequestsController
     }
 
     [HttpGet]
-    public IActionResult Login(string returnUrl)
-    {
-        return View();
-    }
+    public IActionResult Login(string returnUrl) => View();
 
     [HttpGet]
-    public IActionResult Register()
-    {
-        return View();
-    }
+    public IActionResult Register() => View();
 
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
@@ -43,7 +37,9 @@ public class AuthController : ClientRequestsController
         var validationResult = await _registerViewModelValidator.ValidateAsync(registerViewModel);
 
         if (validationResult.IsValid == false)
+        {
             return ViewWithErrorsFromValidationResult(validationResult, nameof(Register), registerViewModel);
+        }
 
         var registerDto = Mapper.Map<RegisterProfileDto>(registerViewModel);
 

@@ -51,8 +51,6 @@ public class ConstructorController : ClientRequestsController
         return PartialView("~/Views/_Partial_Views/Constructor/CategoryImagesList.cshtml", categoryViewModel);
     }
 
-    private IActionResult CreateInnoGotchiPartialView(CreateInnoGotchiViewModel createInnoGotchiViewModel)
-    {
-        return PartialView("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml", createInnoGotchiViewModel);
-    }
+    private IActionResult CreateInnoGotchiPartialView(CreateInnoGotchiViewModel createInnoGotchiViewModel) => 
+        PartialView("~/Views/_Partial_Views/Constructor/CreateInnoGotchiArea.cshtml", createInnoGotchiViewModel);
 }

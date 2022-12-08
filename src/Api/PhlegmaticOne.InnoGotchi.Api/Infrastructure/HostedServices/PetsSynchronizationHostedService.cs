@@ -6,9 +6,7 @@ namespace PhlegmaticOne.InnoGotchi.Api.Infrastructure.HostedServices;
 public class PetsSynchronizationHostedService : CrontabScheduledHostedService
 {
     public PetsSynchronizationHostedService(IServiceScopeFactory serviceScopeFactory,
-        ILogger<PetsSynchronizationHostedService> logger) : base(serviceScopeFactory, logger)
-    {
-    }
+        ILogger<PetsSynchronizationHostedService> logger) : base(serviceScopeFactory, logger) { }
 
     protected override string Schedule => "*/15 * * * *";
 

@@ -14,10 +14,8 @@ public class AvatarsController : IdentityController
 {
     private readonly IMediator _mediator;
 
-    public AvatarsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public AvatarsController(IMediator mediator) => _mediator = mediator;
+
 
     [HttpGet]
     public async Task<OperationResult<byte[]>> GetAuthorized()

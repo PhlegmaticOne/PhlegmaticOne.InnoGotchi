@@ -10,7 +10,7 @@ public class GetDetailedInnoGotchiValidator : AbstractValidator<GetDetailedInnoG
     public GetDetailedInnoGotchiValidator(IInnoGotchiOwnChecker innoGotchiOwnChecker)
     {
         RuleFor(x => x)
-            .MustAsync(async (model, ct) => await 
+            .MustAsync(async (model, ct) => await
                 innoGotchiOwnChecker.IsBelongAsync(model.ProfileId, model.PetId, ct))
             .WithMessage(AppErrorMessages.PetDoesNotBelongToProfileMessage);
     }

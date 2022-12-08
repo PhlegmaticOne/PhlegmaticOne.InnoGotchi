@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Moq;
-using PhlegmaticOne.InnoGotchi.Domain.Exceptions;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
 using PhlegmaticOne.InnoGotchi.Domain.Services;
 using PhlegmaticOne.InnoGotchi.Services.Queries.Avatars;

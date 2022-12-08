@@ -17,9 +17,7 @@ public class InnoGotchiesController : ClientRequestsController
 {
     public InnoGotchiesController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService, mapper)
-    {
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
     public Task<IActionResult> All(int? pageIndex, int? pageSize, int? sortType, bool? isAscending)
@@ -45,10 +43,8 @@ public class InnoGotchiesController : ClientRequestsController
     }
 
     [HttpGet]
-    public Task<IActionResult> Pet(Guid petId)
-    {
-        return FromAuthorizedGet(new GetDetailedInnoGotchiRequest(petId), InnoGotchiView);
-    }
+    public Task<IActionResult> Pet(Guid petId) => 
+        FromAuthorizedGet(new GetDetailedInnoGotchiRequest(petId), InnoGotchiView);
 
     [HttpPost]
     public Task<IActionResult> Feed(InnoGotchiActionViewModel innoGotchiActionViewModel)
@@ -56,29 +52,32 @@ public class InnoGotchiesController : ClientRequestsController
         var model = FeedModel(innoGotchiActionViewModel.InnoGotchiId);
         return FromAuthorizedPut(new UpdateInnoGotchiRequest(model), _ =>
         {
-            return FromAuthorizedGet(new GetDetailedInnoGotchiRequest(innoGotchiActionViewModel.InnoGotchiId),
-                InnoGotchiView);
-        }, result => ErrorView(result.ErrorMessage!));
+            var getPetRequest = new GetDetailedInnoGotchiRequest(innoGotchiActionViewModel.InnoGotchiId);
+            return FromAuthorizedGet(getPetRequest, InnoGotchiView);
+        },
+        onOperationFailed: result => ErrorView(result.ErrorMessage!));
     }
 
     [HttpPost]
     public Task<IActionResult> Drink(InnoGotchiActionViewModel innoGotchiActionViewModel)
     {
         var model = DrinkModel(innoGotchiActionViewModel.InnoGotchiId);
-        return FromAuthorizedPut(new UpdateInnoGotchiRequest(model), result =>
+        return FromAuthorizedPut(new UpdateInnoGotchiRequest(model), _ =>
         {
-            return FromAuthorizedGet(new GetDetailedInnoGotchiRequest(innoGotchiActionViewModel.InnoGotchiId),
-                InnoGotchiView);
-        }, result => ErrorView(result.ErrorMessage!));
+            var getPetRequest = new GetDetailedInnoGotchiRequest(innoGotchiActionViewModel.InnoGotchiId);
+            return FromAuthorizedGet(getPetRequest, InnoGotchiView);
+        }, 
+        onOperationFailed: result => ErrorView(result.ErrorMessage!));
     }
 
     [HttpPost]
     public Task<IActionResult> FeedPartial([FromBody] InnoGotchiRequestViewModel request)
     {
         var model = FeedModel(request.Id);
-        return FromAuthorizedPut(new UpdateInnoGotchiRequest(model), result =>
+        return FromAuthorizedPut(new UpdateInnoGotchiRequest(model), _ =>
         {
-            return FromAuthorizedGet(new GetPreviewInnoGotchiRequest(request.Id),
+            var getPetRequest = new GetPreviewInnoGotchiRequest(request.Id);
+            return FromAuthorizedGet(getPetRequest, 
                 dto => InnoGotchiCardPartialView(dto, request.CanSeeDetails));
         }, result => ErrorView(result.ErrorMessage!));
     }
@@ -89,7 +88,8 @@ public class InnoGotchiesController : ClientRequestsController
         var model = DrinkModel(request.Id);
         return FromAuthorizedPut(new UpdateInnoGotchiRequest(model), result =>
         {
-            return FromAuthorizedGet(new GetPreviewInnoGotchiRequest(request.Id),
+            var getPetRequest = new GetPreviewInnoGotchiRequest(request.Id);
+            return FromAuthorizedGet(getPetRequest, 
                 dto => InnoGotchiCardPartialView(dto, request.CanSeeDetails));
         }, result => ErrorView(result.ErrorMessage!));
     }
@@ -109,21 +109,17 @@ public class InnoGotchiesController : ClientRequestsController
         return Task.FromResult(view);
     }
 
-    private static UpdateInnoGotchiDto FeedModel(Guid petId)
-    {
-        return new()
+    private static UpdateInnoGotchiDto FeedModel(Guid petId) =>
+        new()
         {
             InnoGotchiOperationType = InnoGotchiOperationType.Feeding,
             PetId = petId
         };
-    }
 
-    private static UpdateInnoGotchiDto DrinkModel(Guid petId)
-    {
-        return new()
+    private static UpdateInnoGotchiDto DrinkModel(Guid petId) =>
+        new()
         {
             InnoGotchiOperationType = InnoGotchiOperationType.Drinking,
             PetId = petId
         };
-    }
 }

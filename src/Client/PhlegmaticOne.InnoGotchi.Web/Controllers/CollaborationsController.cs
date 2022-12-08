@@ -15,9 +15,7 @@ public class CollaborationsController : ClientRequestsController
 {
     public CollaborationsController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService, mapper)
-    {
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpPost]
     public Task<IActionResult> Collaborate([FromBody] IdViewModel idViewModel)

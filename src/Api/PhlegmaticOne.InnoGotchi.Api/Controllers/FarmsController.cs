@@ -30,8 +30,10 @@ public class FarmsController : IdentityController
     public async Task<OperationResult<DetailedFarmDto>> GetAuthorized()
     {
         if (_shouldSynchronizePetsProvider.ShouldSynchronize)
+        {
             await _mediator.Send(new SynchronizeInnoGotchiesInProfileFarmCommand(ProfileId()),
                 HttpContext.RequestAborted);
+        }
 
         return await _mediator
             .Send(new GetFarmByProfileQuery(ProfileId()), HttpContext.RequestAborted);
@@ -41,28 +43,24 @@ public class FarmsController : IdentityController
     public async Task<OperationResult<DetailedFarmDto>> Get(Guid farmId)
     {
         if (_shouldSynchronizePetsProvider.ShouldSynchronize)
+        {
             await _mediator.Send(new SynchronizeInnoGotchiesInFarmCommand(farmId),
                 HttpContext.RequestAborted);
+        }
 
         return await _mediator
             .Send(new GetFarmByIdQuery(ProfileId(), farmId), HttpContext.RequestAborted);
     }
 
     [HttpGet]
-    public Task<OperationResult<IList<PreviewFarmDto>>> GetCollaborated()
-    {
-        return _mediator.Send(new GetCollaboratedFarmsQuery(ProfileId()), HttpContext.RequestAborted);
-    }
+    public Task<OperationResult<IList<PreviewFarmDto>>> GetCollaborated() => 
+        _mediator.Send(new GetCollaboratedFarmsQuery(ProfileId()), HttpContext.RequestAborted);
 
     [HttpGet]
-    public Task<OperationResult<bool>> Exists()
-    {
-        return _mediator.Send(new GetIsFarmExistsQuery(ProfileId()), HttpContext.RequestAborted);
-    }
+    public Task<OperationResult<bool>> Exists() =>
+        _mediator.Send(new GetIsFarmExistsQuery(ProfileId()), HttpContext.RequestAborted);
 
     [HttpPost]
-    public Task<OperationResult> Create([FromBody] CreateFarmDto createFarmDto)
-    {
-        return _mediator.Send(new CreateFarmCommand(ProfileId(), createFarmDto), HttpContext.RequestAborted);
-    }
+    public Task<OperationResult> Create([FromBody] CreateFarmDto createFarmDto) => 
+        _mediator.Send(new CreateFarmCommand(ProfileId(), createFarmDto), HttpContext.RequestAborted);
 }

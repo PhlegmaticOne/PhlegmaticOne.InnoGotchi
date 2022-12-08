@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.JwtTokensGeneration\PhlegmaticOne.JwtTokensGeneration.csproj" />
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.OperationResults.Mediatr\PhlegmaticOne.OperationResults.Mediatr.csproj" />
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.PasswordHasher\PhlegmaticOne.PasswordHasher.csproj" />
+    <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Data.EntityFramework\PhlegmaticOne.InnoGotchi.Data.EntityFramework.csproj" />
     <ProjectReference Include="..\PhlegmaticOne.InnoGotchi.Domain\PhlegmaticOne.InnoGotchi.Domain.csproj" />
   </ItemGroup>
 

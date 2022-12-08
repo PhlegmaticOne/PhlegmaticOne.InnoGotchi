@@ -17,7 +17,8 @@ public class SynchronizeInnoGotchiesInFarmCommandHandler :
 {
     public SynchronizeInnoGotchiesInFarmCommandHandler(IUnitOfWork unitOfWork,
         IInnoGotchiesSynchronizationProvider innoGotchiesSynchronizationProvider) :
-        base(unitOfWork, innoGotchiesSynchronizationProvider) { }
+        base(unitOfWork, innoGotchiesSynchronizationProvider)
+    { }
 
     protected override Task<Guid> GetFarmId(SynchronizeInnoGotchiesInFarmCommand request,
         CancellationToken cancellationToken) => Task.FromResult(request.FarmId);

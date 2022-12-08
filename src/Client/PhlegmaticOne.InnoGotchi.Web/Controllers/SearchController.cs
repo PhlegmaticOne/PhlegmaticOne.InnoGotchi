@@ -14,9 +14,7 @@ public class SearchController : ClientRequestsController
 {
     public SearchController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService, IMapper mapper) :
-        base(clientRequestsService, localStorageService, mapper)
-    {
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
     public Task<IActionResult> SearchPartial(string searchText)

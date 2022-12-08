@@ -38,7 +38,7 @@ public class WritableProfileProvider : IWritableProfilesProvider
     {
         var repository = _unitOfWork.GetRepository<UserProfile>();
         var profile = await repository.GetByIdOrDefaultAsync(profileId,
-            include: i => i.Include(x => x.User), 
+            include: i => i.Include(x => x.User),
             cancellationToken: cancellationToken);
 
         if (profile is null)

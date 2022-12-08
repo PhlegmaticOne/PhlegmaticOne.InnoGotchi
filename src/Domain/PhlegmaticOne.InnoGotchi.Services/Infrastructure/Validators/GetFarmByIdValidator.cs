@@ -13,7 +13,7 @@ public class GetFarmByIdValidator : AbstractValidator<GetFarmByIdQuery>
         var collaborationsRepository = unitOfWork.GetRepository<Collaboration>();
 
         RuleFor(x => x)
-            .MustAsync(async (model, ct) => 
+            .MustAsync(async (model, ct) =>
                 await collaborationsRepository
                     .ExistsAsync(x => x.UserProfileId == model.ProfileId && x.FarmId == model.FarmId, ct))
             .WithMessage(AppErrorMessages.CannotGetFarmBecauseOfCollaboration);

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Api\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.UnitOfWork\PhlegmaticOne.UnitOfWork.csproj" />
+    <ProjectReference Include="..\..\Shared\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using PhlegmaticOne.InnoGotchi.Domain.Models;
@@ -7,6 +6,7 @@ using PhlegmaticOne.InnoGotchi.Shared.Farms;
 using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.OperationResults.Mediatr;
 using PhlegmaticOne.UnitOfWork.Interfaces;
+using System.Linq.Expressions;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Queries.Farms.Base;
 

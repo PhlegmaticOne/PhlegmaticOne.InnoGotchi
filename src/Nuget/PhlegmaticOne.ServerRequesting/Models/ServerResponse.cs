@@ -1,5 +1,5 @@
-﻿using System.Net;
-using PhlegmaticOne.OperationResults;
+﻿using PhlegmaticOne.OperationResults;
+using System.Net;
 
 namespace PhlegmaticOne.ServerRequesting.Models;
 

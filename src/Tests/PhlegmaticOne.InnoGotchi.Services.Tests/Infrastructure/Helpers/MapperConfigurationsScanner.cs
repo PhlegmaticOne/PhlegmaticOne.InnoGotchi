@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
+using System.Reflection;
 
 namespace PhlegmaticOne.InnoGotchi.Services.Tests.Infrastructure.Helpers;
 

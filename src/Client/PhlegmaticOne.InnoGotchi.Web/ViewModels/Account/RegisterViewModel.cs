@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
+﻿using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 

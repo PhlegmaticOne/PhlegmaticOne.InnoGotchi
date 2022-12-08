@@ -1,9 +1,9 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using PhlegmaticOne.OperationResults;
+﻿using PhlegmaticOne.OperationResults;
 using PhlegmaticOne.ServerRequesting.Models;
 using PhlegmaticOne.ServerRequesting.Models.Requests;
 using PhlegmaticOne.ServerRequesting.Services;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace PhlegmaticOne.ServerRequesting.Implementation;
 

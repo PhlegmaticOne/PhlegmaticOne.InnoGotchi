@@ -10,7 +10,7 @@ public static class CustomValidators
     public static IRuleBuilderOptions<T, Guid> ProfileMustHaveFarm<T>(
         this IRuleBuilder<T, Guid> ruleBuilder,
         IUnitOfWork unitOfWork,
-        string message = AppErrorMessages.FarmDoesNotExistMessage) 
+        string message = AppErrorMessages.FarmDoesNotExistMessage)
     {
         var farmsRepository = unitOfWork.GetRepository<Farm>();
         return ruleBuilder

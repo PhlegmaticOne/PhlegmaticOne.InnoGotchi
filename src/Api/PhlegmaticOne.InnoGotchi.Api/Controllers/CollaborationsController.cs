@@ -15,10 +15,8 @@ public class CollaborationsController : IdentityController
 {
     private readonly IMediator _mediator;
 
-    public CollaborationsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public CollaborationsController(IMediator mediator) => _mediator = mediator;
+
 
     [HttpPost]
     public Task<OperationResult> Create([FromBody] CreateCollaborationDto createCollaborationDto)

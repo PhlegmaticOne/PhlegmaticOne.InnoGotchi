@@ -1,5 +1,5 @@
-using System.Security.Claims;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
+using System.Security.Claims;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 

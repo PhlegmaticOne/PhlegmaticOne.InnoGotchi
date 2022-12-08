@@ -12,15 +12,15 @@ public class AvatarController : ClientRequestsController
     public AvatarController(IClientRequestsService clientRequestsService,
         ILocalStorageService localStorageService,
         IMapper mapper) :
-        base(clientRequestsService, localStorageService, mapper)
-    {
-    }
+        base(clientRequestsService, localStorageService, mapper) { }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public Task<IActionResult> Get()
     {
-        var result = await ClientRequestsService.GetAsync(new GetAvatarRequest(), JwtToken());
-        var data = result.GetData()!;
-        return File(data, "image/png", "image.png");
+        return FromAuthorizedGet(new GetAvatarRequest(), avatarData =>
+        {
+            IActionResult result = File(avatarData, "image/png", "image.png");
+            return Task.FromResult(result);
+        });
     }
 }

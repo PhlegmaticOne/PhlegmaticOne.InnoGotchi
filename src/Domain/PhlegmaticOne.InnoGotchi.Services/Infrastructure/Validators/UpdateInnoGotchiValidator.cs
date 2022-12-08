@@ -19,7 +19,7 @@ public class UpdateInnoGotchiValidator : AbstractValidator<UpdateInnoGotchiComma
             .WithMessage(AppErrorMessages.PetDoesNotBelongToProfileMessage);
 
         RuleFor(x => x.UpdateInnoGotchiDto.PetId)
-            .MustAsync(async (id, ct) => 
+            .MustAsync(async (id, ct) =>
                 await petsRepository.ExistsAsync(x => x.Id == id && x.IsDead == false, ct))
             .WithMessage(AppErrorMessages.CannotUpdateDeadPetMessage);
     }

@@ -15,14 +15,9 @@ public class SearchController : IdentityController
 {
     private readonly IMediator _mediator;
 
-    public SearchController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public SearchController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
-    public Task<OperationResult<IList<SearchProfileDto>>> Profiles(string searchText)
-    {
-        return _mediator.Send(new SearchProfilesRequest(ProfileId(), searchText), HttpContext.RequestAborted);
-    }
+    public Task<OperationResult<IList<SearchProfileDto>>> Profiles(string searchText) => 
+        _mediator.Send(new SearchProfilesRequest(ProfileId(), searchText), HttpContext.RequestAborted);
 }

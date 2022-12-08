@@ -8,7 +8,7 @@ namespace PhlegmaticOne.InnoGotchi.Services.Queries.Statistics;
 
 public class GetGlobalStatisticsQuery : IOperationResultQuery<GlobalStatisticsDto> { }
 
-public class GetGlobalStatisticsQueryHandler : 
+public class GetGlobalStatisticsQueryHandler :
     IOperationResultQueryHandler<GetGlobalStatisticsQuery, GlobalStatisticsDto>
 {
     private readonly IUnitOfWork _unitOfWork;

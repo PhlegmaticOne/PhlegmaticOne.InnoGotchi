@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore.Query;
 using PhlegmaticOne.PagedLists.Implementation;
 using PhlegmaticOne.UnitOfWork.Models;
+using System.Linq.Expressions;
 
 namespace PhlegmaticOne.UnitOfWork.Interfaces;
 
