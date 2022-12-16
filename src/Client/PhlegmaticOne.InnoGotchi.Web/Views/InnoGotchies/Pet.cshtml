@@ -1,4 +1,7 @@
 ﻿@model DetailedInnoGotchiViewModel
+@{
+    ViewData["Title"] = "InnoGotchi";
+}
 
 <div class="container">
     @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml", Model.Name);

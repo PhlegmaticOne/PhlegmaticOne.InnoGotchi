@@ -1,5 +1,9 @@
 ﻿@model DetailedFarmViewModel
 
+@{
+    ViewData["Title"] = "Farm view";
+}
+
 @if (Model.InnoGotchies.Count == 0)
 {
     @await Html.PartialAsync("~/Views/_Partial_Views/Shared/PageTitle.cshtml",

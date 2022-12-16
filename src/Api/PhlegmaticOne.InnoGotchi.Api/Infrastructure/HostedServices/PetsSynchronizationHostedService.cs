@@ -9,6 +9,7 @@ public class PetsSynchronizationHostedService : CrontabScheduledHostedService
         ILogger<PetsSynchronizationHostedService> logger) : base(serviceScopeFactory, logger) { }
 
     protected override string Schedule => "*/15 * * * *";
+    protected override bool IsExecuteOnServerRestart => true;
 
     protected override async Task ProcessInScopeAsync(IServiceScope serviceScope, CancellationToken token)
     {
