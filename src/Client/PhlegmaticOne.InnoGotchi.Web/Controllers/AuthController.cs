@@ -2,12 +2,12 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PhlegmaticOne.ApiRequesting.Services;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Account;
 using PhlegmaticOne.LocalStorage;
-using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 

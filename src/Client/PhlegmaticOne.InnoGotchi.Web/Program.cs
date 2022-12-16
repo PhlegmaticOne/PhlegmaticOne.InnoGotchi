@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PhlegmaticOne.ApiRequesting.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Extensions;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.MappersConfigurations;
 using PhlegmaticOne.InnoGotchi.Web.Infrastructure.TagHelpers.PagedList.Helpers;
@@ -13,7 +14,6 @@ using PhlegmaticOne.InnoGotchi.Web.Requests.Overviews;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Profiles;
 using PhlegmaticOne.LocalStorage.Extensions;
-using PhlegmaticOne.ServerRequesting.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

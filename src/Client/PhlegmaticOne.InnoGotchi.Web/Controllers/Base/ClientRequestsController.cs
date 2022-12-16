@@ -10,10 +10,10 @@ using PhlegmaticOne.InnoGotchi.Web.Infrastructure.Helpers;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Base;
 using PhlegmaticOne.LocalStorage;
 using PhlegmaticOne.OperationResults;
-using PhlegmaticOne.ServerRequesting.Models;
-using PhlegmaticOne.ServerRequesting.Models.Requests;
-using PhlegmaticOne.ServerRequesting.Services;
 using System.Security.Claims;
+using PhlegmaticOne.ApiRequesting.Models;
+using PhlegmaticOne.ApiRequesting.Models.Requests;
+using PhlegmaticOne.ApiRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 

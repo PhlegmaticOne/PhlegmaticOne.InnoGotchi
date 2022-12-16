@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.ServerRequesting.Models.Requests;
+﻿namespace PhlegmaticOne.ApiRequesting.Models.Requests;
 
 public abstract class ClientQueryBuildableRequest<TRequest, TResponse> : ClientRequest<TRequest, TResponse>
 {

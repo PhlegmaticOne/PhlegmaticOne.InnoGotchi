@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.ServerRequesting.Models;
+﻿namespace PhlegmaticOne.ApiRequesting.Models;
 
 public class GetRequestQueryParameter
 {

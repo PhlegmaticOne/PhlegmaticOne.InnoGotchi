@@ -21,7 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.LocalStorage\PhlegmaticOne.LocalStorage.csproj" />
     <ProjectReference Include="..\..\Nuget\PhlegmaticOne.PagedList\PhlegmaticOne.PagedLists.csproj" />
-    <ProjectReference Include="..\..\Nuget\PhlegmaticOne.ServerRequesting\PhlegmaticOne.ServerRequesting.csproj" />
+    <ProjectReference Include="..\..\Nuget\PhlegmaticOne.ServerRequesting\PhlegmaticOne.ApiRequesting.csproj" />
     <ProjectReference Include="..\..\Shared\PhlegmaticOne.InnoGotchi.Shared\PhlegmaticOne.InnoGotchi.Shared.csproj" />
   </ItemGroup>
 

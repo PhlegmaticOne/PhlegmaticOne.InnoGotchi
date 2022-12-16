@@ -1,11 +1,11 @@
-﻿using PhlegmaticOne.OperationResults;
-using PhlegmaticOne.ServerRequesting.Models;
-using PhlegmaticOne.ServerRequesting.Models.Requests;
-using PhlegmaticOne.ServerRequesting.Services;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using PhlegmaticOne.ApiRequesting.Models;
+using PhlegmaticOne.ApiRequesting.Models.Requests;
+using PhlegmaticOne.ApiRequesting.Services;
+using PhlegmaticOne.OperationResults;
 
-namespace PhlegmaticOne.ServerRequesting.Implementation;
+namespace PhlegmaticOne.ApiRequesting.Implementation;
 
 public class ClientRequestsService : IClientRequestsService
 {

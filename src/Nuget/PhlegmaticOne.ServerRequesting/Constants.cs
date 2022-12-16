@@ -1,4 +1,4 @@
-﻿namespace PhlegmaticOne.ServerRequesting;
+﻿namespace PhlegmaticOne.ApiRequesting;
 
 internal static class Constants
 {

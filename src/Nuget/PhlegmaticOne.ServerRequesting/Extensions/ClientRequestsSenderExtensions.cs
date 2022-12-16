@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PhlegmaticOne.ServerRequesting.Builders;
-using PhlegmaticOne.ServerRequesting.Implementation;
-using PhlegmaticOne.ServerRequesting.Services;
+using PhlegmaticOne.ApiRequesting.Builders;
+using PhlegmaticOne.ApiRequesting.Implementation;
+using PhlegmaticOne.ApiRequesting.Services;
 
-namespace PhlegmaticOne.ServerRequesting.Extensions;
+namespace PhlegmaticOne.ApiRequesting.Extensions;
 
 public static class ClientRequestsSenderExtensions
 {

@@ -1,4 +1,4 @@
-﻿using PhlegmaticOne.ServerRequesting.Models.Requests;
+﻿using PhlegmaticOne.ApiRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
 

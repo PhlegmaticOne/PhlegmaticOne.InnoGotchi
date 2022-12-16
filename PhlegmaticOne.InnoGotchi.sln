@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.PagedLists", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.PasswordHasher", "src\Nuget\PhlegmaticOne.PasswordHasher\PhlegmaticOne.PasswordHasher.csproj", "{77C8D5A9-70DC-4C3A-BC4F-EAD1A835A5A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.ServerRequesting", "src\Nuget\PhlegmaticOne.ServerRequesting\PhlegmaticOne.ServerRequesting.csproj", "{2D5CF90A-6A23-4BDF-A45B-F7FE5AC6A0C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.ApiRequesting", "src\Nuget\PhlegmaticOne.ServerRequesting\PhlegmaticOne.ApiRequesting.csproj", "{2D5CF90A-6A23-4BDF-A45B-F7FE5AC6A0C9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhlegmaticOne.UnitOfWork", "src\Nuget\PhlegmaticOne.UnitOfWork\PhlegmaticOne.UnitOfWork.csproj", "{ED2AC927-BB9C-43A7-BF75-8052DD4BBB8C}"
 EndProject

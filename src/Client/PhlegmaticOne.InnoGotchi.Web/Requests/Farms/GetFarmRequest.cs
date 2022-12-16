@@ -1,6 +1,6 @@
-﻿using PhlegmaticOne.InnoGotchi.Shared.Farms;
-using PhlegmaticOne.ServerRequesting.Models;
-using PhlegmaticOne.ServerRequesting.Models.Requests;
+﻿using PhlegmaticOne.ApiRequesting.Models;
+using PhlegmaticOne.ApiRequesting.Models.Requests;
+using PhlegmaticOne.InnoGotchi.Shared.Farms;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
 

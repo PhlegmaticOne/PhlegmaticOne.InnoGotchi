@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PhlegmaticOne.ApiRequesting.Services;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
 using PhlegmaticOne.LocalStorage;
-using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 

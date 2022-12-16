@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PhlegmaticOne.ApiRequesting.Services;
 using PhlegmaticOne.InnoGotchi.Shared.ErrorMessages;
 using PhlegmaticOne.InnoGotchi.Web.Controllers.Base;
 using PhlegmaticOne.InnoGotchi.Web.Requests.Farms;
@@ -8,7 +9,6 @@ using PhlegmaticOne.InnoGotchi.Web.Requests.Overviews;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Farms;
 using PhlegmaticOne.InnoGotchi.Web.ViewModels.Statistics;
 using PhlegmaticOne.LocalStorage;
-using PhlegmaticOne.ServerRequesting.Services;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Controllers;
 

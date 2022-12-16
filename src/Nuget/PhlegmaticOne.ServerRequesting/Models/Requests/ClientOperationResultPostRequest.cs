@@ -1,6 +1,6 @@
 ﻿using PhlegmaticOne.OperationResults;
 
-namespace PhlegmaticOne.ServerRequesting.Models.Requests;
+namespace PhlegmaticOne.ApiRequesting.Models.Requests;
 
 public abstract class ClientOperationResultPostRequest<TRequest> : ClientPostRequest<TRequest, OperationResult>
 {

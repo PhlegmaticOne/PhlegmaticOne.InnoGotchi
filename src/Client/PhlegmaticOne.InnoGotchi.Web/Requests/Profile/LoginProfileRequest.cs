@@ -1,6 +1,6 @@
-﻿using PhlegmaticOne.InnoGotchi.Shared.Profiles;
+﻿using PhlegmaticOne.ApiRequesting.Models.Requests;
+using PhlegmaticOne.InnoGotchi.Shared.Profiles;
 using PhlegmaticOne.InnoGotchi.Shared.Profiles.Anonymous;
-using PhlegmaticOne.ServerRequesting.Models.Requests;
 
 namespace PhlegmaticOne.InnoGotchi.Web.Requests.Profile;
 
